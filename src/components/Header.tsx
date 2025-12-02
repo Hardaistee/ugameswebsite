@@ -3,33 +3,36 @@ import { Link, useNavigate, useLocation } from 'react-router-dom'
 import MobileNav from './MobileNav'
 import Icon from './Icon'
 
-export default function Header(){
+export default function Header() {
   const [open, setOpen] = useState(false)
   const [showCategoryPanel, setShowCategoryPanel] = useState(false)
   const [showCS2Panel, setShowCS2Panel] = useState(false)
-  const [theme, setTheme] = useState<'dark'|'light'>(() => {
+  const [theme, setTheme] = useState<'dark' | 'light'>(() => {
     try {
       const s = localStorage.getItem('theme')
       return s === 'light' ? 'light' : 'dark'
     } catch { return 'dark' }
   })
 
-  useEffect(()=>{
-    try{
-      if(theme === 'dark') document.documentElement.classList.add('dark')
+  useEffect(() => {
+    try {
+      if (theme === 'dark') document.documentElement.classList.add('dark')
       else document.documentElement.classList.remove('dark')
       localStorage.setItem('theme', theme)
-    }catch(e){}
-  },[theme])
+    } catch (e) { }
+  }, [theme])
 
   const navigate = useNavigate()
   const location = useLocation()
-  
+
   // Tek oyunculu sayfasında mıyız?
-  const isSinglePlayerPage = location.pathname === '/tek-oyunculu' || 
-                              location.pathname.startsWith('/tek-oyunculu') ||
-                              location.pathname.startsWith('/oyun-ara') ||
-                              location.pathname.startsWith('/oyun/')
+  const skipSelection = import.meta.env.VITE_SKIP_SELECTION_SCREEN === 'true'
+  const isSinglePlayerPage = location.pathname === '/tek-oyunculu' ||
+    location.pathname.startsWith('/tek-oyunculu') ||
+    location.pathname.startsWith('/oyun-ara') ||
+    location.pathname.startsWith('/oyun/') ||
+    location.pathname.startsWith('/odeme/') ||
+    (skipSelection && location.pathname === '/')
 
   // Tek oyunculu sayfasında farklı kategoriler göster
   const categories = isSinglePlayerPage ? [
@@ -49,11 +52,11 @@ export default function Header(){
     { name: 'Çekilişler', path: '/cekilisler', icon: 'gift', color: 'from-green-500 to-emerald-500' }
   ]
 
-  function onSearchSubmit(e:React.KeyboardEvent<HTMLInputElement>){
-    if(e.key === 'Enter'){
+  function onSearchSubmit(e: React.KeyboardEvent<HTMLInputElement>) {
+    if (e.key === 'Enter') {
       const q = (e.target as HTMLInputElement).value.trim()
       // Tek oyunculu sayfasındaysa oyun arama sayfasına yönlendir
-      if(isSinglePlayerPage) {
+      if (isSinglePlayerPage) {
         navigate(`/oyun-ara${q ? `?search=${encodeURIComponent(q)}` : ''}`)
       } else {
         navigate(`/ilanlar${q ? `?search=${encodeURIComponent(q)}` : ''}`)
@@ -66,42 +69,42 @@ export default function Header(){
       <header className="border-b" style={{ background: 'var(--surface)', borderColor: 'var(--border)' }}>
         <div className="max-w-6xl mx-auto px-4 py-3 flex items-center gap-4">
           <div className="flex items-center gap-3">
-            <button aria-label="Mobil menüyü aç" onClick={()=>setOpen(true)} className="lg:hidden p-2 rounded hover:bg-gray-100 dark:hover:bg-white/5">
+            <button aria-label="Mobil menüyü aç" onClick={() => setOpen(true)} className="lg:hidden p-2 rounded hover:bg-gray-100 dark:hover:bg-white/5">
               {/* hamburger */}
-              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M4 6h16M4 12h16M4 18h16" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/></svg>
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M4 6h16M4 12h16M4 18h16" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" /></svg>
             </button>
             <Link to="/" className="flex items-center">
-              <img 
-                src={theme === 'dark' ? '/images/Yeni Proje-17.png' : '/images/Yeni Proje-16.png'} 
-                alt="uGames Logo" 
+              <img
+                src={theme === 'dark' ? '/images/Yeni Proje-17.png' : '/images/Yeni Proje-16.png'}
+                alt="uGames Logo"
                 className="h-10 w-auto transition-opacity duration-200"
               />
             </Link>
           </div>
 
           <div className="hidden lg:block flex-1 px-4">
-            <input 
-              aria-label="Ara" 
-              placeholder="Arama yapın..." 
-              onKeyDown={onSearchSubmit} 
-              className="w-full border rounded px-3 py-2" 
+            <input
+              aria-label="Ara"
+              placeholder="Arama yapın..."
+              onKeyDown={onSearchSubmit}
+              className="w-full border rounded px-3 py-2"
               style={{ background: 'var(--bg)', borderColor: 'var(--border)', color: 'var(--text)' }}
             />
           </div>
 
           <div className="ml-auto flex items-center gap-3">
             <button
-              onClick={()=>setTheme(t=> t === 'dark' ? 'light' : 'dark')}
+              onClick={() => setTheme(t => t === 'dark' ? 'light' : 'dark')}
               aria-label={theme === 'dark' ? 'Açık tema geçişi' : 'Karanlık tema geçişi'}
               title={theme === 'dark' ? 'Açık tema' : 'Karanlık tema'}
               className="p-2 rounded hover:bg-gray-100 dark:hover:bg-white/5"
             >
               {theme === 'dark' ? (
                 // sun icon for switching to light
-                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M12 3v2M12 19v2M4.2 4.2l1.4 1.4M18.4 18.4l1.4 1.4M3 12h2M19 12h2M4.2 19.8l1.4-1.4M18.4 5.6l1.4-1.4" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round"/></svg>
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M12 3v2M12 19v2M4.2 4.2l1.4 1.4M18.4 18.4l1.4 1.4M3 12h2M19 12h2M4.2 19.8l1.4-1.4M18.4 5.6l1.4-1.4" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" /></svg>
               ) : (
                 // moon icon for switching to dark
-                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z" stroke="currentColor" strokeWidth="1.4" strokeLinecap="round" strokeLinejoin="round"/></svg>
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z" stroke="currentColor" strokeWidth="1.4" strokeLinecap="round" strokeLinejoin="round" /></svg>
               )}
             </button>
             <div className="hidden sm:flex items-center gap-4">
@@ -116,14 +119,14 @@ export default function Header(){
           <div className="max-w-6xl mx-auto px-4">
             <nav className="flex items-center gap-3 py-2 justify-center">
               {/* Kategoriler Dropdown Button - Sol tarafta */}
-              <div 
+              <div
                 className="relative"
                 onMouseEnter={() => setShowCategoryPanel(true)}
                 onMouseLeave={() => setShowCategoryPanel(false)}
               >
                 <button
                   className="flex items-center gap-2 px-4 py-2 rounded-lg whitespace-nowrap text-sm font-bold transition-all hover:scale-105 relative overflow-hidden group"
-                  style={{ 
+                  style={{
                     color: 'var(--text)',
                     background: 'var(--surface)'
                   }}
@@ -139,9 +142,9 @@ export default function Header(){
 
                 {/* Dropdown Panel */}
                 {showCategoryPanel && (
-                  <div 
+                  <div
                     className="absolute top-full left-0 mt-0.5 w-80 rounded-lg shadow-2xl border overflow-hidden z-50 animate-slide-in"
-                    style={{ 
+                    style={{
                       background: 'var(--surface)',
                       borderColor: 'var(--border)'
                     }}
@@ -161,7 +164,7 @@ export default function Header(){
                           key={cat.name}
                           to={cat.path}
                           className="flex items-center gap-3 px-3 py-3 rounded-lg transition-all hover:scale-[1.02] relative overflow-hidden group"
-                          style={{ 
+                          style={{
                             color: 'var(--text)',
                           }}
                           onMouseEnter={(e) => {
@@ -173,11 +176,37 @@ export default function Header(){
                         >
                           {/* Gradient background on hover */}
                           <div className={`absolute inset-0 bg-gradient-to-r ${cat.color} opacity-0 group-hover:opacity-5 transition-opacity duration-300`} />
-                          
-                          <div className={`w-11 h-11 rounded-lg flex items-center justify-center bg-gradient-to-br ${cat.color} relative z-10 shadow-md`}>
-                            <Icon name={cat.icon} className="w-5 h-5 text-white" />
+
+                          <div
+                            className="w-11 h-11 rounded-lg flex items-center justify-center relative z-10 shadow-md"
+                            style={{
+                              background: theme === 'dark' ? 'rgba(255, 255, 255, 0.1)' : 'rgba(0, 0, 0, 0.06)'
+                            }}
+                          >
+                            {cat.name === 'PC Oyunları' ? (
+                              <img
+                                src={theme === 'dark' ? '/images/pciconlight.png' : '/images/pcicondark.png'}
+                                alt="PC"
+                                className="w-5 h-5"
+                              />
+                            ) : cat.name === 'PlayStation Oyunları' ? (
+                              <img
+                                src="/images/psicon.svg"
+                                alt="PlayStation"
+                                className="w-5 h-5"
+                              />
+                            ) : cat.name === 'Xbox Oyunları' ? (
+                              <img
+                                src="/images/xboxicon.svg"
+                                alt="Xbox"
+                                className="w-5 h-5"
+                              />
+                            ) : (
+                              <Icon name={cat.icon} className="w-5 h-5" style={{ color: 'var(--accent)' }} />
+                            )}
                           </div>
-                          
+
+
                           <div className="flex-1 relative z-10">
                             <div className="font-semibold text-sm">{cat.name}</div>
                             <div className="text-xs mt-0.5" style={{ color: 'var(--muted)' }}>
@@ -203,21 +232,21 @@ export default function Header(){
                               )}
                             </div>
                           </div>
-                          
+
                           <svg className="w-5 h-5 opacity-0 group-hover:opacity-100 transition-opacity relative z-10" style={{ color: 'var(--accent)' }} fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
                           </svg>
                         </Link>
                       ))}
                     </div>
-                    
+
                     <div className="p-3 border-t" style={{ borderColor: 'var(--border)', background: 'var(--bg)' }}>
-                      <Link 
-                        to={isSinglePlayerPage ? "/tek-oyunculu" : "/ilanlar"} 
+                      <Link
+                        to={isSinglePlayerPage ? "/tek-oyunculu" : "/ilanlar"}
                         className="block text-center py-2.5 px-4 rounded-lg font-semibold text-sm transition-all hover:scale-[1.02] hover:shadow-lg"
-                        style={{ 
+                        style={{
                           background: 'var(--accent)',
-                          color: 'white'
+                          color: theme === 'dark' ? '#1a1a1a' : 'white'
                         }}
                       >
                         {isSinglePlayerPage ? 'Tüm Oyunları Gör →' : 'Tüm İlanları Gör →'}
@@ -232,7 +261,7 @@ export default function Header(){
                 // CS2 için özel dropdown - sadece ilan pazarı sayfalarında
                 if (cat.name === 'CS2' && !isSinglePlayerPage) {
                   return (
-                    <div 
+                    <div
                       key={cat.name}
                       className="relative"
                       onMouseEnter={() => setShowCS2Panel(true)}
@@ -242,7 +271,7 @@ export default function Header(){
                         className="flex items-center gap-1.5 px-3 py-2 rounded-lg whitespace-nowrap text-sm font-medium transition-all hover:scale-105 relative overflow-hidden group"
                         style={{ color: 'var(--text)', background: showCS2Panel ? 'var(--surface)' : 'transparent' }}
                       >
-                        <div className={`absolute inset-0 bg-gradient-to-r ${cat.color} opacity-0 group-hover:opacity-10 transition-opacity`}/>
+                        <div className={`absolute inset-0 bg-gradient-to-r ${cat.color} opacity-0 group-hover:opacity-10 transition-opacity`} />
                         <Icon name={cat.icon} className="w-4 h-4 relative z-10" style={{ color: 'var(--accent)' }} />
                         <span className="relative z-10">{cat.name}</span>
                         <svg className={`w-3 h-3 relative z-10 transition-transform ${showCS2Panel ? 'rotate-180' : ''}`} fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -252,9 +281,9 @@ export default function Header(){
 
                       {/* CS2 Dropdown Panel */}
                       {showCS2Panel && (
-                        <div 
+                        <div
                           className="absolute top-full left-0 mt-0.5 w-72 rounded-lg shadow-2xl border overflow-hidden z-50 animate-slide-in"
-                          style={{ 
+                          style={{
                             background: 'var(--surface)',
                             borderColor: 'var(--border)'
                           }}
@@ -277,8 +306,13 @@ export default function Header(){
                                 e.currentTarget.style.background = 'transparent'
                               }}
                             >
-                              <div className="w-9 h-9 rounded-lg flex items-center justify-center bg-gradient-to-br from-blue-500 to-cyan-500 shadow-sm">
-                                <Icon name="gun" className="w-4 h-4 text-white" />
+                              <div
+                                className="w-9 h-9 rounded-lg flex items-center justify-center shadow-sm"
+                                style={{
+                                  background: theme === 'dark' ? 'rgba(255, 255, 255, 0.1)' : 'rgba(0, 0, 0, 0.06)'
+                                }}
+                              >
+                                <Icon name="gun" className="w-5 h-5" style={{ color: 'var(--accent)' }} />
                               </div>
                               <div className="flex-1">
                                 <div className="font-semibold text-sm">CS2 Skin Pazarı</div>
@@ -297,8 +331,13 @@ export default function Header(){
                                 e.currentTarget.style.background = 'transparent'
                               }}
                             >
-                              <div className="w-9 h-9 rounded-lg flex items-center justify-center bg-gradient-to-br from-purple-500 to-pink-500 shadow-sm">
-                                <Icon name="user" className="w-4 h-4 text-white" />
+                              <div
+                                className="w-9 h-9 rounded-lg flex items-center justify-center shadow-sm"
+                                style={{
+                                  background: theme === 'dark' ? 'rgba(255, 255, 255, 0.1)' : 'rgba(0, 0, 0, 0.06)'
+                                }}
+                              >
+                                <Icon name="user" className="w-5 h-5" style={{ color: 'var(--accent)' }} />
                               </div>
                               <div className="flex-1">
                                 <div className="font-semibold text-sm">CS2 Hesap</div>
@@ -317,8 +356,13 @@ export default function Header(){
                                 e.currentTarget.style.background = 'transparent'
                               }}
                             >
-                              <div className="w-9 h-9 rounded-lg flex items-center justify-center bg-gradient-to-br from-red-500 to-pink-500 shadow-sm">
-                                <Icon name="shop" className="w-4 h-4 text-white" />
+                              <div
+                                className="w-9 h-9 rounded-lg flex items-center justify-center shadow-sm"
+                                style={{
+                                  background: theme === 'dark' ? 'rgba(255, 255, 255, 0.1)' : 'rgba(0, 0, 0, 0.06)'
+                                }}
+                              >
+                                <Icon name="shop" className="w-5 h-5" style={{ color: 'var(--accent)' }} />
                               </div>
                               <div className="flex-1">
                                 <div className="font-semibold text-sm">CS2 Kasa</div>
@@ -346,8 +390,28 @@ export default function Header(){
                       e.currentTarget.style.background = 'transparent'
                     }}
                   >
-                    <div className={`absolute inset-0 bg-gradient-to-r ${cat.color} opacity-0 group-hover:opacity-10 transition-opacity`}/>
-                    <Icon name={cat.icon} className="w-4 h-4 relative z-10" style={{ color: 'var(--accent)' }} />
+                    <div className={`absolute inset-0 bg-gradient-to-r ${cat.color} opacity-0 group-hover:opacity-10 transition-opacity`} />
+                    {cat.name === 'PC Oyunları' ? (
+                      <img
+                        src={theme === 'dark' ? '/images/pciconlight.png' : '/images/pcicondark.png'}
+                        alt="PC"
+                        className="w-5 h-5 relative z-10"
+                      />
+                    ) : cat.name === 'PlayStation Oyunları' ? (
+                      <img
+                        src="/images/psicon.svg"
+                        alt="PlayStation"
+                        className="w-5 h-5 relative z-10"
+                      />
+                    ) : cat.name === 'Xbox Oyunları' ? (
+                      <img
+                        src="/images/xboxicon.svg"
+                        alt="Xbox"
+                        className="w-5 h-5 relative z-10"
+                      />
+                    ) : (
+                      <Icon name={cat.icon} className="w-5 h-5 relative z-10" style={{ color: 'var(--accent)' }} />
+                    )}
                     <span className="relative z-10">{cat.name}</span>
                   </Link>
                 )
@@ -357,7 +421,7 @@ export default function Header(){
         </div>
       </header>
 
-      <MobileNav open={open} onClose={()=>setOpen(false)} />
+      <MobileNav open={open} onClose={() => setOpen(false)} />
     </>
   )
 }

@@ -130,7 +130,7 @@ select::-ms-expand {
 .container { max-width: var(--max-w); margin-left: auto; margin-right: auto; padding-left: 1rem; padding-right: 1rem; }
 
 /* Modern typography */
-h1, h2, h3 { color: #0f172a; }
+h1, h2, h3 { color: var(--text); }
 h2 { font-size: 1.25rem; line-height: 1.2; }
 h1 { font-size: 1.75rem; }
 .lead { color: var(--muted); font-size: 0.95rem; }

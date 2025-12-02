@@ -7,9 +7,9 @@ import Icon from '../components/Icon'
 
 export default function EpinSales() {
   // Filter products for epin-related items (you can customize this filter)
-  const epinProducts = (products as any[]).filter(p => 
-    p.category === 'pubg' || 
-    p.category === 'valorant' || 
+  const epinProducts = (products as any[]).filter(p =>
+    p.category === 'pubg' ||
+    p.category === 'valorant' ||
     p.category === 'lol' ||
     p.category === 'steam' ||
     p.parentCategory === 'pubg' ||
@@ -83,7 +83,7 @@ export default function EpinSales() {
               <div className="flex gap-4 w-max py-2">
                 {slice(6).map((p: any) => (
                   <div key={p.id} className="w-72">
-                    <ProductCard product={p} />
+                    <ProductCard product={p} variant="epin" />
                   </div>
                 ))}
               </div>
@@ -102,7 +102,7 @@ export default function EpinSales() {
           <div className="grid gap-4 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
             {epinProducts.map((p: any, i: number) => (
               <div key={p.id} className="staggered-item h-full" style={{ ['--i' as any]: i }}>
-                <ProductCard product={p} />
+                <ProductCard product={p} variant="epin" />
               </div>
             ))}
           </div>

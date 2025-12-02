@@ -9,9 +9,14 @@
     "parentCategory": "pc",
     "platform": "PC",
     "badge": "Çok Satan",
-    "tags": ["Çok Satan", "Vitrin"],
+    "tags": [
+      "Çok Satan",
+      "Vitrin"
+    ],
     "createdAt": 1700000000,
-    "images": ["https://picsum.photos/seed/gta5/900/600"]
+    "images": [
+      "https://i.ytimg.com/vi/uNFPZpdFUJQ/hq720.jpg?sqp=-oaymwEhCK4FEIIDSFryq4qpAxMIARUAAAAAGAElAADIQj0AgKJD&rs=AOn4CLDylOwxcm6c2GX927otPn1yfAcfpQ"
+    ]
   },
   {
     "id": "game-2",
@@ -23,9 +28,13 @@
     "parentCategory": "pc",
     "platform": "PC",
     "badge": "Vitrin İlanı",
-    "tags": ["Vitrin"],
+    "tags": [
+      "Vitrin"
+    ],
     "createdAt": 1700100000,
-    "images": ["https://picsum.photos/seed/cod/900/600"]
+    "images": [
+      "https://image.api.playstation.com/vulcan/ap/rnd/202308/1415/8d9af953f938ba6cb9f9e73cd94424df2d33b0f313794739.png"
+    ]
   },
   {
     "id": "game-3",
@@ -37,9 +46,14 @@
     "parentCategory": "ps",
     "platform": "PlayStation",
     "badge": "Çok Satan",
-    "tags": ["Çok Satan", "Vitrin"],
+    "tags": [
+      "Çok Satan",
+      "Vitrin"
+    ],
     "createdAt": 1700200000,
-    "images": ["https://picsum.photos/seed/fc25/900/600"]
+    "images": [
+      "https://ares.shiftdelete.net/2024/10/EA-Sports-FC-25-ABDde-olaganustu-bir-rekor-kirdi-2.webp"
+    ]
   },
   {
     "id": "game-4",
@@ -51,9 +65,13 @@
     "parentCategory": "ps",
     "platform": "PlayStation",
     "badge": "Çok Satan",
-    "tags": ["Çok Satan"],
+    "tags": [
+      "Çok Satan"
+    ],
     "createdAt": 1700300000,
-    "images": ["https://picsum.photos/seed/tlou2/900/600"]
+    "images": [
+      "https://cdn1.epicgames.com/offer/7713e3fa4b234e0d8f553044205d53b6/EGS_TheLastofUsPartIIRemastered_NaughtyDogLLCNixxesSoftwareIronGalaxy_S1_2560x1440-e93b7a99866b784c5fc948c1666df5e0"
+    ]
   },
   {
     "id": "game-5",
@@ -65,9 +83,13 @@
     "parentCategory": "ps",
     "platform": "PlayStation",
     "badge": "Vitrin İlanı",
-    "tags": ["Vitrin"],
+    "tags": [
+      "Vitrin"
+    ],
     "createdAt": 1700400000,
-    "images": ["https://picsum.photos/seed/acs/900/600"]
+    "images": [
+      "https://cdn1.epicgames.com/offer/14a28903e3d14bd5aa3e6dbf10868126/EN_EGST_StoreLandscape_2560x1440_2560x1440-35f77ef342bb2d3a3efac25f4fa4d4e0"
+    ]
   },
   {
     "id": "game-6",
@@ -79,9 +101,13 @@
     "parentCategory": "xbox",
     "platform": "Xbox",
     "badge": "Çok Satan",
-    "tags": ["Çok Satan"],
+    "tags": [
+      "Çok Satan"
+    ],
     "createdAt": 1700500000,
-    "images": ["https://picsum.photos/seed/elden/900/600"]
+    "images": [
+      "https://image.api.playstation.com/vulcan/img/rnd/202111/0506/hcFeWRVGHYK72uOw6Mn6f4Ms.jpg"
+    ]
   },
   {
     "id": "game-7",
@@ -93,9 +119,13 @@
     "parentCategory": "xbox",
     "platform": "Xbox",
     "badge": "Vitrin İlanı",
-    "tags": ["Vitrin"],
+    "tags": [
+      "Vitrin"
+    ],
     "createdAt": 1700600000,
-    "images": ["https://picsum.photos/seed/cp2077/900/600"]
+    "images": [
+      "https://cdn1.epicgames.com/offer/77f2b98e2cef40c8a7437518bf420e47/EGS_Cyberpunk2077PhantomLiberty_CDPROJEKTRED_DLC_S1_2560x1440-c62f1eb1498aaea2fc109b7aa50279a3"
+    ]
   },
   {
     "id": "game-8",
@@ -106,9 +136,13 @@
     "category": "xbox",
     "parentCategory": "xbox",
     "platform": "Xbox",
-    "tags": ["Vitrin"],
+    "tags": [
+      "Vitrin"
+    ],
     "createdAt": 1700700000,
-    "images": ["https://picsum.photos/seed/forza/900/600"]
+    "images": [
+      "https://image.api.playstation.com/vulcan/ap/rnd/202502/1900/631436cfbc1d64659c778e3783f29fafad6022145e0ffec8.jpg"
+    ]
   },
   {
     "id": "game-9",
@@ -120,9 +154,13 @@
     "parentCategory": "pc",
     "platform": "PC",
     "badge": "Çok Satan",
-    "tags": ["Çok Satan"],
+    "tags": [
+      "Çok Satan"
+    ],
     "createdAt": 1700800000,
-    "images": ["https://picsum.photos/seed/deadisland/900/600"]
+    "images": [
+      "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/934700/a0bb0659f81e6a4c1a7201bd6f4b44f80c5c5388/capsule_616x353.jpg?t=1761231459"
+    ]
   },
   {
     "id": "game-10",
@@ -133,9 +171,13 @@
     "category": "steam",
     "parentCategory": "pc",
     "platform": "PC",
-    "tags": ["Vitrin"],
+    "tags": [
+      "Vitrin"
+    ],
     "createdAt": 1700900000,
-    "images": ["https://picsum.photos/seed/farcry/900/600"]
+    "images": [
+      "https://sm.ign.com/ign_tr/news/f/far-cry-6-/far-cry-6-has-received-its-final-update-ubisoft-confirms_1d3f.jpg"
+    ]
   },
   {
     "id": "game-11",
@@ -147,9 +189,13 @@
     "parentCategory": "pc",
     "platform": "PC",
     "badge": "Çok Satan",
-    "tags": ["Çok Satan"],
+    "tags": [
+      "Çok Satan"
+    ],
     "createdAt": 1701000000,
-    "images": ["https://picsum.photos/seed/dyinglight/900/600"]
+    "images": [
+      "https://cdn1.epicgames.com/offer/87b7846d2eba4bc49eead0854323aba8/EGS_DyingLight2StayHumanDigitalExtrasEdition_Techland_Editions_S1_2560x1440-ee8399252ac6d427f11392d00d4ef9bc"
+    ]
   },
   {
     "id": "game-12",
@@ -160,9 +206,13 @@
     "category": "steam",
     "parentCategory": "pc",
     "platform": "PC",
-    "tags": ["Vitrin"],
+    "tags": [
+      "Vitrin"
+    ],
     "createdAt": 1701100000,
-    "images": ["https://picsum.photos/seed/re8/900/600"]
+    "images": [
+      "https://images.squarespace-cdn.com/content/v1/5ed1b3e73b87d766d1c49146/1627340302779-YNMZ1HLN0AXSMKGW9O69/RE-Village.png"
+    ]
   },
   {
     "id": "game-13",
@@ -174,9 +224,13 @@
     "parentCategory": "ps",
     "platform": "PlayStation",
     "badge": "Çok Satan",
-    "tags": ["Çok Satan"],
+    "tags": [
+      "Çok Satan"
+    ],
     "createdAt": 1701200000,
-    "images": ["https://picsum.photos/seed/returnal/900/600"]
+    "images": [
+      "https://www.misternoob.com/wp-content/uploads/2021/10/ron.jpg"
+    ]
   },
   {
     "id": "game-14",
@@ -188,9 +242,14 @@
     "parentCategory": "ps",
     "platform": "PlayStation",
     "badge": "Çok Satan",
-    "tags": ["Çok Satan", "Vitrin"],
+    "tags": [
+      "Çok Satan",
+      "Vitrin"
+    ],
     "createdAt": 1701300000,
-    "images": ["https://picsum.photos/seed/astrobot/900/600"]
+    "images": [
+      "https://image.api.playstation.com/vulcan/ap/rnd/202406/0500/80ecf657918558eeef8da3ee4cef326e4517d34e6c69d950.jpg"
+    ]
   },
   {
     "id": "game-15",
@@ -201,9 +260,13 @@
     "category": "playstation",
     "parentCategory": "ps",
     "platform": "PlayStation",
-    "tags": ["Vitrin"],
+    "tags": [
+      "Vitrin"
+    ],
     "createdAt": 1701400000,
-    "images": ["https://picsum.photos/seed/alanwake/900/600"]
+    "images": [
+      "https://i.scdn.co/image/ab67616d00001e024b011fc18d8f6ad2a7128e28"
+    ]
   },
   {
     "id": "game-16",
@@ -215,9 +278,13 @@
     "parentCategory": "ps",
     "platform": "PlayStation",
     "badge": "Çok Satan",
-    "tags": ["Çok Satan"],
+    "tags": [
+      "Çok Satan"
+    ],
     "createdAt": 1701500000,
-    "images": ["https://picsum.photos/seed/mirage/900/600"]
+    "images": [
+      "https://sm.ign.com/t/ign_tr/screenshot/default/ac-mirage-1200_bj4g.1280.jpg"
+    ]
   },
   {
     "id": "game-17",
@@ -228,9 +295,13 @@
     "category": "xbox",
     "parentCategory": "xbox",
     "platform": "Xbox",
-    "tags": ["Vitrin"],
+    "tags": [
+      "Vitrin"
+    ],
     "createdAt": 1701600000,
-    "images": ["https://picsum.photos/seed/valhalla/900/600"]
+    "images": [
+      "https://sm.ign.com/ign_tr/screenshot/default/assassins-creed-valhalla-fragman-1_fj2s.jpg"
+    ]
   },
   {
     "id": "game-18",
@@ -242,9 +313,13 @@
     "parentCategory": "xbox",
     "platform": "Xbox",
     "badge": "Çok Satan",
-    "tags": ["Çok Satan"],
+    "tags": [
+      "Çok Satan"
+    ],
     "createdAt": 1701700000,
-    "images": ["https://picsum.photos/seed/miragexbox/900/600"]
+    "images": [
+      "https://sm.ign.com/t/ign_tr/screenshot/default/ac-mirage-1200_bj4g.1280.jpg"
+    ]
   },
   {
     "id": "game-19",
@@ -255,9 +330,13 @@
     "category": "steam",
     "parentCategory": "pc",
     "platform": "PC",
-    "tags": ["Vitrin"],
+    "tags": [
+      "Vitrin"
+    ],
     "createdAt": 1701800000,
-    "images": ["https://picsum.photos/seed/plague/900/600"]
+    "images": [
+      ""
+    ]
   },
   {
     "id": "game-20",
@@ -269,9 +348,13 @@
     "parentCategory": "pc",
     "platform": "PC",
     "badge": "Çok Satan",
-    "tags": ["Çok Satan"],
+    "tags": [
+      "Çok Satan"
+    ],
     "createdAt": 1701900000,
-    "images": ["https://picsum.photos/seed/quietplace/900/600"]
+    "images": [
+      ""
+    ]
   },
   {
     "id": "game-21",
@@ -282,9 +365,13 @@
     "category": "steam",
     "parentCategory": "pc",
     "platform": "PC",
-    "tags": ["Vitrin"],
+    "tags": [
+      "Vitrin"
+    ],
     "createdAt": 1702000000,
-    "images": ["https://picsum.photos/seed/awayout/900/600"]
+    "images": [
+      ""
+    ]
   },
   {
     "id": "game-22",
@@ -296,9 +383,13 @@
     "parentCategory": "pc",
     "platform": "PC",
     "badge": "Çok Satan",
-    "tags": ["Çok Satan"],
+    "tags": [
+      "Çok Satan"
+    ],
     "createdAt": 1702100000,
-    "images": ["https://picsum.photos/seed/aoe4/900/600"]
+    "images": [
+      ""
+    ]
   },
   {
     "id": "game-23",
@@ -309,9 +400,13 @@
     "category": "steam",
     "parentCategory": "pc",
     "platform": "PC",
-    "tags": ["Vitrin"],
+    "tags": [
+      "Vitrin"
+    ],
     "createdAt": 1702200000,
-    "images": ["https://picsum.photos/seed/aom/900/600"]
+    "images": [
+      ""
+    ]
   },
   {
     "id": "game-24",
@@ -323,9 +418,13 @@
     "parentCategory": "ps",
     "platform": "PlayStation",
     "badge": "Çok Satan",
-    "tags": ["Çok Satan"],
+    "tags": [
+      "Çok Satan"
+    ],
     "createdAt": 1702300000,
-    "images": ["https://picsum.photos/seed/awayoutps/900/600"]
+    "images": [
+      ""
+    ]
   },
   {
     "id": "game-25",
@@ -336,9 +435,12 @@
     "category": "playstation",
     "parentCategory": "ps",
     "platform": "PlayStation",
-    "tags": ["Vitrin"],
+    "tags": [
+      "Vitrin"
+    ],
     "createdAt": 1702400000,
-    "images": ["https://picsum.photos/seed/origins/900/600"]
+    "images": [
+      ""
+    ]
   }
 ]
-

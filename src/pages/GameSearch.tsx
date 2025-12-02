@@ -137,11 +137,16 @@ export default function GameSearch() {
   const GameCard = ({ game }: { game: any }) => {
     return (
       <Link to={`/oyun/${game.id}`} className="block h-full group">
-        <div className="border rounded-lg overflow-hidden card-shadow hover:shadow-xl transition-all duration-300 hover:-translate-y-2 h-full" style={{ 
-          background: 'var(--surface)', 
-          borderColor: 'var(--border)' 
+        <div className="border rounded-lg overflow-hidden card-shadow hover:shadow-xl transition-all duration-300 hover:-translate-y-2 h-full" style={{
+          background: 'var(--surface)',
+          borderColor: 'var(--border)'
         }}>
           <div className="relative aspect-square overflow-hidden flex items-center justify-center" style={{ background: 'var(--bg)' }}>
+            <img
+              src={game.images?.[0] || game.image}
+              alt={game.title}
+              className="w-full h-full object-cover transition-all duration-300 group-hover:scale-110"
+            />
             {game.discount && (
               <div className="absolute top-2 left-2 bg-red-500 text-white text-xs font-bold px-2 py-1 rounded shadow-lg">
                 -%{game.discount}
@@ -153,11 +158,10 @@ export default function GameSearch() {
               </div>
             )}
             {game.platform && (
-              <div className={`absolute bottom-2 left-2 text-white text-[10px] font-bold px-2 py-1 rounded backdrop-blur-sm ${
-                game.platform === 'PC' ? 'bg-blue-600/90' :
-                game.platform === 'PlayStation' ? 'bg-blue-500/90' :
-                'bg-green-600/90'
-              }`}>
+              <div className={`absolute bottom-2 left-2 text-white text-[10px] font-bold px-2 py-1 rounded backdrop-blur-sm ${game.platform === 'PC' ? 'bg-blue-600/90' :
+                  game.platform === 'PlayStation' ? 'bg-blue-500/90' :
+                    'bg-green-600/90'
+                }`}>
                 {game.platform}
               </div>
             )}
@@ -176,9 +180,9 @@ export default function GameSearch() {
                 ₺{game.price}
               </span>
             </div>
-            <div className="w-full text-center py-2 rounded font-semibold transition-all hover:scale-105 active:scale-95 text-sm" style={{ 
-              background: 'var(--accent)', 
-              color: 'var(--bg)' 
+            <div className="w-full text-center py-2 rounded font-semibold transition-all hover:scale-105 active:scale-95 text-sm" style={{
+              background: 'var(--accent)',
+              color: 'var(--bg)'
             }}>
               Hemen Al
             </div>
@@ -201,14 +205,14 @@ export default function GameSearch() {
               <span style={{ color: 'var(--muted)' }}>/</span>
               <span className="font-medium capitalize" style={{ color: 'var(--text)' }}>
                 {filters.platform === 'pc' ? 'PC' :
-                 filters.platform === 'playstation' ? 'PlayStation' :
-                 filters.platform === 'xbox' ? 'Xbox' :
-                 filters.category === 'discounted' ? 'İndirimdeki Oyunlar' :
-                 filters.category === 'bestsellers' ? 'Çok Satanlar' :
-                 filters.category === 'pc' ? 'PC' :
-                 filters.category === 'playstation' ? 'PlayStation' :
-                 filters.category === 'xbox' ? 'Xbox' :
-                 'Oyun Ara'}
+                  filters.platform === 'playstation' ? 'PlayStation' :
+                    filters.platform === 'xbox' ? 'Xbox' :
+                      filters.category === 'discounted' ? 'İndirimdeki Oyunlar' :
+                        filters.category === 'bestsellers' ? 'Çok Satanlar' :
+                          filters.category === 'pc' ? 'PC' :
+                            filters.category === 'playstation' ? 'PlayStation' :
+                              filters.category === 'xbox' ? 'Xbox' :
+                                'Oyun Ara'}
               </span>
             </>
           )}
@@ -233,15 +237,15 @@ export default function GameSearch() {
         <div className="flex gap-6">
           {/* Mobile filter button */}
           <div className="lg:hidden mb-4 w-full">
-            <button 
-              onClick={() => setShowMobileFilters(true)} 
-              aria-expanded={showMobileFilters} 
-              aria-controls="mobile-filter-dialog" 
+            <button
+              onClick={() => setShowMobileFilters(true)}
+              aria-expanded={showMobileFilters}
+              aria-controls="mobile-filter-dialog"
               className="w-full px-4 py-3 border rounded-lg font-semibold transition-all hover:scale-[1.02] active:scale-95 flex items-center justify-center gap-2"
-              style={{ 
-                background: 'var(--surface)', 
-                borderColor: 'var(--border)', 
-                color: 'var(--text)' 
+              style={{
+                background: 'var(--surface)',
+                borderColor: 'var(--border)',
+                color: 'var(--text)'
               }}
             >
               <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -263,13 +267,13 @@ export default function GameSearch() {
                   {/* Platform Filter */}
                   <div className="space-y-2">
                     <label className="text-sm font-semibold" style={{ color: 'var(--text)' }}>Platform</label>
-                    <select 
-                      value={filters.platform} 
-                      onChange={e => setFilters(prev => ({...prev, platform: e.target.value}))}
+                    <select
+                      value={filters.platform}
+                      onChange={e => setFilters(prev => ({ ...prev, platform: e.target.value }))}
                       className="w-full border rounded-lg px-4 py-2.5 appearance-none cursor-pointer transition-all focus:ring-2 focus:ring-offset-1 font-medium"
-                      style={{ 
-                        background: 'var(--bg)', 
-                        borderColor: 'var(--border)', 
+                      style={{
+                        background: 'var(--bg)',
+                        borderColor: 'var(--border)',
                         color: 'var(--text)',
                         outline: 'none'
                       }}
@@ -284,13 +288,13 @@ export default function GameSearch() {
                   {/* Category Filter */}
                   <div className="space-y-2">
                     <label className="text-sm font-semibold" style={{ color: 'var(--text)' }}>Kategori</label>
-                    <select 
-                      value={filters.category} 
-                      onChange={e => setFilters(prev => ({...prev, category: e.target.value}))}
+                    <select
+                      value={filters.category}
+                      onChange={e => setFilters(prev => ({ ...prev, category: e.target.value }))}
                       className="w-full border rounded-lg px-4 py-2.5 appearance-none cursor-pointer transition-all focus:ring-2 focus:ring-offset-1 font-medium"
-                      style={{ 
-                        background: 'var(--bg)', 
-                        borderColor: 'var(--border)', 
+                      style={{
+                        background: 'var(--bg)',
+                        borderColor: 'var(--border)',
                         color: 'var(--text)',
                         outline: 'none'
                       }}
@@ -305,27 +309,27 @@ export default function GameSearch() {
                   <div className="space-y-3">
                     <label className="text-sm font-semibold" style={{ color: 'var(--text)' }}>Fiyat Aralığı (TL)</label>
                     <div className="grid grid-cols-2 gap-3">
-                      <input 
-                        type="number" 
-                        value={filters.min} 
-                        onChange={e => setFilters(prev => ({...prev, min: Number(e.target.value)}))} 
+                      <input
+                        type="number"
+                        value={filters.min}
+                        onChange={e => setFilters(prev => ({ ...prev, min: Number(e.target.value) }))}
                         placeholder="Min"
                         className="border rounded-lg px-4 py-2.5 font-medium outline-none transition-all"
-                        style={{ 
-                          background: 'var(--bg)', 
-                          borderColor: 'var(--border)', 
+                        style={{
+                          background: 'var(--bg)',
+                          borderColor: 'var(--border)',
                           color: 'var(--text)'
                         }}
                       />
-                      <input 
-                        type="number" 
-                        value={filters.max === 999999 ? '' : filters.max} 
-                        onChange={e => setFilters(prev => ({...prev, max: e.target.value ? Number(e.target.value) : 999999}))} 
+                      <input
+                        type="number"
+                        value={filters.max === 999999 ? '' : filters.max}
+                        onChange={e => setFilters(prev => ({ ...prev, max: e.target.value ? Number(e.target.value) : 999999 }))}
                         placeholder="Max"
                         className="border rounded-lg px-4 py-2.5 font-medium outline-none transition-all"
-                        style={{ 
-                          background: 'var(--bg)', 
-                          borderColor: 'var(--border)', 
+                        style={{
+                          background: 'var(--bg)',
+                          borderColor: 'var(--border)',
                           color: 'var(--text)'
                         }}
                       />
@@ -335,13 +339,13 @@ export default function GameSearch() {
                   {/* Sort */}
                   <div className="space-y-2">
                     <label className="text-sm font-semibold" style={{ color: 'var(--text)' }}>Sıralama</label>
-                    <select 
-                      value={filters.sort} 
-                      onChange={e => setFilters(prev => ({...prev, sort: e.target.value}))}
+                    <select
+                      value={filters.sort}
+                      onChange={e => setFilters(prev => ({ ...prev, sort: e.target.value }))}
                       className="w-full border rounded-lg px-4 py-2.5 appearance-none cursor-pointer transition-all focus:ring-2 focus:ring-offset-1 font-medium"
-                      style={{ 
-                        background: 'var(--bg)', 
-                        borderColor: 'var(--border)', 
+                      style={{
+                        background: 'var(--bg)',
+                        borderColor: 'var(--border)',
                         color: 'var(--text)',
                         outline: 'none'
                       }}
@@ -358,7 +362,7 @@ export default function GameSearch() {
               </div>
             </div>
           </aside>
-          
+
           <div className="flex-1 min-w-0">
             {/* Sort dropdown - desktop only */}
             <div className="hidden lg:flex items-center justify-between mb-4">
@@ -367,13 +371,13 @@ export default function GameSearch() {
               </div>
               <div className="flex items-center gap-2">
                 <span className="text-sm font-medium" style={{ color: 'var(--text)' }}>Sırala:</span>
-                <select 
-                  value={filters.sort} 
-                  onChange={e => setFilters(prev => ({...prev, sort: e.target.value}))}
+                <select
+                  value={filters.sort}
+                  onChange={e => setFilters(prev => ({ ...prev, sort: e.target.value }))}
                   className="border rounded-lg px-4 py-2 pr-10 appearance-none cursor-pointer text-sm font-medium transition-all focus:ring-2 focus:ring-offset-1"
-                  style={{ 
-                    background: 'var(--surface)', 
-                    borderColor: 'var(--border)', 
+                  style={{
+                    background: 'var(--surface)',
+                    borderColor: 'var(--border)',
                     color: 'var(--text)',
                     outline: 'none'
                   }}
@@ -412,13 +416,13 @@ export default function GameSearch() {
 
             {visibleCount < games.length && (
               <div className="mt-8 text-center">
-                <button 
-                  onClick={() => setVisibleCount(c => c + 12)} 
+                <button
+                  onClick={() => setVisibleCount(c => c + 12)}
                   className="px-6 py-3 border rounded-lg font-semibold transition-all hover:scale-[1.02] active:scale-95 inline-flex items-center gap-2"
-                  style={{ 
-                    background: 'var(--surface)', 
-                    borderColor: 'var(--border)', 
-                    color: 'var(--text)' 
+                  style={{
+                    background: 'var(--surface)',
+                    borderColor: 'var(--border)',
+                    color: 'var(--text)'
                   }}
                 >
                   <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -447,9 +451,9 @@ export default function GameSearch() {
           >
             <div className="sticky top-0 z-10 px-5 py-4 border-b flex items-center justify-between" style={{ background: 'var(--surface)', borderColor: 'var(--border)' }}>
               <h3 className="font-bold text-lg" style={{ color: 'var(--text)' }}>Filtreler</h3>
-              <button 
-                aria-label="Filtreleri kapat" 
-                onClick={() => setShowMobileFilters(false)} 
+              <button
+                aria-label="Filtreleri kapat"
+                onClick={() => setShowMobileFilters(false)}
                 className="p-2 rounded-lg transition-colors hover:bg-gray-100 dark:hover:bg-white/5"
                 style={{ color: 'var(--text)' }}
               >
@@ -462,9 +466,9 @@ export default function GameSearch() {
               {/* Mobile filters - same as desktop */}
               <div className="space-y-2">
                 <label className="text-sm font-semibold" style={{ color: 'var(--text)' }}>Platform</label>
-                <select 
-                  value={filters.platform} 
-                  onChange={e => setFilters(prev => ({...prev, platform: e.target.value}))}
+                <select
+                  value={filters.platform}
+                  onChange={e => setFilters(prev => ({ ...prev, platform: e.target.value }))}
                   className="w-full border rounded-lg px-4 py-2.5"
                   style={{ background: 'var(--bg)', borderColor: 'var(--border)', color: 'var(--text)' }}
                 >
@@ -476,9 +480,9 @@ export default function GameSearch() {
               </div>
               <div className="space-y-2">
                 <label className="text-sm font-semibold" style={{ color: 'var(--text)' }}>Kategori</label>
-                <select 
-                  value={filters.category} 
-                  onChange={e => setFilters(prev => ({...prev, category: e.target.value}))}
+                <select
+                  value={filters.category}
+                  onChange={e => setFilters(prev => ({ ...prev, category: e.target.value }))}
                   className="w-full border rounded-lg px-4 py-2.5"
                   style={{ background: 'var(--bg)', borderColor: 'var(--border)', color: 'var(--text)' }}
                 >
@@ -490,18 +494,18 @@ export default function GameSearch() {
               <div className="space-y-3">
                 <label className="text-sm font-semibold" style={{ color: 'var(--text)' }}>Fiyat Aralığı (TL)</label>
                 <div className="grid grid-cols-2 gap-3">
-                  <input 
-                    type="number" 
-                    value={filters.min} 
-                    onChange={e => setFilters(prev => ({...prev, min: Number(e.target.value)}))} 
+                  <input
+                    type="number"
+                    value={filters.min}
+                    onChange={e => setFilters(prev => ({ ...prev, min: Number(e.target.value) }))}
                     placeholder="Min"
                     className="border rounded-lg px-4 py-2.5"
                     style={{ background: 'var(--bg)', borderColor: 'var(--border)', color: 'var(--text)' }}
                   />
-                  <input 
-                    type="number" 
-                    value={filters.max === 999999 ? '' : filters.max} 
-                    onChange={e => setFilters(prev => ({...prev, max: e.target.value ? Number(e.target.value) : 999999}))} 
+                  <input
+                    type="number"
+                    value={filters.max === 999999 ? '' : filters.max}
+                    onChange={e => setFilters(prev => ({ ...prev, max: e.target.value ? Number(e.target.value) : 999999 }))}
                     placeholder="Max"
                     className="border rounded-lg px-4 py-2.5"
                     style={{ background: 'var(--bg)', borderColor: 'var(--border)', color: 'var(--text)' }}
@@ -510,9 +514,9 @@ export default function GameSearch() {
               </div>
               <div className="space-y-2">
                 <label className="text-sm font-semibold" style={{ color: 'var(--text)' }}>Sıralama</label>
-                <select 
-                  value={filters.sort} 
-                  onChange={e => setFilters(prev => ({...prev, sort: e.target.value}))}
+                <select
+                  value={filters.sort}
+                  onChange={e => setFilters(prev => ({ ...prev, sort: e.target.value }))}
                   className="w-full border rounded-lg px-4 py-2.5"
                   style={{ background: 'var(--bg)', borderColor: 'var(--border)', color: 'var(--text)' }}
                 >
