@@ -35,6 +35,25 @@ export default function TermsOfUse() {
                     Üye, hesap bilgilerinin (kullanıcı adı ve şifre) güvenliğinden kendisi sorumludur.
                     Hesap bilgilerinin üçüncü kişilerle paylaşılması veya çalınması durumunda doğacak zararlardan uGames sorumlu değildir.
                 </p>
+
+                <h2 className="text-xl font-bold mt-8 mb-4">5. İletişim</h2>
+                <p className="mb-4">
+                    Kullanım koşulları ile ilgili sorularınız için bizimle iletişime geçebilirsiniz:<br />
+                    <strong>E-posta:</strong> support@unifor.info<br />
+                    <strong>Telefon:</strong> +90 530 909 62 18<br />
+                    <strong>Adres:</strong> Pınarbaşı Mah. Pınarbaşı Cd. No:46, Konyaaltı/Antalya
+                </p>
+
+                <h2 className="text-xl font-bold mt-8 mb-4">6. Yetkili Mahkeme</h2>
+                <p className="mb-4">
+                    İşbu sözleşmeden doğabilecek her türlü uyuşmazlıkta Antalya Mahkemeleri ve İcra Daireleri yetkilidir.
+                    Tüketici işlemlerinde tüketici, yerleşim yerinin bulunduğu veya tüketici işleminin yapıldığı yerdeki
+                    Tüketici Hakem Heyetine başvurabilir.
+                </p>
+
+                <p className="text-sm mt-8" style={{ color: 'var(--muted)' }}>
+                    <strong>Son Güncelleme Tarihi:</strong> 04 Aralık 2024
+                </p>
             </div>
         </div>
     )

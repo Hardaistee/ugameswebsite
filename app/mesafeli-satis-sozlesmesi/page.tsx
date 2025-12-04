@@ -11,9 +11,10 @@ export default function DistanceSalesAgreement() {
                 <p className="mb-4">
                     <strong>1.1. SATICI:</strong><br />
                     Ünvanı: uGames Dijital Oyun Hizmetleri<br />
-                    Adres: [Şirket Adresi Buraya Gelecek]<br />
-                    Telefon: [Telefon Numarası]<br />
-                    E-posta: info@ugames.com
+                    Adres: Pınarbaşı Mah. Pınarbaşı Cd. No:46, Konyaaltı/Antalya<br />
+                    Telefon: +90 530 909 62 18<br />
+                    E-posta: support@unifor.info<br />
+                    Vergi No: 4140662799
                 </p>
 
                 <p className="mb-4">

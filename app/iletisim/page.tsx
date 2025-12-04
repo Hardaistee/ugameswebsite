@@ -26,8 +26,8 @@ export default function Contact() {
                             <div>
                                 <h3 className="font-bold mb-1" style={{ color: 'var(--text)' }}>Adres</h3>
                                 <p className="text-sm" style={{ color: 'var(--muted)' }}>
-                                    Teknoloji Mah. Bilişim Cad. No:123<br />
-                                    Kadıköy / İstanbul
+                                    Pınarbaşı Mah. Pınarbaşı Cd. No:46<br />
+                                    Konyaaltı / Antalya
                                 </p>
                             </div>
                         </div>
@@ -41,8 +41,8 @@ export default function Contact() {
                             <div>
                                 <h3 className="font-bold mb-1" style={{ color: 'var(--text)' }}>E-posta</h3>
                                 <p className="text-sm" style={{ color: 'var(--muted)' }}>
-                                    info@ugames.com<br />
-                                    destek@ugames.com
+                                    support@unifor.info<br />
+                                    Destek için: support@unifor.info
                                 </p>
                             </div>
                         </div>
@@ -56,7 +56,7 @@ export default function Contact() {
                             <div>
                                 <h3 className="font-bold mb-1" style={{ color: 'var(--text)' }}>Telefon</h3>
                                 <p className="text-sm" style={{ color: 'var(--muted)' }}>
-                                    0850 123 45 67<br />
+                                    +90 530 909 62 18<br />
                                     (Hafta içi 09:00 - 18:00)
                                 </p>
                             </div>

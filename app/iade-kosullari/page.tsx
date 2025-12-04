@@ -36,8 +36,15 @@ export default function ReturnConditions() {
 
                 <h2 className="text-xl font-bold mt-8 mb-4">İade Süreci</h2>
                 <p className="mb-4">
-                    İade talepleriniz için "İletişim" sayfasından veya canlı destek hattımızdan bize ulaşabilirsiniz.
-                    Talebini incelendikten sonra, iade koşullarına uygun bulunması durumunda ödemeniz 3-7 iş günü içinde
+                    İade talepleriniz için aşağıdaki iletişim kanallarından bize ulaşabilirsiniz:
+                </p>
+                <ul className="list-disc pl-5 mb-4 space-y-2">
+                    <li><strong>E-posta:</strong> support@unifor.info</li>
+                    <li><strong>Telefon:</strong> +90 530 909 62 18</li>
+                    <li><strong>Adres:</strong> Pınarbaşı Mah. Pınarbaşı Cd. No:46, Konyaaltı/Antalya</li>
+                </ul>
+                <p className="mb-4">
+                    Talebiniz incelendikten sonra, iade koşullarına uygun bulunması durumunda ödemeniz 3-7 iş günü içinde
                     ödeme yaptığınız karta/hesaba iade edilir.
                 </p>
             </div>

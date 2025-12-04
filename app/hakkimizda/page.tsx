@@ -33,6 +33,14 @@ export default function About() {
                     <li><strong>7/24 Destek:</strong> Her türlü soru ve sorununuz için uzman destek ekibimiz yanınızda.</li>
                     <li><strong>Uygun Fiyatlar:</strong> Piyasadaki en rekabetçi fiyatlarla bütçe dostu alışveriş.</li>
                 </ul>
+
+                <h2 className="text-xl font-bold mt-8 mb-4">İletişim Bilgileri</h2>
+                <p className="mb-4">
+                    <strong>Adres:</strong> Pınarbaşı Mah. Pınarbaşı Cd. No:46, Konyaaltı/Antalya<br />
+                    <strong>E-posta:</strong> support@unifor.info<br />
+                    <strong>Telefon:</strong> +90 530 909 62 18<br />
+                    <strong>Vergi No:</strong> 4140662799
+                </p>
             </div>
         </div>
     )
