@@ -151,7 +151,7 @@ export default function GameSearch() {
               className="w-full h-full object-cover transition-all duration-300 group-hover:scale-110"
             />
             {game.discount && (
-              <div className="absolute top-2 left-2 bg-red-500 text-white text-xs font-bold px-2 py-1 rounded shadow-lg">
+              <div className="absolute top-2 left-2 bg-red-500 text-white text-[10px] font-bold px-2 py-1 rounded shadow-lg">
                 -%{game.discount}
               </div>
             )}
@@ -162,28 +162,28 @@ export default function GameSearch() {
             )}
             {game.platform && (
               <div className={`absolute bottom-2 left-2 text-white text-[10px] font-bold px-2 py-1 rounded backdrop-blur-sm ${game.platform === 'PC' ? 'bg-blue-600/90' :
-                  game.platform === 'PlayStation' ? 'bg-blue-500/90' :
-                    'bg-green-600/90'
+                game.platform === 'PlayStation' ? 'bg-blue-500/90' :
+                  'bg-green-600/90'
                 }`}>
                 {game.platform}
               </div>
             )}
           </div>
-          <div className="p-3">
-            <h3 className="font-semibold text-sm mb-2 line-clamp-2 group-hover:text-opacity-80 transition-colors" style={{ color: 'var(--text)' }}>
+          <div className="p-2 md:p-3">
+            <h3 className="font-semibold text-xs md:text-sm mb-1 md:mb-2 line-clamp-2 group-hover:text-opacity-80 transition-colors" style={{ color: 'var(--text)' }}>
               {game.title}
             </h3>
-            <div className="flex items-center gap-2 mb-3">
+            <div className="flex items-center gap-1 md:gap-2 mb-2 md:mb-3">
               {game.oldPrice && (
-                <span className="text-xs line-through" style={{ color: 'var(--muted)' }}>
+                <span className="text-[10px] md:text-xs line-through" style={{ color: 'var(--muted)' }}>
                   ₺{game.oldPrice}
                 </span>
               )}
-              <span className="text-base font-bold price-text">
+              <span className="text-sm md:text-base font-bold price-text">
                 ₺{game.price}
               </span>
             </div>
-            <div className="w-full text-center py-2 rounded font-semibold transition-all hover:scale-105 active:scale-95 text-sm" style={{
+            <div className="w-full text-center py-1.5 md:py-2 rounded font-semibold transition-all hover:scale-105 active:scale-95 text-xs md:text-sm" style={{
               background: 'var(--accent)',
               color: 'var(--bg)'
             }}>
@@ -237,29 +237,29 @@ export default function GameSearch() {
           <p className="text-sm" style={{ color: 'var(--muted)' }}>{games.length} oyun bulundu</p>
         </div>
 
-        <div className="flex gap-6">
-          {/* Mobile filter button */}
-          <div className="lg:hidden mb-4 w-full">
-            <button
-              onClick={() => setShowMobileFilters(true)}
-              aria-expanded={showMobileFilters}
-              aria-controls="mobile-filter-dialog"
-              className="w-full px-4 py-3 border rounded-lg font-semibold transition-all hover:scale-[1.02] active:scale-95 flex items-center justify-center gap-2"
-              style={{
-                background: 'var(--surface)',
-                borderColor: 'var(--border)',
-                color: 'var(--text)'
-              }}
-            >
-              <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707V17l-4 4v-6.586a1 1 0 00-.293-.707L3.293 7.293A1 1 0 013 6.586V4z" />
-              </svg>
-              Filtrele ve Sırala
-            </button>
-          </div>
+        {/* Mobile filter button */}
+        <div className="lg:hidden mb-4">
+          <button
+            onClick={() => setShowMobileFilters(true)}
+            aria-expanded={showMobileFilters}
+            aria-controls="mobile-filter-dialog"
+            className="w-full px-4 py-3 border rounded-lg font-semibold transition-all hover:scale-[1.02] active:scale-95 flex items-center justify-center gap-2"
+            style={{
+              background: 'var(--surface)',
+              borderColor: 'var(--border)',
+              color: 'var(--text)'
+            }}
+          >
+            <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707V17l-4 4v-6.586a1 1 0 00-.293-.707L3.293 7.293A1 1 0 013 6.586V4z" />
+            </svg>
+            Filtrele ve Sırala
+          </button>
+        </div>
 
-          {/* Sidebar Filters */}
-          <aside className="w-80 hidden lg:block flex-shrink-0">
+        <div className="lg:flex lg:gap-5">
+          {/* Sidebar Filters - Desktop only */}
+          <aside className="hidden lg:block w-80 flex-shrink-0">
             <div className="sticky top-6">
               <div className="rounded-xl overflow-hidden border" style={{ background: 'var(--surface)', borderColor: 'var(--border)' }}>
                 <div className="px-5 py-4 border-b" style={{ borderColor: 'var(--border)' }}>
@@ -395,7 +395,7 @@ export default function GameSearch() {
               </div>
             </div>
 
-            <div className="grid gap-4 grid-cols-1 sm:grid-cols-2 xl:grid-cols-3">
+            <div className="grid gap-4 grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
               {visible.map((game, i) => (
                 <div key={game.id} className="staggered-item h-full" style={{ ['--i' as any]: i }}>
                   <GameCard game={game} />

@@ -1,5 +1,9 @@
 {
-  "/_not-found/page": "app/_not-found/page.js",
   "/page": "app/page.js",
-  "/odeme/[id]/page": "app/odeme/[id]/page.js"
+  "/odeme/[id]/page": "app/odeme/[id]/page.js",
+  "/oyun/[id]/page": "app/oyun/[id]/page.js",
+  "/tek-oyunculu/page": "app/tek-oyunculu/page.js",
+  "/oyun-ara/page": "app/oyun-ara/page.js",
+  "/iade-kosullari/page": "app/iade-kosullari/page.js",
+  "/epin-satis/page": "app/epin-satis/page.js"
 }

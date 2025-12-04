@@ -4,6 +4,7 @@ import Header from './components/Header'
 import Footer from './components/Footer'
 import CookieConsent from './components/CookieConsent'
 import ThemeScript from './components/ThemeScript'
+import BottomNav from './components/BottomNav'
 
 export const metadata: Metadata = {
     title: {
@@ -68,11 +69,12 @@ export default function RootLayout({
             <body>
                 <div className="min-h-screen flex flex-col" style={{ background: 'var(--bg)' }}>
                     <Header />
-                    <main className="flex-1 w-full">
+                    <main className="flex-1 w-full pb-20 md:pb-0">
                         {children}
                     </main>
                     <Footer />
                     <CookieConsent />
+                    <BottomNav />
                 </div>
             </body>
         </html>

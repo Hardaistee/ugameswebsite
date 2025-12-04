@@ -21,6 +21,13 @@ export default function Header() {
     return 'dark'
   })
 
+  // Export setOpen to window for BottomNav to use
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      (window as any).__openMobileMenu = () => setOpen(true)
+    }
+  }, [])
+
   useEffect(() => {
     setMounted(true)
   }, [])
@@ -107,7 +114,7 @@ export default function Header() {
             />
           </div>
 
-          <div className="ml-auto flex items-center gap-3">
+          <div className="ml-auto flex items-center gap-2">
             <button
               onClick={() => setTheme(t => t === 'dark' ? 'light' : 'dark')}
               aria-label={theme === 'dark' ? 'Açık tema geçişi' : 'Karanlık tema geçişi'}
@@ -122,15 +129,26 @@ export default function Header() {
                 <svg width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z" stroke="currentColor" strokeWidth="1.4" strokeLinecap="round" strokeLinejoin="round" /></svg>
               )}
             </button>
-            <div className="hidden sm:flex items-center gap-4">
-              <Link href="/login" className="text-sm" style={{ color: 'var(--text)' }}>Giriş Yap</Link>
-              <Link href="/register" className="text-white px-3 py-2 rounded text-sm transition-colors" style={{ background: 'var(--accent)', color: 'var(--bg)' }}>Kayıt Ol</Link>
+            <div className="hidden sm:flex items-center gap-3">
+              <Link href="/login" className="text-sm whitespace-nowrap" style={{ color: 'var(--text)' }}>Giriş Yap</Link>
+              <Link href="/register" className="px-3 py-2 rounded text-sm transition-colors whitespace-nowrap" style={{ background: 'var(--accent)', color: 'var(--bg)' }}>Kayıt Ol</Link>
             </div>
           </div>
         </div>
 
-        {/* Category Navigation Bar */}
-        <div className="border-t" style={{ borderColor: 'var(--border)', background: 'var(--bg)' }}>
+        {/* Mobile Search Bar */}
+        <div className="lg:hidden px-4 pb-3 border-t" style={{ borderColor: 'var(--border)' }}>
+          <input
+            aria-label="Ara"
+            placeholder="Oyun veya epin ara..."
+            onKeyDown={onSearchSubmit}
+            className="w-full border rounded-lg px-4 py-2.5 text-sm"
+            style={{ background: 'var(--bg)', borderColor: 'var(--border)', color: 'var(--text)' }}
+          />
+        </div>
+
+        {/* Category Navigation Bar - Hidden on Mobile */}
+        <div className="hidden md:block border-t" style={{ borderColor: 'var(--border)', background: 'var(--bg)' }}>
           <div className="max-w-6xl mx-auto px-4">
             <nav className="flex items-center gap-3 py-2 justify-center">
               {/* Kategoriler Dropdown Button - Sol tarafta */}

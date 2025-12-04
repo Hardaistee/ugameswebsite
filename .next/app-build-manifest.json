@@ -16,10 +16,40 @@
       "static/chunks/main-app.js",
       "static/chunks/app/odeme/[id]/page.js"
     ],
-    "/_not-found/page": [
+    "/oyun-ara/page": [
       "static/chunks/webpack.js",
       "static/chunks/main-app.js",
-      "static/chunks/app/_not-found/page.js"
+      "static/chunks/app/oyun-ara/page.js"
+    ],
+    "/oyun/[id]/page": [
+      "static/chunks/webpack.js",
+      "static/chunks/main-app.js",
+      "static/chunks/app/oyun/[id]/page.js"
+    ],
+    "/ilan/[id]/page": [
+      "static/chunks/webpack.js",
+      "static/chunks/main-app.js",
+      "static/chunks/app/ilan/[id]/page.js"
+    ],
+    "/epin-satis/page": [
+      "static/chunks/webpack.js",
+      "static/chunks/main-app.js",
+      "static/chunks/app/epin-satis/page.js"
+    ],
+    "/iade-kosullari/page": [
+      "static/chunks/webpack.js",
+      "static/chunks/main-app.js",
+      "static/chunks/app/iade-kosullari/page.js"
+    ],
+    "/ilanlar/page": [
+      "static/chunks/webpack.js",
+      "static/chunks/main-app.js",
+      "static/chunks/app/ilanlar/page.js"
+    ],
+    "/tek-oyunculu/page": [
+      "static/chunks/webpack.js",
+      "static/chunks/main-app.js",
+      "static/chunks/app/tek-oyunculu/page.js"
     ]
   }
 }

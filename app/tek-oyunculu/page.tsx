@@ -52,8 +52,8 @@ export default function SinglePlayerSales() {
     return (
         <div className="pb-12" style={{ background: 'var(--bg)' }}>
             <div className="max-w-7xl mx-auto px-4 py-6">
-                {/* Breadcrumb */}
-                <div className="flex items-center gap-2 mb-6 text-sm">
+                {/* Breadcrumb - Hidden on homepage */}
+                <div className="hidden flex items-center gap-2 mb-6 text-sm">
                     <Link href="/tek-oyunculu" className="hover:underline" style={{ color: 'var(--muted)' }}>Ana Sayfa</Link>
                     <span style={{ color: 'var(--muted)' }}>/</span>
                     <span className="font-medium" style={{ color: 'var(--text)' }}>Oyunlar</span>
@@ -81,34 +81,36 @@ export default function SinglePlayerSales() {
 
                                     {/* Discount Badge */}
                                     {game.discount && (
-                                        <div className="absolute top-4 left-4 bg-red-500 text-white text-base font-bold px-4 py-2 rounded-lg shadow-xl">
+                                        <div className="absolute top-2 left-2 md:top-4 md:left-4 bg-red-500 text-white text-xs md:text-base font-bold px-2 py-1 md:px-4 md:py-2 rounded-lg shadow-xl">
                                             -%{game.discount}
                                         </div>
                                     )}
 
-                                    <div className="absolute bottom-0 left-0 right-0 p-6 md:p-8">
-                                        <h3 className="text-2xl md:text-3xl lg:text-4xl font-black text-white mb-3 drop-shadow-2xl">
+                                    <div className="absolute bottom-0 left-0 right-0 p-3 md:p-8">
+                                        <h3 className="text-lg md:text-3xl lg:text-4xl font-black text-white mb-1 md:mb-3 drop-shadow-2xl line-clamp-1">
                                             {game.title}
                                         </h3>
-                                        <p className="text-white/95 text-sm md:text-base mb-5 line-clamp-2 drop-shadow-lg">
+                                        <p className="hidden md:block text-white/95 text-base mb-5 line-clamp-2 drop-shadow-lg">
                                             Anında teslimat garantisi ile güvenli alışveriş
                                         </p>
-                                        <div className="flex items-center gap-4 mb-5">
-                                            {game.oldPrice && (
-                                                <span className="text-white/70 line-through text-base md:text-lg">
-                                                    ₺{game.oldPrice}
+                                        <div className="flex flex-col md:flex-row items-start md:items-center gap-1 md:gap-4 mb-3 md:mb-5">
+                                            <div className="flex items-center gap-2 md:gap-4">
+                                                {game.oldPrice && (
+                                                    <span className="text-white/70 line-through text-xs md:text-lg">
+                                                        ₺{game.oldPrice}
+                                                    </span>
+                                                )}
+                                                <span className="text-xl md:text-4xl font-black text-white drop-shadow-lg">
+                                                    ₺{game.price}
                                                 </span>
-                                            )}
-                                            <span className="text-3xl md:text-4xl font-black text-white drop-shadow-lg">
-                                                ₺{game.price}
-                                            </span>
-                                            <span className="text-white/80 text-sm md:text-base">
+                                            </div>
+                                            <span className="text-white/80 text-xs md:text-base">
                                                 'den Başlayan Fiyatlarla
                                             </span>
                                         </div>
                                         <Link
                                             href={`/odeme/${game.id}`}
-                                            className="inline-block px-8 py-4 rounded-lg font-bold text-base transition-all hover:scale-105 active:scale-95 shadow-xl"
+                                            className="inline-block px-4 py-2 md:px-8 md:py-4 rounded-lg font-bold text-sm md:text-base transition-all hover:scale-105 active:scale-95 shadow-xl"
                                             style={{
                                                 background: '#ffffff',
                                                 color: '#000000'
