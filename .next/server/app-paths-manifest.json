@@ -1,1 +1,5 @@
-{}
+{
+  "/oyunlar/page": "app/oyunlar/page.js",
+  "/pazaryeri/page": "app/pazaryeri/page.js",
+  "/oyun-ara/page": "app/oyun-ara/page.js"
+}

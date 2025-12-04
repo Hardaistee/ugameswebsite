@@ -1,5 +1,5 @@
 'use client'
-import React from 'react'
+import React, { useState, useEffect } from 'react'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import Icon from './Icon'
@@ -8,7 +8,17 @@ export default function MobileNav({ open, onClose }: { open: boolean, onClose: (
   if (!open) return null
 
   const pathname = usePathname()
-  const mode = process.env.NEXT_PUBLIC_HOMEPAGE_MODE || 'marketplace'
+  const mode = process.env.NEXT_PUBLIC_HOMEPAGE_MODE || 'multiple'
+
+  // Theme detection
+  const [theme, setTheme] = useState<'dark' | 'light'>('dark')
+
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      const currentTheme = localStorage.getItem('theme') as 'dark' | 'light' || 'dark'
+      setTheme(currentTheme)
+    }
+  }, [])
 
   // Context-aware kategoriler - oyun veya pazaryeri sayfasına göre
   const isGamesPage = pathname === '/oyunlar' ||
@@ -19,24 +29,24 @@ export default function MobileNav({ open, onClose }: { open: boolean, onClose: (
     (mode === 'games_only' && pathname === '/')
 
   const gameCategories = [
-    { name: 'Anasayfa', path: '/oyunlar', icon: 'home' },
-    { name: 'Tüm Oyunlar', path: '/oyun-ara', icon: 'gamepad' },
-    { name: 'PC Oyunları', path: '/oyun-ara?platform=pc', icon: 'gamepad' },
-    { name: 'PlayStation', path: '/oyun-ara?platform=playstation', icon: 'gamepad' },
-    { name: 'Xbox', path: '/oyun-ara?platform=xbox', icon: 'gamepad' },
-    { name: 'İndirimdekiler', path: '/oyun-ara?category=discounted', icon: 'fire' },
-    { name: 'Çok Satanlar', path: '/oyun-ara?category=bestsellers', icon: 'crown' }
+    { name: 'Anasayfa', path: '/oyunlar', icon: 'home', color: 'from-blue-500 to-cyan-500' },
+    { name: 'PC Oyunları', path: '/oyun-ara?platform=pc', icon: 'gamepad', color: 'from-blue-500 to-cyan-500' },
+    { name: 'PlayStation Oyunları', path: '/oyun-ara?platform=playstation', icon: 'gamepad', color: 'from-blue-500 to-indigo-500' },
+    { name: 'Xbox Oyunları', path: '/oyun-ara?platform=xbox', icon: 'gamepad', color: 'from-green-500 to-emerald-500' },
+    { name: 'İndirimdeki Oyunlar', path: '/oyun-ara?category=discounted', icon: 'fire', color: 'from-red-500 to-orange-500' },
+    { name: 'Çok Satanlar', path: '/oyun-ara?category=bestsellers', icon: 'crown', color: 'from-yellow-500 to-orange-500' }
   ]
 
   const marketplaceCategories = [
-    { name: 'Anasayfa', path: '/pazaryeri', icon: 'home' },
-    { name: 'Sosyal Medya', path: '/ilanlar?category=sosyal-medya', icon: 'mobile' },
-    { name: 'PUBG', path: '/ilanlar?category=pubg', icon: 'gamepad' },
-    { name: 'Valorant', path: '/ilanlar?category=valorant', icon: 'target' },
-    { name: 'LoL', path: '/ilanlar?category=lol', icon: 'sword' },
-    { name: 'CS2', path: '/cs2-skin-pazari', icon: 'gun' },
-    { name: 'İlan Pazarı', path: '/ilan-pazari', icon: 'shop' },
-    { name: 'Günün Fırsatları', path: '/ilanlar?badge=Günün Fırsatı', icon: 'fire' }
+    { name: 'Anasayfa', path: '/pazaryeri', icon: 'home', color: 'from-pink-500 to-rose-500' },
+    { name: 'Sosyal Medya', path: '/ilanlar?category=sosyal-medya', icon: 'mobile', color: 'from-pink-500 to-rose-500' },
+    { name: 'PUBG', path: '/ilanlar?category=pubg', icon: 'gamepad', color: 'from-orange-500 to-red-500' },
+    { name: 'Valorant', path: '/ilanlar?category=valorant', icon: 'target', color: 'from-red-500 to-pink-500' },
+    { name: 'LoL', path: '/ilanlar?category=lol', icon: 'sword', color: 'from-blue-500 to-cyan-500' },
+    { name: 'CS2', path: '/ilanlar?category=cs2', icon: 'gun', color: 'from-gray-600 to-gray-800' },
+    { name: 'İlan Pazari', path: '/ilan-pazari', icon: 'shop', color: 'from-teal-500 to-cyan-500' },
+    { name: 'Günün Fırsatları', path: '/ilanlar?badge=Günün Fırsatı', icon: 'fire', color: 'from-yellow-500 to-orange-500' },
+    { name: 'Çekilisler', path: '/cekilisler', icon: 'gift', color: 'from-green-500 to-emerald-500' }
   ]
 
   // games_only modunda sadece oyun kategorileri, multiple modunda sayfa bazlı
@@ -141,7 +151,7 @@ export default function MobileNav({ open, onClose }: { open: boolean, onClose: (
                   key={cat.name}
                   href={cat.path}
                   onClick={onClose}
-                  className={`flex items-center gap-3 px-4 py-3 rounded-lg transition-all ${isActive ? 'shadow-md' : 'hover:bg-gray-100 dark:hover:bg-white/5'}`}
+                  className={`relative overflow-hidden flex items-center gap-3 px-4 py-3 rounded-lg transition-all group ${isActive ? 'shadow-md' : ''}`}
                   style={isActive ? {
                     background: 'var(--surface)',
                     color: 'var(--accent)',
@@ -149,9 +159,40 @@ export default function MobileNav({ open, onClose }: { open: boolean, onClose: (
                   } : {
                     color: 'var(--text)'
                   }}
+                  onMouseEnter={(e) => {
+                    if (!isActive) e.currentTarget.style.background = 'var(--surface)'
+                  }}
+                  onMouseLeave={(e) => {
+                    if (!isActive) e.currentTarget.style.background = 'transparent'
+                  }}
                 >
-                  <Icon name={cat.icon} className="w-5 h-5" />
-                  <span className="font-medium">{cat.name}</span>
+                  {/* Gradient background on hover/active */}
+                  <div className={`absolute inset-0 bg-gradient-to-r ${cat.color} opacity-0 group-hover:opacity-5 transition-opacity`} />
+
+                  {/* Platform-specific icons */}
+                  {cat.name === 'PC Oyunları' ? (
+                    <img
+                      src={theme === 'dark' ? '/images/pciconlight.png' : '/images/pcicondark.png'}
+                      alt="PC"
+                      className="w-5 h-5 relative z-10"
+                    />
+                  ) : cat.name === 'PlayStation Oyunları' ? (
+                    <img
+                      src="/images/psicon.svg"
+                      alt="PlayStation"
+                      className="w-5 h-5 relative z-10"
+                    />
+                  ) : cat.name === 'Xbox Oyunları' ? (
+                    <img
+                      src="/images/xboxicon.svg"
+                      alt="Xbox"
+                      className="w-5 h-5 relative z-10"
+                    />
+                  ) : (
+                    <Icon name={cat.icon} className="w-5 h-5 relative z-10" />
+                  )}
+
+                  <span className="font-medium relative z-10">{cat.name}</span>
                 </Link>
               )
             })}
