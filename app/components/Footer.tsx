@@ -101,11 +101,6 @@ export default function Footer() {
               <div className="h-auto w-auto flex items-center justify-center rounded">
                 <img src="/images/mastercard.svg" alt="MasterCard" className="h-12 w-12 object-contain p-1" />
               </div>
-
-              {/* Iyzico Logo */}
-              <div className="h-auto w-auto flex items-center justify-center rounded">
-                <img src="/images/iyzico.svg" alt="Iyzico" className="h-12 w-12 object-contain p-1" />
-              </div>
             </div>
           </div>
         </div>
