@@ -9,11 +9,11 @@ export default function Footer() {
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 mb-8">
           {/* Company Info */}
           <div>
-            <div className="font-bold text-xl mb-4" style={{ color: 'var(--text)' }}>uGames</div>
-            <div className="text-sm mb-4" style={{ color: 'var(--muted)' }}>
+            <h3 className="font-bold text-lg mb-4" style={{ color: 'var(--text)' }}>uGames</h3>
+            <p className="text-sm mb-4" style={{ color: 'var(--muted)' }}>
               Modern ve güvenilir dijital ürün alışveriş platformu.
               Oyun hesapları, sosyal medya hizmetleri ve daha fazlası.
-            </div>
+            </p>
             <div className="flex gap-3">
               <a
                 href="#"
@@ -102,12 +102,9 @@ export default function Footer() {
                 <img src="/images/mastercard.svg" alt="MasterCard" className="h-12 w-12 object-contain p-1" />
               </div>
 
+              {/* Iyzico Logo */}
               <div className="h-auto w-auto flex items-center justify-center rounded">
-                <img src="/images/paytr.jpeg" alt="Paytr" className="h-13 w-12 object-contain p-1" />
-              </div>
-
-              <div className="h-auto w-auto flex items-center justify-center rounded">
-                <img src="/images/iyzico.svg" alt="MasterCard" className="h-12 w-12 object-contain p-1" />
+                <img src="/images/iyzico.svg" alt="Iyzico" className="h-12 w-12 object-contain p-1" />
               </div>
             </div>
           </div>
@@ -116,8 +113,18 @@ export default function Footer() {
         {/* Bottom Bar */}
         <div className="border-t pt-6" style={{ borderColor: 'var(--border)' }}>
           <div className="flex flex-col md:flex-row justify-between items-center gap-4 text-xs" style={{ color: 'var(--muted)' }}>
-            <div className="text-center md:text-left">
-              © {new Date().getFullYear()} uGames — Modern dijital ürün platformu. Tüm hakları saklıdır.
+            <div className="flex flex-col md:flex-row items-center gap-2 md:gap-4">
+              <div className="text-center md:text-left">
+                © {new Date().getFullYear()} uGames — Modern dijital ürün platformu. Tüm hakları saklıdır.
+              </div>
+              {/* Location in bottom */}
+              <div className="hidden md:flex items-center gap-1.5">
+                <svg className="w-3.5 h-3.5" style={{ color: 'var(--accent)' }} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
+                </svg>
+                <span>Antalya/Konyaaltı, Pınarbaşı Mah. Pınarbaşı Cd. No:46</span>
+              </div>
             </div>
             <div className="flex flex-wrap justify-center gap-4">
               <Link href="/gizlilik-politikasi" className="hover:underline transition-colors hover:text-[var(--accent)]">Gizlilik</Link>
