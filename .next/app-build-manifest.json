@@ -30,6 +30,16 @@
       "static/chunks/webpack.js",
       "static/chunks/main-app.js",
       "static/chunks/app/oyunlar/page.js"
+    ],
+    "/odeme/[id]/page": [
+      "static/chunks/webpack.js",
+      "static/chunks/main-app.js",
+      "static/chunks/app/odeme/[id]/page.js"
+    ],
+    "/oyun/[id]/page": [
+      "static/chunks/webpack.js",
+      "static/chunks/main-app.js",
+      "static/chunks/app/oyun/[id]/page.js"
     ]
   }
 }
