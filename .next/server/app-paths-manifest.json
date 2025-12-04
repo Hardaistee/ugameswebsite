@@ -1,8 +1,1 @@
-{
-  "/oyun-ara/page": "app/oyun-ara/page.js",
-  "/epin-satis/page": "app/epin-satis/page.js",
-  "/oyunlar/page": "app/oyunlar/page.js",
-  "/pazaryeri/page": "app/pazaryeri/page.js",
-  "/odeme/[id]/page": "app/odeme/[id]/page.js",
-  "/oyun/[id]/page": "app/oyun/[id]/page.js"
-}
+{}
