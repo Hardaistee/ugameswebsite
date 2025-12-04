@@ -11,7 +11,7 @@ export default function Footer() {
           <div>
             <h3 className="font-bold text-lg mb-4" style={{ color: 'var(--text)' }}>uGames</h3>
             <p className="text-sm mb-4" style={{ color: 'var(--muted)' }}>
-              Modern ve güvenilir dijital ürün alışveriş platformu.
+              Unifor Yazılım ve Teknoloji bünyesinde hizmet veren modern ve güvenilir dijital ürün alışveriş platformu.
               Oyun hesapları, sosyal medya hizmetleri ve daha fazlası.
             </p>
             <div className="flex gap-3">
@@ -110,7 +110,7 @@ export default function Footer() {
           <div className="flex flex-col md:flex-row justify-between items-center gap-4 text-xs" style={{ color: 'var(--muted)' }}>
             <div className="flex flex-col md:flex-row items-center gap-2 md:gap-4">
               <div className="text-center md:text-left">
-                © {new Date().getFullYear()} uGames — Modern dijital ürün platformu. Tüm hakları saklıdır.
+                © {new Date().getFullYear()} Unifor Yazılım ve Teknoloji (uGames) — Modern dijital ürün platformu. Tüm hakları saklıdır.
               </div>
               {/* Location in bottom */}
               <div className="hidden md:flex items-center gap-1.5">

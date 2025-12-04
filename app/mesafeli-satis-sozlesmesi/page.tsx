@@ -10,7 +10,7 @@ export default function DistanceSalesAgreement() {
                 <p className="mb-4 font-bold">MADDE 1 - TARAFLAR</p>
                 <p className="mb-4">
                     <strong>1.1. SATICI:</strong><br />
-                    Ünvanı: uGames Dijital Oyun Hizmetleri<br />
+                    Ünvanı: Unifor Yazılım ve Teknoloji<br />
                     Adres: Pınarbaşı Mah. Pınarbaşı Cd. No:46, Konyaaltı/Antalya<br />
                     Telefon: +90 530 909 62 18<br />
                     E-posta: support@unifor.info<br />

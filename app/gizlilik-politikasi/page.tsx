@@ -15,7 +15,7 @@ export default function PrivacyPolicy() {
 
                 <h3 className="text-lg font-bold mt-6 mb-3">Veri Sorumlusu</h3>
                 <p className="mb-4">
-                    <strong>Ünvan:</strong> uGames Dijital Oyun Hizmetleri<br />
+                    <strong>Ünvan:</strong> Unifor Yazılım ve Teknoloji<br />
                     <strong>Adres:</strong> Pınarbaşı Mah. Pınarbaşı Cd. No:46, Konyaaltı/Antalya<br />
                     <strong>E-posta:</strong> support@unifor.info<br />
                     <strong>Telefon:</strong> +90 530 909 62 18

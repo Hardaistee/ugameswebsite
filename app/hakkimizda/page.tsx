@@ -8,7 +8,8 @@ export default function About() {
 
             <div className="prose dark:prose-invert max-w-none" style={{ color: 'var(--text)' }}>
                 <p className="mb-4">
-                    uGames, dijital oyun dünyasında güvenilir ve hızlı alışverişin adresi olarak yola çıkmıştır.
+                    <strong>Unifor Yazılım ve Teknoloji</strong> bünyesinde hizmet veren <strong>uGames</strong>,
+                    dijital oyun dünyasında güvenilir ve hızlı alışverişin adresi olarak yola çıkmıştır.
                     Oyuncuların ihtiyaç duyduğu oyun hesapları, epin kodları, oyun paraları ve diğer dijital ürünleri
                     en uygun fiyatlarla ve güvenli ödeme altyapısıyla sunmayı hedefliyoruz.
                 </p>
@@ -36,6 +37,8 @@ export default function About() {
 
                 <h2 className="text-xl font-bold mt-8 mb-4">İletişim Bilgileri</h2>
                 <p className="mb-4">
+                    <strong>Şirket Ünvanı:</strong> Unifor Yazılım ve Teknoloji<br />
+                    <strong>Marka:</strong> uGames<br />
                     <strong>Adres:</strong> Pınarbaşı Mah. Pınarbaşı Cd. No:46, Konyaaltı/Antalya<br />
                     <strong>E-posta:</strong> support@unifor.info<br />
                     <strong>Telefon:</strong> +90 530 909 62 18<br />
