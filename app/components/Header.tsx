@@ -43,17 +43,17 @@ export default function Header() {
   const router = useRouter()
   const pathname = usePathname()
 
-  // Tek oyunculu sayfasında mıyız?
-  const skipSelection = process.env.NEXT_PUBLIC_SKIP_SELECTION_SCREEN === 'true'
-  const isSinglePlayerPage = pathname === '/tek-oyunculu' ||
-    pathname?.startsWith('/tek-oyunculu') ||
+  // Homepage modunu kontrol et
+  const mode = process.env.NEXT_PUBLIC_HOMEPAGE_MODE || 'marketplace'
+  const isGamesPage = pathname === '/oyunlar' ||
+    pathname?.startsWith('/oyunlar') ||
     pathname?.startsWith('/oyun-ara') ||
     pathname?.startsWith('/oyun/') ||
     pathname?.startsWith('/odeme/') ||
-    (skipSelection && pathname === '/')
+    (mode === 'games_only' && pathname === '/')
 
-  // Tek oyunculu sayfasında farklı kategoriler göster
-  const categories = isSinglePlayerPage ? [
+  // Sayfa moduna ve games_only ayarına göre kategoriler
+  const categories = (isGamesPage || mode === 'games_only') ? [
     { name: 'PC Oyunları', path: '/oyun-ara?platform=pc', icon: 'gamepad', color: 'from-blue-500 to-cyan-500' },
     { name: 'PlayStation Oyunları', path: '/oyun-ara?platform=playstation', icon: 'gamepad', color: 'from-blue-500 to-indigo-500' },
     { name: 'Xbox Oyunları', path: '/oyun-ara?platform=xbox', icon: 'gamepad', color: 'from-green-500 to-emerald-500' },
@@ -73,8 +73,8 @@ export default function Header() {
   function onSearchSubmit(e: React.KeyboardEvent<HTMLInputElement>) {
     if (e.key === 'Enter') {
       const q = (e.target as HTMLInputElement).value.trim()
-      // Tek oyunculu sayfasındaysa oyun arama sayfasına yönlendir
-      if (isSinglePlayerPage) {
+      // Oyun sayfasındaysa oyun arama sayfasına yönlendir
+      if (isGamesPage) {
         router.push(`/oyun-ara${q ? `?search=${encodeURIComponent(q)}` : ''}`)
       } else {
         router.push(`/ilanlar${q ? `?search=${encodeURIComponent(q)}` : ''}`)
@@ -137,10 +137,10 @@ export default function Header() {
         </div>
 
         {/* Mobile Search Bar */}
-        <div className="lg:hidden px-4 pb-3 border-t" style={{ borderColor: 'var(--border)' }}>
+        <div className="lg:hidden px-4 py-3 border-t" style={{ borderColor: 'var(--border)' }}>
           <input
             aria-label="Ara"
-            placeholder="Oyun veya epin ara..."
+            placeholder={isGamesPage ? "Oyun ara..." : "Ara..."}
             onKeyDown={onSearchSubmit}
             className="w-full border rounded-lg px-4 py-2.5 text-sm"
             style={{ background: 'var(--bg)', borderColor: 'var(--border)', color: 'var(--text)' }}
@@ -243,7 +243,7 @@ export default function Header() {
                           <div className="flex-1 relative z-10">
                             <div className="font-semibold text-sm">{cat.name}</div>
                             <div className="text-xs mt-0.5" style={{ color: 'var(--muted)' }}>
-                              {isSinglePlayerPage ? (
+                              {isGamesPage ? (
                                 <>
                                   {cat.name === 'PC Oyunları' && 'Steam, Epic Games, Origin'}
                                   {cat.name === 'PlayStation Oyunları' && 'PS4, PS5 Oyunları'}
@@ -275,14 +275,14 @@ export default function Header() {
 
                     <div className="p-3 border-t" style={{ borderColor: 'var(--border)', background: 'var(--bg)' }}>
                       <Link
-                        href={isSinglePlayerPage ? "/tek-oyunculu" : "/ilanlar"}
+                        href={isGamesPage ? "/oyunlar" : "/ilanlar"}
                         className="block text-center py-2.5 px-4 rounded-lg font-semibold text-sm transition-all hover:scale-[1.02] hover:shadow-lg"
                         style={{
                           background: 'var(--accent)',
                           color: theme === 'dark' ? '#1a1a1a' : 'white'
                         }}
                       >
-                        {isSinglePlayerPage ? 'Tüm Oyunları Gör →' : 'Tüm İlanları Gör →'}
+                        {isGamesPage ? 'Tüm Oyunları Gör →' : 'Tüm İlanları Gör →'}
                       </Link>
                     </div>
                   </div>
@@ -292,7 +292,7 @@ export default function Header() {
               {/* Tüm Kategoriler - Orijinal linkler */}
               {categories.map((cat) => {
                 // CS2 için özel dropdown - sadece ilan pazarı sayfalarında
-                if (cat.name === 'CS2' && !isSinglePlayerPage) {
+                if (cat.name === 'CS2' && !isGamesPage) {
                   return (
                     <div
                       key={cat.name}

@@ -29,7 +29,10 @@ export default function BottomNav() {
         if (e.key === 'Enter') {
             const query = (e.target as HTMLInputElement).value.trim()
             if (query) {
-                router.push(`/oyun-ara?search=${encodeURIComponent(query)}`)
+                // Homepage modunu kontrol et
+                const mode = process.env.NEXT_PUBLIC_HOMEPAGE_MODE || 'marketplace'
+                const searchPath = mode === 'games_only' ? '/oyun-ara' : '/ilanlar'
+                router.push(`${searchPath}?search=${encodeURIComponent(query)}`)
                 setShowSearch(false)
             }
         }
@@ -48,7 +51,7 @@ export default function BottomNav() {
                             <input
                                 autoFocus
                                 type="text"
-                                placeholder="Oyun veya epin ara..."
+                                placeholder="Ara..."
                                 onKeyDown={handleSearch}
                                 className="flex-1 px-4 py-3 rounded-lg border text-base"
                                 style={{

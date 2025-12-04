@@ -1,4 +1,4 @@
-// File: /Users/saidtuzcu/Documents/Github/ugameswebsite/app/epin-satis/page.tsx
+// File: /Users/harda/Documents/GitHub/ugameswebsite/app/epin-satis/page.tsx
 import * as entry from '../../../../app/epin-satis/page.js'
 import type { ResolvingMetadata, ResolvingViewport } from 'next/dist/lib/metadata/types/metadata-interface.js'
 

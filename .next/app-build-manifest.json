@@ -11,45 +11,25 @@
       "static/chunks/main-app.js",
       "static/chunks/app/page.js"
     ],
-    "/odeme/[id]/page": [
-      "static/chunks/webpack.js",
-      "static/chunks/main-app.js",
-      "static/chunks/app/odeme/[id]/page.js"
-    ],
     "/oyun-ara/page": [
       "static/chunks/webpack.js",
       "static/chunks/main-app.js",
       "static/chunks/app/oyun-ara/page.js"
-    ],
-    "/oyun/[id]/page": [
-      "static/chunks/webpack.js",
-      "static/chunks/main-app.js",
-      "static/chunks/app/oyun/[id]/page.js"
-    ],
-    "/ilan/[id]/page": [
-      "static/chunks/webpack.js",
-      "static/chunks/main-app.js",
-      "static/chunks/app/ilan/[id]/page.js"
     ],
     "/epin-satis/page": [
       "static/chunks/webpack.js",
       "static/chunks/main-app.js",
       "static/chunks/app/epin-satis/page.js"
     ],
-    "/iade-kosullari/page": [
+    "/pazaryeri/page": [
       "static/chunks/webpack.js",
       "static/chunks/main-app.js",
-      "static/chunks/app/iade-kosullari/page.js"
+      "static/chunks/app/pazaryeri/page.js"
     ],
-    "/ilanlar/page": [
+    "/oyunlar/page": [
       "static/chunks/webpack.js",
       "static/chunks/main-app.js",
-      "static/chunks/app/ilanlar/page.js"
-    ],
-    "/tek-oyunculu/page": [
-      "static/chunks/webpack.js",
-      "static/chunks/main-app.js",
-      "static/chunks/app/tek-oyunculu/page.js"
+      "static/chunks/app/oyunlar/page.js"
     ]
   }
 }

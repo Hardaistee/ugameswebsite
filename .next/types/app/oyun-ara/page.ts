@@ -1,4 +1,4 @@
-// File: /Users/saidtuzcu/Documents/Github/ugameswebsite/app/oyun-ara/page.tsx
+// File: /Users/harda/Documents/GitHub/ugameswebsite/app/oyun-ara/page.tsx
 import * as entry from '../../../../app/oyun-ara/page.js'
 import type { ResolvingMetadata, ResolvingViewport } from 'next/dist/lib/metadata/types/metadata-interface.js'
 

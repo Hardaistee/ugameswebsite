@@ -1,13 +1,15 @@
-import SinglePlayerSales from './tek-oyunculu/page'
+import SelectionPage from './selection/page'
+import GamesPage from './oyunlar/page'
 
 export default function HomePage() {
-    // Check env variable to decide between Selection or SinglePlayerSales
-    const skipSelection = process.env.NEXT_PUBLIC_SKIP_SELECTION_SCREEN === 'true'
+    // Ana sayfa modu: 'games_only' (sadece oyunlar) veya 'multiple' (seçim paneli)
+    const mode = process.env.NEXT_PUBLIC_HOMEPAGE_MODE || 'multiple'
 
-    if (skipSelection) {
-        return <SinglePlayerSales />
+    // games_only: Direkt oyunlar sayfasını göster, pazaryeri erişimi yok
+    if (mode === 'games_only') {
+        return <GamesPage />
     }
 
-    // For now, redirect to single player sales (you can create Selection page later)
-    return <SinglePlayerSales />
+    // multiple: Seçim paneli göster (Oyunlar veya Pazaryeri seçimi)
+    return <SelectionPage />
 }

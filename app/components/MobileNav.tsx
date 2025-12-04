@@ -8,18 +8,18 @@ export default function MobileNav({ open, onClose }: { open: boolean, onClose: (
   if (!open) return null
 
   const pathname = usePathname()
-  const skipSelection = process.env.NEXT_PUBLIC_SKIP_SELECTION_SCREEN === 'true'
+  const mode = process.env.NEXT_PUBLIC_HOMEPAGE_MODE || 'marketplace'
 
-  // Context-aware kategoriler - oyun veya epin sayfasına göre
-  const isSinglePlayerPage = pathname === '/tek-oyunculu' ||
-    pathname?.startsWith('/tek-oyunculu') ||
+  // Context-aware kategoriler - oyun veya pazaryeri sayfasına göre
+  const isGamesPage = pathname === '/oyunlar' ||
+    pathname?.startsWith('/oyunlar') ||
     pathname?.startsWith('/oyun-ara') ||
     pathname?.startsWith('/oyun/') ||
     pathname?.startsWith('/odeme/') ||
-    (skipSelection && pathname === '/')
+    (mode === 'games_only' && pathname === '/')
 
   const gameCategories = [
-    { name: 'Anasayfa', path: '/tek-oyunculu', icon: 'home' },
+    { name: 'Anasayfa', path: '/oyunlar', icon: 'home' },
     { name: 'Tüm Oyunlar', path: '/oyun-ara', icon: 'gamepad' },
     { name: 'PC Oyunları', path: '/oyun-ara?platform=pc', icon: 'gamepad' },
     { name: 'PlayStation', path: '/oyun-ara?platform=playstation', icon: 'gamepad' },
@@ -28,8 +28,8 @@ export default function MobileNav({ open, onClose }: { open: boolean, onClose: (
     { name: 'Çok Satanlar', path: '/oyun-ara?category=bestsellers', icon: 'crown' }
   ]
 
-  const epinCategories = [
-    { name: 'Anasayfa', path: '/epin-satis', icon: 'home' },
+  const marketplaceCategories = [
+    { name: 'Anasayfa', path: '/pazaryeri', icon: 'home' },
     { name: 'Sosyal Medya', path: '/ilanlar?category=sosyal-medya', icon: 'mobile' },
     { name: 'PUBG', path: '/ilanlar?category=pubg', icon: 'gamepad' },
     { name: 'Valorant', path: '/ilanlar?category=valorant', icon: 'target' },
@@ -39,7 +39,8 @@ export default function MobileNav({ open, onClose }: { open: boolean, onClose: (
     { name: 'Günün Fırsatları', path: '/ilanlar?badge=Günün Fırsatı', icon: 'fire' }
   ]
 
-  const categories = isSinglePlayerPage ? gameCategories : epinCategories
+  // games_only modunda sadece oyun kategorileri, multiple modunda sayfa bazlı
+  const categories = (mode === 'games_only' || isGamesPage) ? gameCategories : marketplaceCategories
 
   return (
     <div className="fixed inset-0 z-50">
@@ -88,47 +89,49 @@ export default function MobileNav({ open, onClose }: { open: boolean, onClose: (
           </div>
         </div>
 
-        {/* Page Selector */}
-        <div className="px-6 py-4 border-b" style={{ borderColor: 'var(--border)' }}>
-          <div className="text-xs font-bold mb-3" style={{ color: 'var(--muted)' }}>SAYFA SEÇİMİ</div>
-          <div className="grid grid-cols-2 gap-2">
-            <Link
-              href="/tek-oyunculu"
-              onClick={onClose}
-              className={`px-4 py-3 rounded-lg font-semibold text-sm text-center transition-all ${isSinglePlayerPage ? 'shadow-lg' : 'opacity-70'}`}
-              style={isSinglePlayerPage ? {
-                background: 'var(--accent)',
-                color: 'var(--bg)'
-              } : {
-                background: 'var(--surface)',
-                color: 'var(--text)',
-                border: '1px solid var(--border)'
-              }}
-            >
-              Oyunlar
-            </Link>
-            <Link
-              href="/epin-satis"
-              onClick={onClose}
-              className={`px-4 py-3 rounded-lg font-semibold text-sm text-center transition-all ${!isSinglePlayerPage ? 'shadow-lg' : 'opacity-70'}`}
-              style={!isSinglePlayerPage ? {
-                background: 'var(--accent)',
-                color: 'var(--bg)'
-              } : {
-                background: 'var(--surface)',
-                color: 'var(--text)',
-                border: '1px solid var(--border)'
-              }}
-            >
-              Epin Satış
-            </Link>
+        {/* Page Selector - Sadece multiple modda göster */}
+        {mode === 'multiple' && (
+          <div className="px-6 py-4 border-b" style={{ borderColor: 'var(--border)' }}>
+            <div className="text-xs font-bold mb-3" style={{ color: 'var(--muted)' }}>SAYFA SEÇİMİ</div>
+            <div className="grid grid-cols-2 gap-2">
+              <Link
+                href="/oyunlar"
+                onClick={onClose}
+                className={`px-4 py-3 rounded-lg font-semibold text-sm text-center transition-all ${isGamesPage ? 'shadow-lg' : 'opacity-70'}`}
+                style={isGamesPage ? {
+                  background: 'var(--accent)',
+                  color: 'var(--bg)'
+                } : {
+                  background: 'var(--surface)',
+                  color: 'var(--text)',
+                  border: '1px solid var(--border)'
+                }}
+              >
+                Oyunlar
+              </Link>
+              <Link
+                href="/pazaryeri"
+                onClick={onClose}
+                className={`px-4 py-3 rounded-lg font-semibold text-sm text-center transition-all ${!isGamesPage ? 'shadow-lg' : 'opacity-70'}`}
+                style={!isGamesPage ? {
+                  background: 'var(--accent)',
+                  color: 'var(--bg)'
+                } : {
+                  background: 'var(--surface)',
+                  color: 'var(--text)',
+                  border: '1px solid var(--border)'
+                }}
+              >
+                Pazaryeri
+              </Link>
+            </div>
           </div>
-        </div>
+        )}
 
         {/* Categories */}
         <div className="px-6 py-4">
           <div className="text-xs font-bold mb-3" style={{ color: 'var(--muted)' }}>
-            {isSinglePlayerPage ? 'OYUN KATEGORİLERİ' : 'EPİN KATEGORİLERİ'}
+            {isGamesPage ? 'OYUN KATEGORİLERİ' : 'PAZARYERI KATEGORİLERİ'}
           </div>
           <nav className="flex flex-col gap-1">
             {categories.map((cat) => {
