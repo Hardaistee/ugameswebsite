@@ -5,8 +5,6 @@ import { usePathname } from 'next/navigation'
 import Icon from './Icon'
 
 export default function MobileNav({ open, onClose }: { open: boolean, onClose: () => void }) {
-  if (!open) return null
-
   const pathname = usePathname()
   const mode = process.env.NEXT_PUBLIC_HOMEPAGE_MODE || 'multiple'
 
@@ -51,6 +49,9 @@ export default function MobileNav({ open, onClose }: { open: boolean, onClose: (
 
   // games_only modunda sadece oyun kategorileri, multiple modunda sayfa bazlı
   const categories = (mode === 'games_only' || isGamesPage) ? gameCategories : marketplaceCategories
+
+  // Early return AFTER all hooks
+  if (!open) return null
 
   return (
     <div className="fixed inset-0 z-50">

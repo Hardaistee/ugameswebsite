@@ -1,5 +1,7 @@
 {
+  "/_not-found/page": "app/_not-found/page.js",
   "/oyunlar/page": "app/oyunlar/page.js",
   "/pazaryeri/page": "app/pazaryeri/page.js",
-  "/oyun-ara/page": "app/oyun-ara/page.js"
+  "/hakkimizda/page": "app/hakkimizda/page.js",
+  "/page": "app/page.js"
 }
