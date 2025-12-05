@@ -125,8 +125,8 @@ export default function Contact() {
 
                         <button
                             type="button"
-                            className="w-full py-3 rounded-lg font-bold text-white transition-all hover:opacity-90 hover:shadow-lg"
-                            style={{ background: 'var(--accent)' }}
+                            className="w-full py-3 rounded-lg font-bold transition-all hover:opacity-90 hover:shadow-lg"
+                            style={{ background: 'var(--accent)', color: '#000' }}
                         >
                             Gönder
                         </button>

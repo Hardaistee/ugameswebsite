@@ -2,30 +2,30 @@
 import React, { useState } from 'react'
 import Icon from './Icon'
 
-export default function FilterPanel({onChange, initial}:{onChange:any, initial:any}){
+export default function FilterPanel({ onChange, initial }: { onChange: any, initial: any }) {
   const [category, setCategory] = useState(initial.category || 'all')
   const [min, setMin] = useState(initial.min ?? 0)
   const [max, setMax] = useState(initial.max ?? 999999)
   const [tags, setTags] = useState<string[]>(initial.tags || [])
   const [sort, setSort] = useState(initial.sort || 'default')
-  
-  function toggleTag(t:string){
-    setTags(prev => prev.includes(t) ? prev.filter(x=>x!==t) : [...prev, t])
+
+  function toggleTag(t: string) {
+    setTags(prev => prev.includes(t) ? prev.filter(x => x !== t) : [...prev, t])
   }
 
-  function applyFilters(){
-    onChange({category, min, max, tags, sort})
+  function applyFilters() {
+    onChange({ category, min, max, tags, sort })
   }
 
-  function resetFilters(){
+  function resetFilters() {
     setCategory('all')
     setMin(0)
     setMax(999999)
     setTags([])
     setSort('default')
-    onChange({category:'all', min:0, max:999999, tags:[], sort:'default'})
+    onChange({ category: 'all', min: 0, max: 999999, tags: [], sort: 'default' })
   }
-  
+
   return (
     <div className="rounded-xl overflow-hidden border" style={{ background: 'var(--surface)', borderColor: 'var(--border)' }}>
       {/* Header */}
@@ -48,13 +48,13 @@ export default function FilterPanel({onChange, initial}:{onChange:any, initial:a
             Kategori
           </label>
           <div className="relative">
-            <select 
-              value={category} 
-              onChange={e=>setCategory(e.target.value)} 
+            <select
+              value={category}
+              onChange={e => setCategory(e.target.value)}
               className="w-full border rounded-lg px-4 py-2.5 appearance-none cursor-pointer transition-all focus:ring-2 focus:ring-offset-1 font-medium"
-              style={{ 
-                background: 'var(--bg)', 
-                borderColor: 'var(--border)', 
+              style={{
+                background: 'var(--bg)',
+                borderColor: 'var(--border)',
                 color: 'var(--text)',
                 outline: 'none',
                 fontFamily: 'Inter, ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial'
@@ -91,19 +91,18 @@ export default function FilterPanel({onChange, initial}:{onChange:any, initial:a
               { name: 'Vitrin', icon: 'crown', color: 'from-yellow-500 to-orange-500' },
               { name: 'Çok Satan', icon: 'fire', color: 'from-red-500 to-pink-500' },
               { name: 'Fırsat', icon: 'zap', color: 'from-green-500 to-emerald-500' }
-            ].map(t=> (
-              <button 
-                key={t.name} 
-                onClick={()=>toggleTag(t.name)} 
-                className={`px-4 py-2 border rounded-lg text-sm font-medium transition-all duration-200 hover:scale-105 active:scale-95 flex items-center gap-2 ${
-                  tags.includes(t.name) 
-                    ? `bg-gradient-to-r ${t.color} text-white border-transparent shadow-md` 
+            ].map(t => (
+              <button
+                key={t.name}
+                onClick={() => toggleTag(t.name)}
+                className={`px-4 py-2 border rounded-lg text-sm font-medium transition-all duration-200 hover:scale-105 active:scale-95 flex items-center gap-2 ${tags.includes(t.name)
+                    ? `bg-gradient-to-r ${t.color} text-white border-transparent shadow-md`
                     : 'hover:border-current'
-                }`}
-                style={tags.includes(t.name) ? {} : { 
-                  background: 'var(--surface)', 
-                  borderColor: 'var(--border)', 
-                  color: 'var(--text)' 
+                  }`}
+                style={tags.includes(t.name) ? {} : {
+                  background: 'var(--surface)',
+                  borderColor: 'var(--border)',
+                  color: 'var(--text)'
                 }}
               >
                 <Icon name={t.icon} className="w-4 h-4" />
@@ -122,13 +121,13 @@ export default function FilterPanel({onChange, initial}:{onChange:any, initial:a
             Sıralama
           </label>
           <div className="relative">
-            <select 
-              value={sort} 
-              onChange={e=>setSort(e.target.value)} 
+            <select
+              value={sort}
+              onChange={e => setSort(e.target.value)}
               className="w-full border rounded-lg px-4 py-2.5 appearance-none cursor-pointer transition-all focus:ring-2 focus:ring-offset-1 font-medium"
-              style={{ 
-                background: 'var(--bg)', 
-                borderColor: 'var(--border)', 
+              style={{
+                background: 'var(--bg)',
+                borderColor: 'var(--border)',
                 color: 'var(--text)',
                 outline: 'none',
                 fontFamily: 'Inter, ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial'
@@ -156,19 +155,19 @@ export default function FilterPanel({onChange, initial}:{onChange:any, initial:a
             Fiyat Aralığı (TL)
           </label>
           <div className="grid grid-cols-2 gap-3">
-            <div className="relative flex items-center border rounded-lg transition-all" 
-              style={{ 
-                background: 'var(--bg)', 
+            <div className="relative flex items-center border rounded-lg transition-all"
+              style={{
+                background: 'var(--bg)',
                 borderColor: 'var(--border)',
               }}
             >
-              <input 
-                type="number" 
-                value={min} 
-                onChange={e=>setMin(Number(e.target.value))} 
+              <input
+                type="number"
+                value={min}
+                onChange={e => setMin(Number(e.target.value))}
                 placeholder="Min"
                 className="flex-1 bg-transparent px-4 py-2.5 font-medium outline-none border-none"
-                style={{ 
+                style={{
                   color: 'var(--text)',
                 }}
                 onFocus={(e) => e.currentTarget.parentElement!.style.borderColor = 'var(--accent)'}
@@ -176,19 +175,19 @@ export default function FilterPanel({onChange, initial}:{onChange:any, initial:a
               />
               <span className="pr-4 text-base font-semibold select-none whitespace-nowrap" style={{ color: 'var(--text)' }}>TL</span>
             </div>
-            <div className="relative flex items-center border rounded-lg transition-all" 
-              style={{ 
-                background: 'var(--bg)', 
+            <div className="relative flex items-center border rounded-lg transition-all"
+              style={{
+                background: 'var(--bg)',
                 borderColor: 'var(--border)',
               }}
             >
-              <input 
-                type="number" 
-                value={max === 999999 ? '' : max} 
-                onChange={e=>setMax(e.target.value ? Number(e.target.value) : 999999)} 
+              <input
+                type="number"
+                value={max === 999999 ? '' : max}
+                onChange={e => setMax(e.target.value ? Number(e.target.value) : 999999)}
                 placeholder="Max"
                 className="flex-1 bg-transparent px-4 py-2.5 font-medium outline-none border-none"
-                style={{ 
+                style={{
                   color: 'var(--text)',
                 }}
                 onFocus={(e) => e.currentTarget.parentElement!.style.borderColor = 'var(--accent)'}
@@ -202,23 +201,23 @@ export default function FilterPanel({onChange, initial}:{onChange:any, initial:a
 
       {/* Action Buttons */}
       <div className="px-5 pb-5 pt-2 flex gap-3">
-        <button 
-          onClick={applyFilters} 
+        <button
+          onClick={applyFilters}
           className="flex-1 text-white rounded-lg px-4 py-3 font-semibold transition-all duration-200 hover:shadow-lg hover:scale-[1.02] active:scale-95 flex items-center justify-center gap-2"
-          style={{ background: 'var(--accent)', color: 'var(--bg)' }}
+          style={{ background: 'var(--accent)', color: '#000' }}
         >
           <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
           </svg>
           Uygula
         </button>
-        <button 
-          onClick={resetFilters} 
+        <button
+          onClick={resetFilters}
           className="px-4 py-3 rounded-lg font-semibold transition-all duration-200 hover:scale-[1.02] active:scale-95 border flex items-center gap-2"
-          style={{ 
-            background: 'var(--surface)', 
-            borderColor: 'var(--border)', 
-            color: 'var(--muted)' 
+          style={{
+            background: 'var(--surface)',
+            borderColor: 'var(--border)',
+            color: 'var(--muted)'
           }}
         >
           <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">

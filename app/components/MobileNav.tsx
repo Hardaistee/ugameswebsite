@@ -93,7 +93,7 @@ export default function MobileNav({ open, onClose }: { open: boolean, onClose: (
               href="/register"
               onClick={onClose}
               className="flex-1 px-4 py-2.5 rounded-lg font-semibold text-center transition-all hover:scale-[1.02] active:scale-95"
-              style={{ background: 'var(--accent)', color: 'var(--bg)' }}
+              style={{ background: 'var(--accent)', color: '#000' }}
             >
               Kayıt Ol
             </Link>
@@ -111,7 +111,7 @@ export default function MobileNav({ open, onClose }: { open: boolean, onClose: (
                 className={`px-4 py-3 rounded-lg font-semibold text-sm text-center transition-all ${isGamesPage ? 'shadow-lg' : 'opacity-70'}`}
                 style={isGamesPage ? {
                   background: 'var(--accent)',
-                  color: 'var(--bg)'
+                  color: '#000'
                 } : {
                   background: 'var(--surface)',
                   color: 'var(--text)',
@@ -126,7 +126,7 @@ export default function MobileNav({ open, onClose }: { open: boolean, onClose: (
                 className={`px-4 py-3 rounded-lg font-semibold text-sm text-center transition-all ${!isGamesPage ? 'shadow-lg' : 'opacity-70'}`}
                 style={!isGamesPage ? {
                   background: 'var(--accent)',
-                  color: 'var(--bg)'
+                  color: '#000'
                 } : {
                   background: 'var(--surface)',
                   color: 'var(--text)',

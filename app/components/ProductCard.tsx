@@ -1,6 +1,7 @@
 'use client'
 import React, { useState } from 'react'
 import Link from 'next/link'
+import { useCart } from '../../context/CartContext'
 
 interface ProductCardProps {
   product: any
@@ -29,8 +30,27 @@ export default function ProductCard({ product, variant = 'epin', size = 'normal'
     })
   }
 
-  const linkPath = isGame ? `/oyun/${product.id}` : `/ilan/${product.id}`
-  const checkoutPath = `/odeme/${product.id}`
+  const { addToCart } = useCart()
+
+  function handleAddToCart(e: React.MouseEvent) {
+    e.preventDefault()
+    e.stopPropagation()
+
+    // Convert price string to expected format if needed, or pass as is
+    addToCart({
+      id: parseInt(product.id.toString().replace(/\D/g, '')) || Number(product.id),
+      name: product.title || product.name,
+      price: product.price ? product.price.toString() : '0',
+      image: product.images?.[0] || product.image || '',
+      quantity: 1,
+      slug: product.slug || ''
+    })
+
+    // Optional: Show visual feedback (for now just alert or log)
+    // alert('Sepete eklendi!')
+  }
+
+  const linkPath = product.slug ? `/urun/${product.slug}` : `/urun/${product.id}`
 
   return (
     <Link href={linkPath} className="block h-full group">
@@ -176,20 +196,16 @@ export default function ProductCard({ product, variant = 'epin', size = 'normal'
 
           {/* Action Button (only for games) */}
           {isGame && (
-            <div
-              onClick={(e) => {
-                e.preventDefault()
-                e.stopPropagation()
-                window.location.href = checkoutPath
-              }}
-              className={`w-full text-center ${isLarge ? 'py-3' : 'py-2'} rounded font-semibold transition-all hover:scale-105 active:scale-95 text-sm cursor-pointer`}
+            <button
+              onClick={handleAddToCart}
+              className={`w-full text-center ${isLarge ? 'py-3' : 'py-2'} rounded font-semibold transition-all hover:scale-105 active:scale-95 text-sm cursor-pointer border-none`}
               style={{
                 background: 'var(--accent)',
-                color: 'var(--bg)'
+                color: '#000'
               }}
             >
-              Hemen Al
-            </div>
+              Sepete Ekle
+            </button>
           )}
         </div>
       </div>

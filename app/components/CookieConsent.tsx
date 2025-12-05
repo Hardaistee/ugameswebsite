@@ -39,8 +39,8 @@ export default function CookieConsent() {
                 <div className="flex gap-3 shrink-0">
                     <button
                         onClick={acceptCookies}
-                        className="px-6 py-2 rounded-lg font-bold text-sm text-white transition-all hover:scale-105 hover:shadow-lg"
-                        style={{ background: 'var(--accent)' }}
+                        className="px-6 py-2 rounded-lg font-bold text-sm transition-all hover:scale-105 hover:shadow-lg"
+                        style={{ background: 'var(--accent)', color: '#000' }}
                     >
                         Kabul Et
                     </button>

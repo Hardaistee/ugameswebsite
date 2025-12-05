@@ -5,6 +5,7 @@ import Link from 'next/link'
 import { useRouter, usePathname, useSearchParams } from 'next/navigation'
 import MobileNav from './MobileNav'
 import Icon from './Icon'
+import { useCart } from '../../context/CartContext'
 
 export default function Header() {
   const [open, setOpen] = useState(false)
@@ -82,6 +83,9 @@ export default function Header() {
     }
   }
 
+  const { cart } = useCart()
+  const cartItemCount = cart.reduce((acc: number, item: any) => acc + item.quantity, 0)
+
   return (
     <>
       <header className="border-b" style={{ background: 'var(--surface)', borderColor: 'var(--border)' }}>
@@ -114,7 +118,24 @@ export default function Header() {
             />
           </div>
 
+
           <div className="ml-auto flex items-center gap-2">
+            {/* Cart Icon */}
+            <Link
+              href="/sepet"
+              className="relative p-2 rounded hover:bg-gray-100 dark:hover:bg-white/5 mr-1"
+              aria-label="Sepet"
+            >
+              <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z" />
+              </svg>
+              {mounted && cartItemCount > 0 && (
+                <span className="absolute -top-1 -right-1 bg-red-500 text-white text-[10px] font-bold rounded-full w-5 h-5 flex items-center justify-center shadow-sm">
+                  {cartItemCount}
+                </span>
+              )}
+            </Link>
+
             <button
               onClick={() => setTheme(t => t === 'dark' ? 'light' : 'dark')}
               aria-label={theme === 'dark' ? 'Açık tema geçişi' : 'Karanlık tema geçişi'}
@@ -131,7 +152,7 @@ export default function Header() {
             </button>
             <div className="hidden sm:flex items-center gap-3">
               <Link href="/login" className="text-sm whitespace-nowrap" style={{ color: 'var(--text)' }}>Giriş Yap</Link>
-              <Link href="/register" className="px-3 py-2 rounded text-sm transition-colors whitespace-nowrap" style={{ background: 'var(--accent)', color: 'var(--bg)' }}>Kayıt Ol</Link>
+              <Link href="/register" className="px-3 py-2 rounded text-sm transition-colors whitespace-nowrap" style={{ background: 'var(--accent)', color: '#000' }}>Kayıt Ol</Link>
             </div>
           </div>
         </div>
