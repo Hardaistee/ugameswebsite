@@ -1,6 +1,7 @@
 import type { Metadata } from 'next'
 import './globals.css'
 import { CartProvider } from '../context/CartContext'
+import { AuthProvider } from '../context/AuthContext'
 import Header from './components/Header'
 import Footer from './components/Footer'
 import CookieConsent from './components/CookieConsent'
@@ -68,17 +69,19 @@ export default function RootLayout({
                 <ThemeScript />
             </head>
             <body>
-                <CartProvider>
-                    <div className="min-h-screen flex flex-col" style={{ background: 'var(--bg)' }}>
-                        <Header />
-                        <main className="flex-1 w-full pb-20 md:pb-0">
-                            {children}
-                        </main>
-                        <Footer />
-                        <CookieConsent />
-                        <BottomNav />
-                    </div>
-                </CartProvider>
+                <AuthProvider>
+                    <CartProvider>
+                        <div className="min-h-screen flex flex-col" style={{ background: 'var(--bg)' }}>
+                            <Header />
+                            <main className="flex-1 w-full pb-20 md:pb-0">
+                                {children}
+                            </main>
+                            <Footer />
+                            <CookieConsent />
+                            <BottomNav />
+                        </div>
+                    </CartProvider>
+                </AuthProvider>
             </body>
         </html>
     )

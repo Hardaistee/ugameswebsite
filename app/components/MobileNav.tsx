@@ -2,21 +2,13 @@
 import React, { useState, useEffect } from 'react'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
+import { useAuth } from '../../context/AuthContext'
 import Icon from './Icon'
 
 export default function MobileNav({ open, onClose }: { open: boolean, onClose: () => void }) {
   const pathname = usePathname()
   const mode = process.env.NEXT_PUBLIC_HOMEPAGE_MODE || 'multiple'
-
-  // Theme detection
-  const [theme, setTheme] = useState<'dark' | 'light'>('dark')
-
-  useEffect(() => {
-    if (typeof window !== 'undefined') {
-      const currentTheme = localStorage.getItem('theme') as 'dark' | 'light' || 'dark'
-      setTheme(currentTheme)
-    }
-  }, [])
+  const { user, logout } = useAuth()
 
   // Context-aware kategoriler - oyun veya pazaryeri sayfasına göre
   const isGamesPage = pathname === '/oyunlar' ||
@@ -78,26 +70,62 @@ export default function MobileNav({ open, onClose }: { open: boolean, onClose: (
           </button>
         </div>
 
-        {/* Auth Buttons */}
+        {/* Auth Buttons / User Profile */}
         <div className="px-6 py-4 border-b" style={{ borderColor: 'var(--border)' }}>
-          <div className="flex gap-3">
-            <Link
-              href="/login"
-              onClick={onClose}
-              className="flex-1 px-4 py-2.5 rounded-lg font-semibold text-center transition-all hover:scale-[1.02] active:scale-95"
-              style={{ background: 'var(--surface)', color: 'var(--text)', border: '1px solid var(--border)' }}
-            >
-              Giriş Yap
-            </Link>
-            <Link
-              href="/register"
-              onClick={onClose}
-              className="flex-1 px-4 py-2.5 rounded-lg font-semibold text-center transition-all hover:scale-[1.02] active:scale-95"
-              style={{ background: 'var(--accent)', color: '#000' }}
-            >
-              Kayıt Ol
-            </Link>
-          </div>
+          {user ? (
+            <div className="space-y-4">
+              <div className="flex items-center gap-3">
+                <div className="w-12 h-12 rounded-full bg-gray-700 flex items-center justify-center text-lg text-white">
+                  {user.name.charAt(0).toUpperCase()}
+                </div>
+                <div>
+                  <div className="font-bold" style={{ color: 'var(--text)' }}>{user.name}</div>
+                  <div className="text-xs opacity-70" style={{ color: 'var(--muted)' }}>{user.email}</div>
+                </div>
+              </div>
+
+              <div className="grid grid-cols-2 gap-3">
+                <Link
+                  href="/profil"
+                  onClick={onClose}
+                  className="flex items-center justify-center gap-2 px-3 py-2.5 rounded-lg border border-transparent hover:border-gray-700 bg-white/5 transition-all text-sm font-medium"
+                  style={{ color: 'var(--text)' }}
+                >
+                  <Icon name="user" className="w-4 h-4" />
+                  Profilim
+                </Link>
+                <button
+                  onClick={() => {
+                    logout();
+                    onClose();
+                  }}
+                  className="flex items-center justify-center gap-2 px-3 py-2.5 rounded-lg border border-transparent bg-red-500/10 text-red-500 hover:bg-red-500/20 transition-all text-sm font-medium"
+                >
+                  <Icon name="logout" className="w-4 h-4" />
+                  Çıkış Yap
+                </button>
+              </div>
+            </div>
+          ) : (
+            <div className="flex gap-3">
+              <Link
+                href="/giris"
+                onClick={onClose}
+                className="flex-1 px-4 py-2.5 rounded-lg font-semibold text-center transition-all hover:scale-[1.02] active:scale-95"
+                style={{ background: 'var(--surface)', color: 'var(--text)', border: '1px solid var(--border)' }}
+              >
+                Giriş Yap
+              </Link>
+              <Link
+                href="/kayit"
+                onClick={onClose}
+                className="flex-1 px-4 py-2.5 rounded-lg font-semibold text-center transition-all hover:scale-[1.02] active:scale-95"
+                style={{ background: 'var(--accent)', color: '#000' }}
+              >
+                Kayıt Ol
+              </Link>
+            </div>
+          )}
         </div>
 
         {/* Page Selector - Sadece multiple modda göster */}
@@ -173,7 +201,7 @@ export default function MobileNav({ open, onClose }: { open: boolean, onClose: (
                   {/* Platform-specific icons */}
                   {cat.name === 'PC Oyunları' ? (
                     <img
-                      src={theme === 'dark' ? '/images/pciconlight.png' : '/images/pcicondark.png'}
+                      src="/images/pciconlight.png"
                       alt="PC"
                       className="w-5 h-5 relative z-10"
                     />
