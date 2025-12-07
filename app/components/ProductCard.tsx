@@ -17,6 +17,12 @@ export default function ProductCard({ product, variant = 'epin', size = 'normal'
   const isGame = variant === 'game'
   const isLarge = size === 'large'
 
+  // Format price with 2 decimal places
+  const formatPrice = (price: any) => {
+    const num = parseFloat(price)
+    return isNaN(num) ? '0.00' : num.toFixed(2)
+  }
+
   function handleFav(e: React.MouseEvent) {
     e.preventDefault()
     e.stopPropagation()
@@ -55,7 +61,7 @@ export default function ProductCard({ product, variant = 'epin', size = 'normal'
   return (
     <Link href={linkPath} className="block h-full group">
       <div
-        className={`border rounded-lg overflow-hidden card-shadow hover:shadow-xl transition-all duration-300 hover:-translate-y-2 hover:scale-[1.02] h-full ${isLarge ? '' : ''
+        className={`border rounded-lg overflow-hidden card-shadow hover:shadow-xl transition-all duration-300 hover:-translate-y-2 hover:scale-[1.02] h-full flex flex-col ${isLarge ? '' : ''
           }`}
         style={{
           background: 'var(--surface)',
@@ -75,6 +81,8 @@ export default function ProductCard({ product, variant = 'epin', size = 'normal'
             src={product.images?.[0] || product.image}
             alt={product.title}
             className="w-full h-full object-cover transition-all duration-300 group-hover:scale-110"
+            loading="lazy"
+            decoding="async"
           />
 
           {/* Discount Badge - Top Left */}
@@ -125,8 +133,8 @@ export default function ProductCard({ product, variant = 'epin', size = 'normal'
             <button
               onClick={handleFav}
               aria-pressed={fav}
-              className="absolute right-3 top-3 rounded-full p-1.5 shadow-md transition-transform hover:scale-110"
-              title={fav ? 'Favorilerden çıkar' : 'Favorilere ekle'}
+              aria-label={fav ? 'Favorilerden çıkar' : 'Favorilere ekle'}
+              className="absolute right-3 top-3 rounded-full p-2 shadow-md transition-transform hover:scale-110 min-w-[44px] min-h-[44px] flex items-center justify-center"
               style={{ background: 'rgba(255,255,255,0.95)', backdropFilter: 'blur(8px)' }}
             >
               <svg
@@ -135,6 +143,7 @@ export default function ProductCard({ product, variant = 'epin', size = 'normal'
                 fill={fav ? 'currentColor' : 'none'}
                 stroke="currentColor"
                 strokeWidth="1.5"
+                aria-hidden="true"
               >
                 <path d="M12 21s-7-4.35-9-7.5C1.5 10.8 4 7 7.5 7c1.9 0 3.5 1.2 4.5 3 1-1.8 2.6-3 4.5-3C20 7 22.5 10.8 21 13.5 19 16.65 12 21 12 21z" />
               </svg>
@@ -153,7 +162,7 @@ export default function ProductCard({ product, variant = 'epin', size = 'normal'
 
           {/* Title */}
           <h3
-            className={`font-semibold ${isLarge ? 'text-base mb-2' : 'text-sm mb-2'} line-clamp-2 ${isGame ? 'group-hover:text-opacity-80' : 'min-h-[3rem]'
+            className={`font-semibold ${isLarge ? 'text-base mb-2' : 'text-sm mb-2'} line-clamp-2 ${isGame ? 'min-h-[2.5rem] group-hover:text-opacity-80' : 'min-h-[3rem]'
               } transition-colors`}
             style={{ color: 'var(--text)' }}
           >
@@ -177,15 +186,15 @@ export default function ProductCard({ product, variant = 'epin', size = 'normal'
             </div>
           )}
 
-          {/* Price Section */}
-          <div className={`${isGame ? 'flex items-center gap-2 mb-3' : 'mt-auto pt-3 border-t'}`} style={!isGame ? { borderColor: 'var(--border)' } : {}}>
+          {/* Price Section - Auto margin to push button to bottom */}
+          <div className={`${isGame ? 'flex items-center gap-2 mb-3 mt-auto' : 'mt-auto pt-3 border-t'}`} style={!isGame ? { borderColor: 'var(--border)' } : {}}>
             {product.oldPrice && (
               <span className={`${isLarge ? 'text-sm' : 'text-xs'} line-through ${isGame ? '' : 'mb-1 block'}`} style={{ color: 'var(--muted)' }}>
-                {isGame ? `₺${product.oldPrice}` : `${product.oldPrice} TL`}
+                {isGame ? `₺${formatPrice(product.oldPrice)}` : `${formatPrice(product.oldPrice)} TL`}
               </span>
             )}
             <span className={`${isLarge ? 'text-xl' : isGame ? 'text-base' : 'text-xl'} font-bold price-text ${isGame ? '' : 'block'}`}>
-              {isGame ? `₺${product.price}` : `${product.price} TL`}
+              {isGame ? `₺${formatPrice(product.price)}` : `${formatPrice(product.price)} TL`}
             </span>
             {isGame && isLarge && product.oldPrice && (
               <span className="text-xs" style={{ color: 'var(--muted)' }}>

@@ -62,7 +62,8 @@ export default function BottomNav() {
                             />
                             <button
                                 onClick={() => setShowSearch(false)}
-                                className="px-4 py-3 rounded-lg font-medium"
+                                aria-label="Aramayı kapat"
+                                className="px-4 py-3 rounded-lg font-medium min-w-[44px] min-h-[44px]"
                                 style={{ color: 'var(--text)' }}
                             >
                                 İptal
@@ -91,10 +92,11 @@ export default function BottomNav() {
                     {/* Menu Button */}
                     <button
                         onClick={handleMenuClick}
-                        className="flex flex-col items-center justify-center gap-1 transition-all active:scale-95"
+                        aria-label="Menüyü aç"
+                        className="flex flex-col items-center justify-center gap-1 transition-all active:scale-95 min-h-[44px]"
                         style={{ color: 'var(--text)' }}
                     >
-                        <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
                         </svg>
                         <span className="text-xs font-medium">Menü</span>
@@ -115,10 +117,11 @@ export default function BottomNav() {
                     {/* Search Button */}
                     <button
                         onClick={() => setShowSearch(true)}
-                        className="flex flex-col items-center justify-center gap-1 transition-all active:scale-95"
+                        aria-label="Ara"
+                        className="flex flex-col items-center justify-center gap-1 transition-all active:scale-95 min-h-[44px]"
                         style={{ color: 'var(--text)' }}
                     >
-                        <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
                         </svg>
                         <span className="text-xs font-medium">Ara</span>

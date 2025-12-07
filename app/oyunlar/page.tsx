@@ -1,12 +1,30 @@
 import React, { Suspense } from 'react'
 import ClientGamesPage from './ClientGamesPage'
-import { getProducts, getBestSellers } from '../../lib/woocommerce'
+import { getAllProducts, getBestSellers } from '../../lib/woocommerce'
 
 // Revalidate every hour
 export const revalidate = 3600
 
+// Product type after mapping
+interface MappedProduct {
+    id: number
+    title: string
+    name: string
+    price: string
+    oldPrice: string | null
+    discount: number
+    images: string[]
+    image: string
+    slug: string
+    featured: boolean
+    categories: { id: number; name: string; slug: string }[]
+    tags: { id: number; name: string; slug: string }[]
+    stock_status: string
+    total_sales: number
+}
+
 // Helper to map WooCommerce product to component structure
-function mapProduct(p: any) {
+function mapProduct(p: any): MappedProduct {
     return {
         id: p.id,
         title: p.name,
@@ -29,18 +47,19 @@ function mapProduct(p: any) {
 
 export default async function GamesPage() {
     const [allProducts, bestSellers] = await Promise.all([
-        getProducts(1, 50),
+        getAllProducts(),
         getBestSellers(12)
     ])
 
-    const mappedAll = allProducts.map(mapProduct)
-    const mappedBestSellers = bestSellers.map(mapProduct)
+    const mappedAll: MappedProduct[] = allProducts.map(mapProduct)
+    const mappedBestSellers: MappedProduct[] = bestSellers.map(mapProduct)
 
     const categorizedProducts = {
         all: mappedAll,
         bestSellers: mappedBestSellers,
-        featured: mappedAll.filter(p => p.featured).slice(0, 4),
-        discounted: mappedAll.filter(p => p.discount > 0).slice(0, 12)
+        featured: mappedAll.filter(p => p.featured).slice(0, 8),
+        discounted: mappedAll.filter(p => p.discount > 0).slice(0, 12),
+        gameKeys: mappedAll.filter(p => p.categories?.some(c => c.slug === 'random-oyun-keyleri')).slice(0, 12)
     }
 
     return (

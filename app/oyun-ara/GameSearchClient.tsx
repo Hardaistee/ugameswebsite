@@ -59,6 +59,7 @@ function GameSearchContent({ products: allProducts }: GameSearchClientProps) {
                 if (filters.category === 'pc' && game.platform !== 'PC') return false
                 if (filters.category === 'playstation' && game.platform !== 'PlayStation') return false
                 if (filters.category === 'xbox' && game.platform !== 'Xbox') return false
+                if (filters.category === 'game-keys' && !game.categories?.some((c: any) => c.slug === 'random-oyun-keyleri')) return false
             }
 
             // Filter query param (for bestsellers link etc)
@@ -152,6 +153,7 @@ function GameSearchContent({ products: allProducts }: GameSearchClientProps) {
         if (filters.platform === 'xbox') return 'Xbox Oyunları'
         if (filters.category === 'bestsellers' || filters.filter === 'bestsellers') return 'Çok Satanlar'
         if (filters.category === 'discounted') return 'İndirimdeki Oyunlar'
+        if (filters.category === 'game-keys') return 'Oyun Keyleri'
         return 'Oyun Ara'
     }, [filters])
 
@@ -249,6 +251,7 @@ function GameSearchContent({ products: allProducts }: GameSearchClientProps) {
                                             <option value="all">Tüm Kategoriler</option>
                                             <option value="discounted">İndirimdeki Oyunlar</option>
                                             <option value="bestsellers">Çok Satanlar</option>
+                                            <option value="game-keys">Oyun Keyleri</option>
                                         </select>
                                     </div>
 
@@ -435,6 +438,7 @@ function GameSearchContent({ products: allProducts }: GameSearchClientProps) {
                                     <option value="all">Tüm Kategoriler</option>
                                     <option value="discounted">İndirimdeki Oyunlar</option>
                                     <option value="bestsellers">Çok Satanlar</option>
+                                    <option value="game-keys">Oyun Keyleri</option>
                                 </select>
                             </div>
                             <div className="space-y-3">

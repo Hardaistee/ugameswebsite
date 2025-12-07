@@ -23,8 +23,8 @@ export default function MobileNav({ open, onClose }: { open: boolean, onClose: (
     { name: 'PC Oyunları', path: '/oyun-ara?platform=pc', icon: 'gamepad', color: 'from-blue-500 to-cyan-500' },
     { name: 'PlayStation Oyunları', path: '/oyun-ara?platform=playstation', icon: 'gamepad', color: 'from-blue-500 to-indigo-500' },
     { name: 'Xbox Oyunları', path: '/oyun-ara?platform=xbox', icon: 'gamepad', color: 'from-green-500 to-emerald-500' },
-    { name: 'İndirimdeki Oyunlar', path: '/oyun-ara?category=discounted', icon: 'fire', color: 'from-red-500 to-orange-500' },
-    { name: 'Çok Satanlar', path: '/oyun-ara?category=bestsellers', icon: 'crown', color: 'from-yellow-500 to-orange-500' }
+    { name: 'Oyun Keyleri', path: '/oyun-ara?category=game-keys', icon: 'key', color: 'from-purple-500 to-pink-500' },
+    { name: 'İndirimdeki Oyunlar', path: '/oyun-ara?category=discounted', icon: 'fire', color: 'from-red-500 to-orange-500' }
   ]
 
   const marketplaceCategories = [

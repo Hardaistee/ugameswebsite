@@ -14,9 +14,9 @@ export default function Icon({ name, className = "w-5 h-5", style }: IconProps) 
       </svg>
     ),
     'gamepad': (
-      <img 
-        src="/images/icons8-pubg-100.png" 
-        alt="PUBG" 
+      <img
+        src="/images/icons8-pubg-100.png"
+        alt="PUBG"
         className="w-5 h-5"
         style={style}
       />
@@ -27,25 +27,25 @@ export default function Icon({ name, className = "w-5 h-5", style }: IconProps) 
       </svg>
     ),
     'valorant': (
-      <img 
-        src="/images/icons8-valorant-16.png" 
-        alt="Valorant" 
+      <img
+        src="/images/icons8-valorant-16.png"
+        alt="Valorant"
         className="w-5 h-5"
         style={style}
       />
     ),
     'sword': (
-      <img 
-        src="/images/21516-256x256x32-2.png" 
-        alt="LoL" 
+      <img
+        src="/images/21516-256x256x32-2.png"
+        alt="LoL"
         className="w-[18px] h-[18px]"
         style={style}
       />
     ),
     'gun': (
-      <img 
-        src="/images/e67a27ba8bb6ba92dc274342c874d373-2.png" 
-        alt="CS2" 
+      <img
+        src="/images/e67a27ba8bb6ba92dc274342c874d373-2.png"
+        alt="CS2"
         className="w-5 h-5"
         style={style}
       />
@@ -56,9 +56,9 @@ export default function Icon({ name, className = "w-5 h-5", style }: IconProps) 
       </svg>
     ),
     'fire': (
-      <img 
-        src="/images/icons8-fire-48.png" 
-        alt="Fire" 
+      <img
+        src="/images/icons8-fire-48.png"
+        alt="Fire"
         className="w-5 h-5"
         style={style}
       />
@@ -97,6 +97,11 @@ export default function Icon({ name, className = "w-5 h-5", style }: IconProps) 
     'crown': (
       <svg className={className} style={style} fill="none" stroke="currentColor" viewBox="0 0 24 24">
         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.286 6.857L21 12l-5.714 2.143L13 21l-2.286-6.857L5 12l5.714-2.143L13 3z" />
+      </svg>
+    ),
+    'key': (
+      <svg className={className} style={style} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 7a2 2 0 012 2m4 0a6 6 0 01-7.743 5.743L11 17H9v2H7v2H4a1 1 0 01-1-1v-2.586a1 1 0 01.293-.707l5.964-5.964A6 6 0 1121 9z" />
       </svg>
     ),
     'zap': (

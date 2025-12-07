@@ -2,6 +2,10 @@
 @tailwind components;
 @tailwind utilities;
 
+html {
+	scroll-behavior: smooth;
+}
+
 html,
 body,
 #root {
@@ -138,6 +142,24 @@ html.dark .badge {
 .vertical-badge {
 	writing-mode: vertical-rl;
 	text-orientation: mixed;
+}
+
+/* Custom Scrollbar */
+.custom-scrollbar::-webkit-scrollbar {
+	width: 6px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-track {
+	background: #1a1a1a;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb {
+	background: #444;
+	border-radius: 3px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb:hover {
+	background: #555;
 }
 
 /* Hide scrollbar for category nav */

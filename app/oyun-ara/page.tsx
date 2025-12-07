@@ -1,6 +1,6 @@
 import React, { Suspense } from 'react'
 import GameSearchClient from './GameSearchClient'
-import { getProducts } from '../../lib/woocommerce'
+import { getAllProducts } from '../../lib/woocommerce'
 
 export const revalidate = 3600
 
@@ -45,7 +45,7 @@ export default async function GameSearchPage() {
   let products: any[] = []
 
   try {
-    const wcProducts = await getProducts(1, 100)
+    const wcProducts = await getAllProducts()
     products = wcProducts.map(mapProduct)
   } catch (error) {
     console.error('Failed to fetch products:', error)
