@@ -35,11 +35,40 @@ export async function generateMetadata({ params }: ProductPageProps) {
     if (!product) {
         return {
             title: 'Ürün Bulunamadı - uGames',
+            robots: 'noindex',
         }
     }
 
+    const cleanDescription = product.short_description?.replace(/<[^>]*>/g, '') || `${product.name} ürününü en uygun fiyata satın alın.`
+    const imageUrl = product.images?.[0]?.src || 'https://ugames.com/logo.png' // Fallback image
+
     return {
-        title: `${product.name} - uGames`,
-        description: product.short_description?.replace(/<[^>]*>/g, '') || `${product.name} ürününü inceleyin ve satın alın.`,
+        title: `${product.name} Satın Al - En Ucuz Fiyat | uGames`,
+        description: cleanDescription,
+        keywords: [product.name, 'oyun satın al', 'ucuz oyun', 'dijital kod', 'steam key', ...product.categories.map((c: any) => c.name)],
+        alternates: {
+            canonical: `https://ugames.com/urun/${slug}`,
+        },
+        openGraph: {
+            title: `${product.name} - uGames`,
+            description: cleanDescription,
+            url: `https://ugames.com/urun/${slug}`,
+            siteName: 'uGames',
+            images: [
+                {
+                    url: imageUrl,
+                    width: 800,
+                    height: 600,
+                    alt: product.name,
+                },
+            ],
+            type: 'website',
+        },
+        twitter: {
+            card: 'summary_large_image',
+            title: `${product.name} - uGames`,
+            description: cleanDescription,
+            images: [imageUrl],
+        },
     }
 }

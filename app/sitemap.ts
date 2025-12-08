@@ -1,6 +1,10 @@
 import { MetadataRoute } from 'next'
+import { getAllProducts } from '../lib/woocommerce'
 
-export default function sitemap(): MetadataRoute.Sitemap {
+export const revalidate = 3600 // Her 1 saatte bir yenile
+
+
+export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     const baseUrl = 'https://ugames.com'
 
     // Static pages
@@ -13,6 +17,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
         '/kullanim-kosullari',
         '/gizlilik-politikasi',
         '/iade-politikasi',
+        '/blog',
     ]
 
     const staticRoutes = staticPages.map((route) => ({
@@ -22,5 +27,21 @@ export default function sitemap(): MetadataRoute.Sitemap {
         priority: route === '' ? 1 : 0.8,
     }))
 
-    return staticRoutes
+    // Dynamic Product Pages
+    let productRoutes: MetadataRoute.Sitemap = []
+    try {
+        const products = await getAllProducts()
+        productRoutes = products.map((product: any) => ({
+            url: `${baseUrl}/urun/${product.slug}`,
+            lastModified: new Date(product.date_modified || product.date_created),
+            changeFrequency: 'daily' as const,
+            priority: 0.9,
+        }))
+    } catch (error) {
+        console.error('Sitemap generation error:', error)
+    }
+
+    // You could also add dynamic blog posts here if you have a getAllBlogs function
+
+    return [...staticRoutes, ...productRoutes]
 }
