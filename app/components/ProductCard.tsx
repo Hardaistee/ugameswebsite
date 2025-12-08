@@ -37,10 +37,13 @@ export default function ProductCard({ product, variant = 'epin', size = 'normal'
   }
 
   const { addToCart } = useCart()
+  const [buttonState, setButtonState] = useState<'idle' | 'success' | 'exiting'>('idle')
 
   function handleAddToCart(e: React.MouseEvent) {
     e.preventDefault()
     e.stopPropagation()
+
+    if (buttonState !== 'idle') return
 
     // Convert price string to expected format if needed, or pass as is
     addToCart({
@@ -52,8 +55,18 @@ export default function ProductCard({ product, variant = 'epin', size = 'normal'
       slug: product.slug || ''
     })
 
-    // Optional: Show visual feedback (for now just alert or log)
-    // alert('Sepete eklendi!')
+    // Start Animation (Slide In)
+    setButtonState('success')
+
+    // Wait, then Slide Out
+    setTimeout(() => {
+      setButtonState('exiting')
+
+      // Reset to Idle (Hidden Left) after slide out finishes
+      setTimeout(() => {
+        setButtonState('idle')
+      }, 300) // Match transition duration
+    }, 2000)
   }
 
   const linkPath = product.slug ? `/urun/${product.slug}` : `/urun/${product.id}`
@@ -207,13 +220,33 @@ export default function ProductCard({ product, variant = 'epin', size = 'normal'
           {isGame && (
             <button
               onClick={handleAddToCart}
-              className={`w-full text-center ${isLarge ? 'py-3' : 'py-2'} rounded font-semibold transition-all hover:scale-105 active:scale-95 text-sm cursor-pointer border-none`}
+              disabled={buttonState !== 'idle'}
+              className={`relative w-full text-center ${isLarge ? 'py-3' : 'py-2'} rounded font-semibold transition-transform overflow-hidden
+                 ${buttonState === 'idle' ? 'hover:scale-105 active:scale-95' : ''}
+              `}
               style={{
                 background: 'var(--accent)',
                 color: '#000'
               }}
             >
-              Sepete Ekle
+              {/* Original Content */}
+              <div className={`flex justify-center items-center gap-2 transition-opacity duration-300 ${buttonState !== 'idle' ? 'opacity-0' : 'opacity-100'}`}>
+                <span>Sepete Ekle</span>
+              </div>
+
+              {/* Slide Overlay */}
+              <div
+                className={`absolute inset-0 bg-green-600 flex items-center justify-center gap-2 text-white font-bold text-sm
+                        ${buttonState === 'idle' ? '-translate-x-full transition-none' : ''}
+                        ${buttonState === 'success' ? 'translate-x-0 transition-transform duration-300 ease-out' : ''}
+                        ${buttonState === 'exiting' ? 'translate-x-full transition-transform duration-300 ease-in' : ''}
+                    `}
+              >
+                <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                </svg>
+                <span>Eklendi</span>
+              </div>
             </button>
           )}
         </div>

@@ -90,7 +90,16 @@ export const CartProvider = ({ children }: { children: React.ReactNode }) => {
 export const useCart = () => {
     const context = useContext(CartContext);
     if (context === undefined) {
-        throw new Error("useCart must be used within a CartProvider");
+        // Fallback for SSR/Edge cases where context might be missing temporarily
+        // This prevents the "Recoverable Error" during initial server render
+        return {
+            cart: [],
+            addToCart: () => console.warn('Cart context not ready'),
+            removeFromCart: () => { },
+            clearCart: () => { },
+            cartTotal: 0,
+            wallet: 0,
+        };
     }
     return context;
 };

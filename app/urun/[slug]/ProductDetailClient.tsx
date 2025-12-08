@@ -31,7 +31,11 @@ export default function ProductDetailClient({ product }: ProductDetailClientProp
     const images = product.images || []
     const mainImage = images[selectedImage]?.src || '/placeholder.png'
 
+    const [buttonState, setButtonState] = useState<'idle' | 'success' | 'exiting'>('idle')
+
     const handleAddToCart = () => {
+        if (buttonState !== 'idle') return
+
         addToCart({
             id: product.id,
             name: product.name,
@@ -40,7 +44,19 @@ export default function ProductDetailClient({ product }: ProductDetailClientProp
             quantity: 1,
             slug: product.slug || ''
         })
-        alert('Ürün sepete eklendi!')
+
+        // Start Animation (Slide In)
+        setButtonState('success')
+
+        // Wait, then Slide Out
+        setTimeout(() => {
+            setButtonState('exiting')
+
+            // Reset to Idle (Hidden Left) after slide out finishes
+            setTimeout(() => {
+                setButtonState('idle')
+            }, 300) // Match transition duration
+        }, 2000)
     }
 
     // Parse description HTML safely
@@ -144,15 +160,33 @@ export default function ProductDetailClient({ product }: ProductDetailClientProp
                     {/* Add to Cart Button */}
                     <button
                         onClick={handleAddToCart}
-                        disabled={product.stock_status !== 'instock'}
-                        className={`w-full py-4 rounded-xl font-bold text-white shadow-lg transition-transform hover:scale-105 active:scale-95 flex justify-center items-center gap-2 mb-6 ${product.stock_status !== 'instock' ? 'opacity-50 cursor-not-allowed' : ''
-                            }`}
+                        disabled={product.stock_status !== 'instock' || buttonState !== 'idle'}
+                        className={`group relative w-full py-4 rounded-xl font-bold shadow-lg transition-transform overflow-hidden
+                            ${product.stock_status !== 'instock' ? 'opacity-50 cursor-not-allowed' : 'hover:scale-105 active:scale-95'}
+                        `}
                         style={{ background: 'var(--accent)', color: '#000' }}
                     >
-                        <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z" />
-                        </svg>
-                        Sepete Ekle
+                        {/* Original Content */}
+                        <div className={`flex justify-center items-center gap-2 transition-opacity duration-300 ${buttonState !== 'idle' ? 'opacity-0' : 'opacity-100'}`}>
+                            <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z" />
+                            </svg>
+                            <span>Sepete Ekle</span>
+                        </div>
+
+                        {/* Slide Overlay */}
+                        <div
+                            className={`absolute inset-0 bg-green-600 flex items-center justify-center gap-2 text-white font-bold
+                                ${buttonState === 'idle' ? '-translate-x-full transition-none' : ''}
+                                ${buttonState === 'success' ? 'translate-x-0 transition-transform duration-300 ease-out' : ''}
+                                ${buttonState === 'exiting' ? 'translate-x-full transition-transform duration-300 ease-in' : ''}
+                            `}
+                        >
+                            <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                            </svg>
+                            <span>Sepete Eklendi!</span>
+                        </div>
                     </button>
 
                     {/* Product Meta */}
