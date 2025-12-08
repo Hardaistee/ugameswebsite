@@ -16,7 +16,7 @@ export default function LoginPage() {
     const router = useRouter();
     const { login } = useAuth();
 
-    const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3001/api';
+    const API_URL = `${process.env.NEXT_PUBLIC_BACKEND_URL || 'http://localhost:3001'}/api`;
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
