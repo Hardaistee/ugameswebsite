@@ -98,12 +98,7 @@ export default function ProductCard({ product, variant = 'epin', size = 'normal'
             decoding="async"
           />
 
-          {/* Discount Badge - Top Left */}
-          {product.discount && (
-            <div className={`absolute ${isGame ? 'top-2 left-2' : 'left-0 top-3'} bg-red-500 text-white text-xs font-bold px-2 py-1 ${isGame ? 'rounded' : 'rounded-r-md'} shadow-lg`}>
-              {isGame ? `-%${product.discount}` : `%${product.discount}`}
-            </div>
-          )}
+          {/* Discount Badge Removed from here */}
 
           {/* Hot Badge - Top Right (for games) */}
           {isGame && (product.badge === 'Çok Satan' || product.tags?.includes('Çok Satan')) && (
@@ -200,18 +195,28 @@ export default function ProductCard({ product, variant = 'epin', size = 'normal'
           )}
 
           {/* Price Section - Auto margin to push button to bottom */}
-          <div className={`${isGame ? 'flex items-center gap-2 mb-3 mt-auto' : 'mt-auto pt-3 border-t'}`} style={!isGame ? { borderColor: 'var(--border)' } : {}}>
-            {product.oldPrice && (
-              <span className={`${isLarge ? 'text-sm' : 'text-xs'} line-through ${isGame ? '' : 'mb-1 block'}`} style={{ color: 'var(--muted)' }}>
-                {isGame ? `₺${formatPrice(product.oldPrice)}` : `${formatPrice(product.oldPrice)} TL`}
+          <div className={`${isGame ? 'flex items-center gap-2 mb-3 mt-auto' : 'mt-auto pt-3 border-t flex flex-wrap items-center gap-2'}`} style={!isGame ? { borderColor: 'var(--border)' } : {}}>
+            <div className="flex flex-col">
+              {product.oldPrice && (
+                <span className={`${isLarge ? 'text-sm' : 'text-xs'} line-through`} style={{ color: 'var(--muted)' }}>
+                  {isGame ? `₺${formatPrice(product.oldPrice)}` : `${formatPrice(product.oldPrice)} TL`}
+                </span>
+              )}
+              <span className={`${isLarge ? 'text-xl' : isGame ? 'text-base' : 'text-xl'} font-bold price-text`}>
+                {isGame ? `₺${formatPrice(product.price)}` : `${formatPrice(product.price)} TL`}
               </span>
+            </div>
+
+            {/* Discount Badge Next to Price */}
+            {product.discount && (
+              <div className="ml-auto px-2 py-1 rounded bg-red-500/10 border border-red-500/20 text-red-500 text-xs font-bold whitespace-nowrap">
+                {isGame ? `-%${product.discount}` : `%${product.discount}`}
+              </div>
             )}
-            <span className={`${isLarge ? 'text-xl' : isGame ? 'text-base' : 'text-xl'} font-bold price-text ${isGame ? '' : 'block'}`}>
-              {isGame ? `₺${formatPrice(product.price)}` : `${formatPrice(product.price)} TL`}
-            </span>
+
             {isGame && isLarge && product.oldPrice && (
-              <span className="text-xs" style={{ color: 'var(--muted)' }}>
-                'den Başlayan Fiyatlarla
+              <span className="text-xs ml-2 hidden sm:block" style={{ color: 'var(--muted)' }}>
+                'den Başlayan
               </span>
             )}
           </div>

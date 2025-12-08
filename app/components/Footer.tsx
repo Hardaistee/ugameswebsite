@@ -110,7 +110,7 @@ export default function Footer() {
           <div className="flex flex-col md:flex-row justify-between items-center gap-4 text-xs" style={{ color: 'var(--muted)' }}>
             <div className="flex flex-col md:flex-row items-center gap-2 md:gap-4">
               <div className="text-center md:text-left">
-                © {new Date().getFullYear()} Unifor Yazılım ve Teknoloji (uGames) — Modern dijital ürün platformu. Tüm hakları saklıdır.
+                © 2025 Unifor Yazılım ve Teknoloji (uGames) — Modern dijital ürün platformu. Tüm hakları saklıdır.
               </div>
               {/* Location in bottom */}
               <div className="hidden md:flex items-center gap-1.5">

@@ -3,6 +3,7 @@
 import React, { useState } from 'react'
 import Link from 'next/link'
 import { useCart } from '../../../context/CartContext'
+import { FadeIn } from '../../components/animations/FadeIn'
 
 interface ProductDetailClientProps {
     product: any
@@ -65,129 +66,135 @@ export default function ProductDetailClient({ product }: ProductDetailClientProp
     return (
         <div className="max-w-6xl mx-auto px-4 py-8">
             {/* Breadcrumb */}
-            <nav className="text-sm mb-6" style={{ color: 'var(--muted)' }}>
-                <Link href="/" className="hover:underline">Ana Sayfa</Link>
-                <span className="mx-2">/</span>
-                <Link href="/oyunlar" className="hover:underline">Ürünler</Link>
-                <span className="mx-2">/</span>
-                <span style={{ color: 'var(--text)' }}>{product.name}</span>
-            </nav>
+            <FadeIn delay={0.1}>
+                <nav className="text-sm mb-6" style={{ color: 'var(--muted)' }}>
+                    <Link href="/" className="hover:underline">Ana Sayfa</Link>
+                    <span className="mx-2">/</span>
+                    <Link href="/oyunlar" className="hover:underline">Ürünler</Link>
+                    <span className="mx-2">/</span>
+                    <span style={{ color: 'var(--text)' }}>{product.name}</span>
+                </nav>
+            </FadeIn>
 
             <div className="flex flex-col lg:flex-row gap-8">
                 {/* Image Gallery */}
                 <div className="lg:w-1/2">
-                    {/* Main Image */}
-                    <div className="aspect-square rounded-xl overflow-hidden mb-4 border" style={{ background: 'var(--surface)', borderColor: 'var(--border)' }}>
-                        <img
-                            src={mainImage}
-                            alt={product.name}
-                            className="w-full h-full object-contain"
-                        />
-                    </div>
-
-                    {/* Thumbnails */}
-                    {images.length > 1 && (
-                        <div className="flex gap-2 overflow-x-auto pb-2">
-                            {images.map((img: any, index: number) => (
-                                <button
-                                    key={img.id || index}
-                                    onClick={() => setSelectedImage(index)}
-                                    className={`w-20 h-20 rounded-lg overflow-hidden flex-shrink-0 border-2 transition-all ${selectedImage === index
-                                        ? 'border-blue-500 scale-105'
-                                        : 'border-transparent opacity-70 hover:opacity-100'
-                                        }`}
-                                >
-                                    <img
-                                        src={img.src}
-                                        alt={`${product.name} - ${index + 1}`}
-                                        className="w-full h-full object-cover"
-                                    />
-                                </button>
-                            ))}
+                    <FadeIn direction="right" delay={0.2}>
+                        {/* Main Image */}
+                        <div className="aspect-square rounded-xl overflow-hidden mb-4 border" style={{ background: 'var(--surface)', borderColor: 'var(--border)' }}>
+                            <img
+                                src={mainImage}
+                                alt={product.name}
+                                className="w-full h-full object-contain"
+                            />
                         </div>
-                    )}
+
+                        {/* Thumbnails */}
+                        {images.length > 1 && (
+                            <div className="flex gap-2 overflow-x-auto pb-2">
+                                {images.map((img: any, index: number) => (
+                                    <button
+                                        key={img.id || index}
+                                        onClick={() => setSelectedImage(index)}
+                                        className={`w-20 h-20 rounded-lg overflow-hidden flex-shrink-0 border-2 transition-all ${selectedImage === index
+                                            ? 'border-blue-500 scale-105'
+                                            : 'border-transparent opacity-70 hover:opacity-100'
+                                            }`}
+                                    >
+                                        <img
+                                            src={img.src}
+                                            alt={`${product.name} - ${index + 1}`}
+                                            className="w-full h-full object-cover"
+                                        />
+                                    </button>
+                                ))}
+                            </div>
+                        )}
+                    </FadeIn>
                 </div>
 
                 {/* Product Info */}
                 <div className="lg:w-1/2">
-                    {/* Categories */}
-                    {product.categories && product.categories.length > 0 && (
-                        <div className="flex flex-wrap gap-2 mb-3">
-                            {product.categories.map((cat: any) => (
-                                <span
-                                    key={cat.id}
-                                    className="text-xs px-2 py-1 rounded-full"
-                                    style={{ background: 'var(--accent)', color: '#000' }}
-                                >
-                                    {cat.name}
+                    <FadeIn direction="left" delay={0.3}>
+                        {/* Categories */}
+                        {product.categories && product.categories.length > 0 && (
+                            <div className="flex flex-wrap gap-2 mb-3">
+                                {product.categories.map((cat: any) => (
+                                    <span
+                                        key={cat.id}
+                                        className="text-xs px-2 py-1 rounded-full"
+                                        style={{ background: 'var(--accent)', color: '#000' }}
+                                    >
+                                        {cat.name}
+                                    </span>
+                                ))}
+                            </div>
+                        )}
+
+                        <h1 className="text-3xl font-bold mb-4">{product.name}</h1>
+
+                        {/* Stock Status */}
+                        <div className="mb-4">
+                            {product.stock_status === 'instock' ? (
+                                <span className="text-green-500 text-sm font-medium">✓ Stokta</span>
+                            ) : (
+                                <span className="text-red-500 text-sm font-medium">✗ Stokta Yok</span>
+                            )}
+                        </div>
+
+                        {/* Price */}
+                        <div className="mb-6">
+                            {product.on_sale && product.regular_price && (
+                                <span className="text-lg line-through mr-3" style={{ color: 'var(--muted)' }}>
+                                    ₺{product.regular_price}
                                 </span>
-                            ))}
-                        </div>
-                    )}
-
-                    <h1 className="text-3xl font-bold mb-4">{product.name}</h1>
-
-                    {/* Stock Status */}
-                    <div className="mb-4">
-                        {product.stock_status === 'instock' ? (
-                            <span className="text-green-500 text-sm font-medium">✓ Stokta</span>
-                        ) : (
-                            <span className="text-red-500 text-sm font-medium">✗ Stokta Yok</span>
-                        )}
-                    </div>
-
-                    {/* Price */}
-                    <div className="mb-6">
-                        {product.on_sale && product.regular_price && (
-                            <span className="text-lg line-through mr-3" style={{ color: 'var(--muted)' }}>
-                                ₺{product.regular_price}
+                            )}
+                            <span className="text-3xl font-bold" style={{ color: 'var(--accent)' }}>
+                                ₺{product.price || product.regular_price || '0'}
                             </span>
+                        </div>
+
+                        {/* Short Description */}
+                        {product.short_description && (
+                            <div
+                                className="mb-6 text-sm leading-relaxed"
+                                style={{ color: 'var(--muted)' }}
+                                dangerouslySetInnerHTML={{ __html: product.short_description }}
+                            />
                         )}
-                        <span className="text-3xl font-bold" style={{ color: 'var(--accent)' }}>
-                            ₺{product.price || product.regular_price || '0'}
-                        </span>
-                    </div>
 
-                    {/* Short Description */}
-                    {product.short_description && (
-                        <div
-                            className="mb-6 text-sm leading-relaxed"
-                            style={{ color: 'var(--muted)' }}
-                            dangerouslySetInnerHTML={{ __html: product.short_description }}
-                        />
-                    )}
-
-                    {/* Add to Cart Button */}
-                    <button
-                        onClick={handleAddToCart}
-                        disabled={product.stock_status !== 'instock' || buttonState !== 'idle'}
-                        className={`group relative w-full py-4 rounded-xl font-bold shadow-lg transition-transform overflow-hidden
-                            ${product.stock_status !== 'instock' ? 'opacity-50 cursor-not-allowed' : 'hover:scale-105 active:scale-95'}
-                        `}
-                        style={{ background: 'var(--accent)', color: '#000' }}
-                    >
-                        {/* Original Content */}
-                        <div className={`flex justify-center items-center gap-2 transition-opacity duration-300 ${buttonState !== 'idle' ? 'opacity-0' : 'opacity-100'}`}>
-                            <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z" />
-                            </svg>
-                            <span>Sepete Ekle</span>
-                        </div>
-
-                        {/* Slide Overlay */}
-                        <div
-                            className={`absolute inset-0 bg-green-600 flex items-center justify-center gap-2 text-white font-bold
-                                ${buttonState === 'idle' ? '-translate-x-full transition-none' : ''}
-                                ${buttonState === 'success' ? 'translate-x-0 transition-transform duration-300 ease-out' : ''}
-                                ${buttonState === 'exiting' ? 'translate-x-full transition-transform duration-300 ease-in' : ''}
+                        {/* Add to Cart Button */}
+                        <button
+                            onClick={handleAddToCart}
+                            disabled={product.stock_status !== 'instock' || buttonState !== 'idle'}
+                            className={`group relative w-full py-4 rounded-xl font-bold shadow-lg transition-transform overflow-hidden
+                                ${product.stock_status !== 'instock' ? 'opacity-50 cursor-not-allowed' : 'hover:scale-105 active:scale-95'}
                             `}
+                            style={{ background: 'var(--accent)', color: '#000' }}
                         >
-                            <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
-                            </svg>
-                            <span>Sepete Eklendi!</span>
-                        </div>
-                    </button>
+                            {/* Original Content */}
+                            <div className={`flex justify-center items-center gap-2 transition-opacity duration-300 ${buttonState !== 'idle' ? 'opacity-0' : 'opacity-100'}`}>
+                                <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z" />
+                                </svg>
+                                <span>Sepete Ekle</span>
+                            </div>
+
+                            {/* Slide Overlay */}
+                            <div
+                                className={`absolute inset-0 bg-green-600 flex items-center justify-center gap-2 text-white font-bold
+                                    ${buttonState === 'idle' ? '-translate-x-full transition-none' : ''}
+                                    ${buttonState === 'success' ? 'translate-x-0 transition-transform duration-300 ease-out' : ''}
+                                    ${buttonState === 'exiting' ? 'translate-x-full transition-transform duration-300 ease-in' : ''}
+                                `}
+                            >
+                                <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                                </svg>
+                                <span>Sepete Eklendi!</span>
+                            </div>
+                        </button>
+                    </FadeIn>
 
                     {/* Product Meta */}
                     <div className="space-y-3 text-sm border-t pt-6" style={{ borderColor: 'var(--border)' }}>

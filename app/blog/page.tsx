@@ -1,4 +1,6 @@
+import Link from 'next/link'
 import BlogList from './components/BlogList'
+import { FadeIn } from '../components/animations/FadeIn'
 
 interface Blog {
     slug: string
@@ -36,31 +38,61 @@ async function getBlogs(): Promise<Blog[]> {
 export default async function BlogPage() {
     const blogs = await getBlogs()
 
-    // En yeni bloğu featured olarak seçelim (opsiyonel)
-    const featuredBlog = blogs[0]
-
     return (
-        <div className="min-h-screen bg-[var(--bg)] pb-20">
+        <div className="min-h-screen bg-[var(--bg)]">
             {/* Hero Section */}
-            <div className="relative bg-[#0a0a0a] border-b border-[var(--border)] overflow-hidden">
-                <div className="absolute inset-0 bg-gradient-to-br from-[var(--accent)]/10 to-purple-900/10" />
-                <div className="absolute inset-0 bg-[url('/grid-pattern.svg')] opacity-10" />
+            <div className="relative py-24 px-4 overflow-hidden border-b border-[var(--border)]">
+                {/* Background Pattern */}
+                <div className="absolute inset-0 opacity-10 pointer-events-none">
+                    <div className="absolute inset-0 bg-[url('/grid-pattern.svg')] bg-center [mask-image:linear-gradient(180deg,white,rgba(255,255,255,0))]" />
+                </div>
 
-                <div className="relative mx-auto max-w-7xl px-4 py-20 text-center sm:px-6 lg:px-8">
-                    <span className="mb-4 inline-block rounded-full bg-[var(--accent)]/10 px-4 py-1.5 text-sm font-semibold text-[var(--accent)] border border-[var(--accent)]/20">
-                        🚀 uGames Blog
-                    </span>
-                    <h1 className="mb-6 text-4xl font-black tracking-tight bg-gradient-to-r from-white to-gray-400 bg-clip-text text-transparent sm:text-6xl">
-                        Oyun Dünyasının Nabzı
-                    </h1>
-                    <p className="mx-auto max-w-2xl text-lg text-[var(--muted)]">
-                        En güncel oyun haberleri, detaylı incelemeler, e-spor gelişmeleri ve özel rehberler ile oyun dünyasını yakından takip edin.
-                    </p>
+                {/* Gradient Blob */}
+                <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-purple-500/20 rounded-full blur-[100px] -translate-y-1/2 translate-x-1/2 pointer-events-none" />
+                <div className="absolute bottom-0 left-0 w-[500px] h-[500px] bg-blue-500/20 rounded-full blur-[100px] translate-y-1/2 -translate-x-1/2 pointer-events-none" />
+
+                <div className="container mx-auto relative z-10">
+                    <div className="max-w-3xl">
+                        <FadeIn direction="up">
+                            <span className="inline-block px-4 py-1.5 rounded-full bg-[var(--accent)]/10 text-[var(--accent)] font-bold text-sm mb-6 border border-[var(--accent)]/20">
+                                uGames Blog
+                            </span>
+                        </FadeIn>
+
+                        <FadeIn direction="up" delay={0.1}>
+                            <h1 className="text-5xl md:text-7xl font-black mb-6 tracking-tight text-[var(--text)]">
+                                Oyun Dünyasından <br />
+                                <span className="text-transparent bg-clip-text bg-gradient-to-r from-[var(--accent)] to-purple-500">
+                                    Haberler ve İpuçları
+                                </span>
+                            </h1>
+                        </FadeIn>
+
+                        <FadeIn direction="up" delay={0.2}>
+                            <p className="text-xl text-[var(--muted)] mb-8 leading-relaxed max-w-2xl">
+                                En güncel oyun haberleri, incelemeler, rehberler ve e-spor dünyasından gelişmeler. Oyun dünyasını bizimle takip edin.
+                            </p>
+                        </FadeIn>
+
+                        <FadeIn direction="up" delay={0.3}>
+                            <div className="flex flex-wrap gap-4">
+                                <Link
+                                    href="/oyunlar"
+                                    className="px-8 py-4 rounded-xl bg-[var(--text)] text-[var(--bg)] font-bold hover:scale-105 transition-transform shadow-lg shadow-white/10"
+                                >
+                                    Mağazaya Dön
+                                </Link>
+                                <button className="px-8 py-4 rounded-xl bg-[var(--surface)] text-[var(--text)] font-bold border border-[var(--border)] hover:bg-[var(--surface)]/80 transition-colors">
+                                    Bültene Abone Ol
+                                </button>
+                            </div>
+                        </FadeIn>
+                    </div>
                 </div>
             </div>
 
-            <div className="mx-auto max-w-7xl px-4 py-12 sm:px-6 lg:px-8">
-                {/* Content */}
+            {/* Blog Posts */}
+            <div className="container mx-auto px-4 py-20">
                 <BlogList initialBlogs={blogs} />
             </div>
         </div>
