@@ -1,4 +1,5 @@
 import type { Metadata } from 'next'
+import { Inter } from 'next/font/google'
 import './globals.css'
 import { CartProvider } from '../context/CartContext'
 import { AuthProvider } from '../context/AuthContext'
@@ -7,6 +8,15 @@ import Footer from './components/Footer'
 import CookieConsent from './components/CookieConsent'
 import ThemeScript from './components/ThemeScript'
 import BottomNav from './components/BottomNav'
+import ChatWidget from './components/ChatWidget'
+
+// Next.js Font Optimization - Self-hosted, no render blocking
+const inter = Inter({
+    subsets: ['latin', 'latin-ext'],
+    weight: ['400', '500', '600', '700', '800', '900'],
+    display: 'swap',
+    variable: '--font-inter',
+})
 
 export const metadata: Metadata = {
     title: {
@@ -33,7 +43,7 @@ export const metadata: Metadata = {
         description: 'Oyun hesapları, e-pinler ve dijital ürünleri güvenilir şekilde alıp satın.',
         images: [
             {
-                url: '/og-image.png', // You'll need to add this image to public/
+                url: '/og-image.png',
                 width: 1200,
                 height: 630,
                 alt: 'uGames',
@@ -63,26 +73,14 @@ export const metadata: Metadata = {
     },
 }
 
-import ChatWidget from './components/ChatWidget'
-
 export default function RootLayout({
     children,
 }: {
     children: React.ReactNode
 }) {
     return (
-        <html lang="tr" suppressHydrationWarning>
+        <html lang="tr" className={inter.variable} suppressHydrationWarning>
             <head>
-                {/* Performance: Preconnect to external origins */}
-                <link rel="preconnect" href="https://fonts.googleapis.com" />
-                <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
-
-                {/* Performance: Optimized font loading with display swap */}
-                <link
-                    href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap"
-                    rel="stylesheet"
-                />
-
                 {/* Accessibility: Theme color for mobile browsers */}
                 <meta name="theme-color" content="#1c1c1c" />
 
@@ -91,7 +89,7 @@ export default function RootLayout({
 
                 <ThemeScript />
             </head>
-            <body className="flex flex-col min-h-screen antialiased">
+            <body className={`${inter.className} flex flex-col min-h-screen antialiased`}>
                 <a href="#main-content" className="sr-only focus:not-sr-only focus:absolute focus:top-4 focus:left-4 focus:z-50 focus:px-4 focus:py-2 focus:bg-white focus:text-black focus:rounded">
                     Ana içeriğe atla
                 </a>
@@ -111,3 +109,4 @@ export default function RootLayout({
         </html>
     )
 }
+

@@ -1,6 +1,7 @@
 'use client'
 import React, { useState } from 'react'
 import Link from 'next/link'
+import Image from 'next/image'
 import { useCart } from '../../context/CartContext'
 
 interface ProductCardProps {
@@ -20,10 +21,14 @@ export default function ProductCard({ product, variant = 'epin', size = 'normal'
   const [popping, setPopping] = useState(false)
   // loaded state kullanılmıyor, kaldırabiliriz veya kalsın
   const [isPressed, setIsPressed] = useState(false) // Visual feedback için
+  const [imageError, setImageError] = useState(false)
 
   const isGame = variant === 'game'
   const isLarge = size === 'large'
   const linkPath = product.slug ? `/urun/${product.slug}` : `/urun/${product.id}`
+
+  // Get image source
+  const imageSrc = product.images?.[0] || product.image || ''
 
   // Format price with 2 decimal places
   const formatPrice = (price: any) => {
@@ -128,15 +133,23 @@ export default function ProductCard({ product, variant = 'epin', size = 'normal'
             } overflow-hidden flex items-center justify-center`}
           style={{ background: 'var(--bg)' }}
         >
-          {/* Image */}
-          <img
-            src={product.images?.[0] || product.image}
-            alt={product.title}
-            className="w-full h-full object-cover transition-all duration-300 md:group-hover:scale-110"
-            loading="lazy"
-            decoding="async"
-            draggable={false}
-          />
+          {/* Optimized Image with Next.js */}
+          {imageSrc && !imageError ? (
+            <Image
+              src={imageSrc}
+              alt={product.title || product.name || 'Product'}
+              fill
+              sizes="(max-width: 640px) 50vw, (max-width: 1024px) 33vw, 20vw"
+              className="object-cover transition-all duration-300 md:group-hover:scale-110"
+              loading="lazy"
+              quality={75}
+              onError={() => setImageError(true)}
+            />
+          ) : (
+            <div className="w-full h-full flex items-center justify-center bg-gray-800">
+              <span className="text-gray-500 text-sm">Resim yok</span>
+            </div>
+          )}
 
           {/* ... Badges and Overlays (Aynı kalıyor) ... */}
 

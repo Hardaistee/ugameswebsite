@@ -5,7 +5,19 @@ const nextConfig = {
 
     // Configure image optimization
     images: {
-        domains: [], // Add external image domains here if needed
+        // Remote patterns for external images (WooCommerce)
+        remotePatterns: [
+            {
+                protocol: 'https',
+                hostname: 'payment.ugames.com.tr',
+                pathname: '/wp-content/uploads/**',
+            },
+        ],
+        // Optimize images with modern formats
+        formats: ['image/avif', 'image/webp'],
+        // Device sizes for responsive images
+        deviceSizes: [640, 750, 828, 1080, 1200, 1920],
+        imageSizes: [16, 32, 48, 64, 96, 128, 256],
     },
 
     // Environment variables
