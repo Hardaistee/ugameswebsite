@@ -5,10 +5,9 @@ import { CartProvider } from '../context/CartContext'
 import { AuthProvider } from '../context/AuthContext'
 import Header from './components/Header'
 import Footer from './components/Footer'
-import CookieConsent from './components/CookieConsent'
 import ThemeScript from './components/ThemeScript'
 import BottomNav from './components/BottomNav'
-import ChatWidget from './components/ChatWidget'
+import DynamicComponents from './components/DynamicComponents'
 
 // Next.js Font Optimization - Self-hosted, no render blocking
 const inter = Inter({
@@ -101,12 +100,10 @@ export default function RootLayout({
                         </main>
                         <Footer />
                         <BottomNav />
-                        <ChatWidget />
-                        <CookieConsent />
+                        <DynamicComponents />
                     </CartProvider>
                 </AuthProvider>
             </body>
         </html>
     )
 }
-

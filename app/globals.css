@@ -19,20 +19,38 @@ body {
 	-webkit-overflow-scrolling: touch;
 }
 
-/* Touch optimization for mobile */
-a,
-button,
-[role="button"],
-input,
-select,
-textarea {
-	touch-action: manipulation;
+/* Touch optimization for mobile - Remove 300ms delay */
+* {
 	-webkit-tap-highlight-color: transparent;
 }
 
-/* Ensure links are clickable on touch devices */
-.touch-manipulation {
+a,
+button,
+[role="button"],
+[role="link"],
+input,
+select,
+textarea,
+.cursor-pointer {
 	touch-action: manipulation;
+	-webkit-tap-highlight-color: transparent;
+	-webkit-touch-callout: none;
+}
+
+/* Clickable cards - ensure immediate response */
+.group {
+	touch-action: manipulation;
+}
+
+/* Prevent text selection on interactive elements */
+.select-none {
+	-webkit-user-select: none;
+	user-select: none;
+}
+
+/* Fast tap for links */
+a {
+	cursor: pointer;
 }
 
 
