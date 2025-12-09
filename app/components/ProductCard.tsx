@@ -9,13 +9,20 @@ interface ProductCardProps {
   size?: 'normal' | 'large'
 }
 
+// useCart üstte zaten import edilmiş
+import { useRouter } from 'next/navigation'
+
+// ... (interface aynı kalıyor)
+
 export default function ProductCard({ product, variant = 'epin', size = 'normal' }: ProductCardProps) {
+  const router = useRouter()
   const [fav, setFav] = useState(false)
   const [popping, setPopping] = useState(false)
-  const [loaded, setLoaded] = useState(false)
+  // loaded state kullanılmıyor, kaldırabiliriz veya kalsın
 
   const isGame = variant === 'game'
   const isLarge = size === 'large'
+  const linkPath = product.slug ? `/urun/${product.slug}` : `/urun/${product.id}`
 
   // Format price with 2 decimal places
   const formatPrice = (price: any) => {
@@ -39,13 +46,13 @@ export default function ProductCard({ product, variant = 'epin', size = 'normal'
   const { addToCart } = useCart()
   const [buttonState, setButtonState] = useState<'idle' | 'success' | 'exiting'>('idle')
 
-  function handleAddToCart(e: React.MouseEvent) {
+  // Sepete Ekle Butonu
+  function handleAddToCart(e: React.BaseSyntheticEvent) {
     e.preventDefault()
-    e.stopPropagation()
+    e.stopPropagation() // Kart tıklamasını engelle
 
     if (buttonState !== 'idle') return
 
-    // Convert price string to expected format if needed, or pass as is
     addToCart({
       id: parseInt(product.id.toString().replace(/\D/g, '')) || Number(product.id),
       name: product.title || product.name,
@@ -55,27 +62,35 @@ export default function ProductCard({ product, variant = 'epin', size = 'normal'
       slug: product.slug || ''
     })
 
-    // Start Animation (Slide In)
     setButtonState('success')
-
-    // Wait, then Slide Out
     setTimeout(() => {
       setButtonState('exiting')
-
-      // Reset to Idle (Hidden Left) after slide out finishes
-      setTimeout(() => {
-        setButtonState('idle')
-      }, 300) // Match transition duration
+      setTimeout(() => setButtonState('idle'), 300)
     }, 2000)
   }
 
-  const linkPath = product.slug ? `/urun/${product.slug}` : `/urun/${product.id}`
+  // Kart Tıklaması (Navigasyon)
+  function handleCardClick(e: React.BaseSyntheticEvent) {
+    // Eğer tıklanan yer buton veya favori ise işlem yapma (gerçi stopPropagation bunu çözer ama garanti olsun)
+    // useRouter push ile git
+    router.push(linkPath)
+  }
 
   return (
-    <Link href={linkPath} className="block h-full group">
+    <div
+      onClick={handleCardClick}
+      role="link"
+      tabIndex={0}
+      onKeyDown={(e) => e.key === 'Enter' && router.push(linkPath)}
+      className="block h-full group touch-manipulation cursor-pointer select-none"
+    >
       <div
-        className={`border rounded-lg overflow-hidden card-shadow hover:shadow-xl transition-all duration-300 hover:-translate-y-2 hover:scale-[1.02] h-full flex flex-col ${isLarge ? '' : ''
-          }`}
+        className={`border rounded-lg overflow-hidden card-shadow h-full flex flex-col active:scale-[0.98] transition-transform duration-200 ${isLarge ? '' : ''}
+          /* Desktop Hover Effects Only */
+          [@media(hover:hover)]:hover:shadow-xl 
+          [@media(hover:hover)]:hover:-translate-y-1 
+          [@media(hover:hover)]:hover:scale-[1.01]
+        `}
         style={{
           background: 'var(--surface)',
           borderColor: 'var(--border)'
@@ -93,24 +108,24 @@ export default function ProductCard({ product, variant = 'epin', size = 'normal'
           <img
             src={product.images?.[0] || product.image}
             alt={product.title}
-            className="w-full h-full object-cover transition-all duration-300 group-hover:scale-110"
+            className="w-full h-full object-cover transition-all duration-300 group-hover:scale-110 pointer-events-none" // pointer-events-none resme tıklamayı engeller, click parent'a düşer (daha iyi performans)
             loading="lazy"
             decoding="async"
           />
 
-          {/* Discount Badge Removed from here */}
+          {/* ... Badges and Overlays (Aynı kalıyor) ... */}
 
-          {/* Hot Badge - Top Right (for games) */}
+          {/* Hot Badge */}
           {isGame && (product.badge === 'Çok Satan' || product.tags?.includes('Çok Satan')) && (
-            <div className="absolute top-2 right-2 bg-gradient-to-r from-orange-500 to-red-500 text-white text-[10px] font-bold px-2 py-1 rounded shadow-lg">
+            <div className="absolute top-2 right-2 bg-gradient-to-r from-orange-500 to-red-500 text-white text-[10px] font-bold px-2 py-1 rounded shadow-lg pointer-events-none">
               Hot
             </div>
           )}
 
-          {/* Vertical Badge - Left Side (for epin) */}
+          {/* Vertical Badge */}
           {!isGame && product.badge && (
             <div
-              className="absolute left-0 top-1/2 -translate-y-1/2 bg-gradient-to-r from-yellow-500 to-orange-500 text-white text-[10px] font-bold px-1.5 py-4 rounded-r-md shadow-lg"
+              className="absolute left-0 top-1/2 -translate-y-1/2 bg-gradient-to-r from-yellow-500 to-orange-500 text-white text-[10px] font-bold px-1.5 py-4 rounded-r-md shadow-lg pointer-events-none"
               style={{ writingMode: 'vertical-rl', transform: 'translateY(-50%) rotate(180deg)' }}
             >
               <div className="whitespace-nowrap tracking-wider">
@@ -119,30 +134,31 @@ export default function ProductCard({ product, variant = 'epin', size = 'normal'
             </div>
           )}
 
-          {/* Platform Badges (for games) */}
+          {/* Platform Badges */}
           {isGame && product.platform === 'PC' && (
-            <div className="absolute bottom-2 left-2 bg-blue-600/90 text-white text-[10px] font-bold px-2 py-1 rounded backdrop-blur-sm">
+            <div className="absolute bottom-2 left-2 bg-blue-600/90 text-white text-[10px] font-bold px-2 py-1 rounded backdrop-blur-sm pointer-events-none">
               PC
             </div>
           )}
           {isGame && product.platform === 'PlayStation' && (
-            <div className="absolute bottom-2 left-2 bg-blue-500/90 text-white text-[10px] font-bold px-2 py-1 rounded backdrop-blur-sm">
+            <div className="absolute bottom-2 left-2 bg-blue-500/90 text-white text-[10px] font-bold px-2 py-1 rounded backdrop-blur-sm pointer-events-none">
               PS
             </div>
           )}
           {isGame && product.platform === 'Xbox' && (
-            <div className="absolute bottom-2 left-2 bg-green-600/90 text-white text-[10px] font-bold px-2 py-1 rounded backdrop-blur-sm">
+            <div className="absolute bottom-2 left-2 bg-green-600/90 text-white text-[10px] font-bold px-2 py-1 rounded backdrop-blur-sm pointer-events-none">
               XBOX
             </div>
           )}
 
-          {/* Favorite Button (only for epin) */}
+          {/* Favorite Button */}
           {!isGame && (
             <button
               onClick={handleFav}
+              // onTouchStart={e => e.stopPropagation()} // Mobilde touch bubble'ı engelle
               aria-pressed={fav}
               aria-label={fav ? 'Favorilerden çıkar' : 'Favorilere ekle'}
-              className="absolute right-3 top-3 rounded-full p-2 shadow-md transition-transform hover:scale-110 min-w-[44px] min-h-[44px] flex items-center justify-center"
+              className="absolute right-3 top-3 rounded-full p-2 shadow-md transition-transform hover:scale-110 min-w-[44px] min-h-[44px] flex items-center justify-center z-10"
               style={{ background: 'rgba(255,255,255,0.95)', backdropFilter: 'blur(8px)' }}
             >
               <svg
@@ -160,8 +176,11 @@ export default function ProductCard({ product, variant = 'epin', size = 'normal'
         </div>
 
         {/* Content */}
-        <div className={`${isLarge ? 'p-4' : 'p-3'} flex flex-col flex-1`}>
-          {/* Seller (only for epin) */}
+        <div className={`${isLarge ? 'p-4' : 'p-3'} flex flex-col flex-1 pointer-events-none`}>
+          {/* İçerik container'ını pointer-events-none yaparak tıklamayı parent div'e geçirmesini sağlıyoruz. 
+                Sadece buton pointer-events-auto olacak. */}
+
+          {/* Seller */}
           {!isGame && product.seller && (
             <div className="text-sm mb-1" style={{ color: 'var(--muted)' }}>
               {product.seller}
@@ -177,14 +196,14 @@ export default function ProductCard({ product, variant = 'epin', size = 'normal'
             {product.title}
           </h3>
 
-          {/* Large game description */}
+          {/* Description */}
           {isGame && isLarge && (
             <p className="text-xs mb-3 line-clamp-2" style={{ color: 'var(--muted)' }}>
               Anında teslimat garantisi
             </p>
           )}
 
-          {/* Delivery Badge (for epin) */}
+          {/* Delivery Badge */}
           {!isGame && product.deliveryBadge && (
             <div className="mt-3 flex items-center gap-1.5 text-xs text-green-600 dark:text-green-400">
               <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -194,7 +213,7 @@ export default function ProductCard({ product, variant = 'epin', size = 'normal'
             </div>
           )}
 
-          {/* Price Section - Auto margin to push button to bottom */}
+          {/* Price Section */}
           <div className={`${isGame ? 'flex items-center gap-2 mb-3 mt-auto' : 'mt-auto pt-3 border-t flex flex-wrap items-center gap-2'}`} style={!isGame ? { borderColor: 'var(--border)' } : {}}>
             <div className="flex flex-col">
               {product.oldPrice && (
@@ -207,7 +226,7 @@ export default function ProductCard({ product, variant = 'epin', size = 'normal'
               </span>
             </div>
 
-            {/* Discount Badge Next to Price */}
+            {/* Discount Badge */}
             {product.discount && (
               <div className="ml-auto px-2 py-1 rounded bg-red-500/10 border border-red-500/20 text-red-500 text-xs font-bold whitespace-nowrap">
                 {isGame ? `-%${product.discount}` : `%${product.discount}`}
@@ -221,41 +240,45 @@ export default function ProductCard({ product, variant = 'epin', size = 'normal'
             )}
           </div>
 
-          {/* Action Button (only for games) */}
+          {/* Action Button - POINTER EVENTS AUTO OLMALI */}
           {isGame && (
-            <button
-              onClick={handleAddToCart}
-              disabled={buttonState !== 'idle'}
-              className={`relative w-full text-center ${isLarge ? 'py-3' : 'py-2'} rounded font-semibold transition-transform overflow-hidden
-                 ${buttonState === 'idle' ? 'hover:scale-105 active:scale-95' : ''}
-              `}
-              style={{
-                background: 'var(--accent)',
-                color: '#000'
-              }}
-            >
-              {/* Original Content */}
-              <div className={`flex justify-center items-center gap-2 transition-opacity duration-300 ${buttonState !== 'idle' ? 'opacity-0' : 'opacity-100'}`}>
-                <span>Sepete Ekle</span>
-              </div>
-
-              {/* Slide Overlay */}
-              <div
-                className={`absolute inset-0 bg-green-600 flex items-center justify-center gap-2 text-white font-bold text-sm
-                        ${buttonState === 'idle' ? '-translate-x-full transition-none' : ''}
-                        ${buttonState === 'success' ? 'translate-x-0 transition-transform duration-300 ease-out' : ''}
-                        ${buttonState === 'exiting' ? 'translate-x-full transition-transform duration-300 ease-in' : ''}
-                    `}
+            <div className="pointer-events-auto mt-2"> {/* Wrapper div for pointer events restoration */}
+              <button
+                onClick={handleAddToCart}
+                // onTouchEnd={e => e.stopPropagation()} 
+                disabled={buttonState !== 'idle'}
+                className={`relative w-full text-center z-20 ${isLarge ? 'py-3' : 'py-2'} rounded font-semibold transition-transform overflow-hidden
+                    ${buttonState === 'idle' ? 'active:scale-95' : ''}
+                `}
+                style={{
+                  background: 'var(--accent)',
+                  color: '#000'
+                }}
               >
-                <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
-                </svg>
-                <span>Eklendi</span>
-              </div>
-            </button>
+                {/* ... Button Content ... */}
+                <div className={`flex justify-center items-center gap-2 transition-opacity duration-300 ${buttonState !== 'idle' ? 'opacity-0' : 'opacity-100'}`}>
+                  <span>Sepete Ekle</span>
+                </div>
+
+                {/* Slide Overlay */}
+                <div
+                  className={`absolute inset-0 bg-green-600 flex items-center justify-center gap-2 text-white font-bold text-sm
+                            ${buttonState === 'idle' ? '-translate-x-full transition-none' : ''}
+                            ${buttonState === 'success' ? 'translate-x-0 transition-transform duration-300 ease-out' : ''}
+                            ${buttonState === 'exiting' ? 'translate-x-full transition-transform duration-300 ease-in' : ''}
+                        `}
+                >
+                  <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                  </svg>
+                  <span>Eklendi</span>
+                </div>
+              </button>
+            </div>
           )}
         </div>
       </div>
-    </Link>
+    </div>
   )
 }
+

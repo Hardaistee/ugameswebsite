@@ -2,11 +2,10 @@
 
 import React, { useMemo } from 'react'
 import Link from 'next/link'
-import { motion } from 'framer-motion'
 import ProductCard from '../components/ProductCard'
 import FeaturedSlider from '../components/FeaturedSlider'
 import { FadeIn } from '../components/animations/FadeIn'
-import { StaggerContainer, staggerItem } from '../components/animations/StaggerContainer'
+
 
 interface CategorizedProducts {
     all: any[]
@@ -66,14 +65,14 @@ export default function ClientGamesPage({ categorizedProducts }: ClientGamesPage
 
                     {all.length > 0 ? (
                         <>
-                            <StaggerContainer className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4">
+                            <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4">
                                 {/* Display shuffled games */}
                                 {shuffledGames.map((game: any) => (
-                                    <motion.div key={game.id} variants={staggerItem} className="h-full">
+                                    <div key={game.id} className="h-full">
                                         <ProductCard product={game} variant="game" size="normal" />
-                                    </motion.div>
+                                    </div>
                                 ))}
-                            </StaggerContainer>
+                            </div>
 
                             {/* Diğer Oyunlar Button */}
                             {all.length > 20 && (
@@ -128,13 +127,13 @@ export default function ClientGamesPage({ categorizedProducts }: ClientGamesPage
                                 </Link>
                             </div>
                         </FadeIn>
-                        <StaggerContainer className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-6 gap-4">
+                        <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-6 gap-4">
                             {gameKeys.slice(0, 6).map((game: any) => (
-                                <motion.div key={game.id} variants={staggerItem} className="h-full">
+                                <div key={game.id} className="h-full">
                                     <ProductCard product={game} variant="game" size="normal" />
-                                </motion.div>
+                                </div>
                             ))}
-                        </StaggerContainer>
+                        </div>
                     </section>
                 )}
 
@@ -153,13 +152,13 @@ export default function ClientGamesPage({ categorizedProducts }: ClientGamesPage
                                 </h2>
                             </div>
                         </FadeIn>
-                        <StaggerContainer className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-6 gap-4">
+                        <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-6 gap-4">
                             {discounted.slice(0, 6).map((game: any) => (
-                                <motion.div key={game.id} variants={staggerItem} className="h-full">
+                                <div key={game.id} className="h-full">
                                     <ProductCard product={game} variant="game" size="normal" />
-                                </motion.div>
+                                </div>
                             ))}
-                        </StaggerContainer>
+                        </div>
                     </section>
                 )}
             </div>

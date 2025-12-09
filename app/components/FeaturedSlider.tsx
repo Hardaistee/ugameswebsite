@@ -41,15 +41,19 @@ export default function FeaturedSlider({ games }: FeaturedSliderProps) {
     // Touch handlers for swipe
     const handleTouchStart = (e: TouchEvent) => {
         touchStartX.current = e.targetTouches[0].clientX
+        touchEndX.current = e.targetTouches[0].clientX // Reset end to start
     }
 
     const handleTouchMove = (e: TouchEvent) => {
         touchEndX.current = e.targetTouches[0].clientX
     }
 
-    const handleTouchEnd = () => {
+    const handleTouchEnd = (e: TouchEvent) => {
         const distance = touchStartX.current - touchEndX.current
+        // Only change slide if swipe distance is significant
+        // Small movements (< minSwipeDistance) won't trigger slide change, allowing clicks to work
         if (Math.abs(distance) > minSwipeDistance) {
+            e.preventDefault() // Prevent link click only on real swipe
             if (distance > 0) {
                 // Swipe left - next
                 setIndex(i => (i + 1) % games.length)
@@ -58,6 +62,7 @@ export default function FeaturedSlider({ games }: FeaturedSliderProps) {
                 setIndex(i => (i - 1 + games.length) % games.length)
             }
         }
+        // If distance is small, the click will naturally proceed to the link
     }
 
     if (games.length === 0) return null
@@ -99,6 +104,7 @@ export default function FeaturedSlider({ games }: FeaturedSliderProps) {
                             <Link
                                 key={game.id}
                                 href={`/urun/${game.slug}`}
+                                prefetch={false}
                                 className={`absolute inset-0 transition-all duration-500 block ${index === i ? 'opacity-100 z-10 scale-100' : 'opacity-0 z-0 scale-100 pointer-events-none'}`}
                             >
                                 <img
