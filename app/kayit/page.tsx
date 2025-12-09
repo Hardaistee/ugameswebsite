@@ -6,6 +6,7 @@ import { useRouter } from 'next/navigation';
 import axios from 'axios';
 import { useAuth } from '../../context/AuthContext';
 import { FaUser, FaEnvelope, FaLock, FaPhone, FaSpinner } from 'react-icons/fa';
+import { API_CONFIG } from '../../lib/api-config';
 
 export default function RegisterPage() {
     const [formData, setFormData] = useState({
@@ -21,7 +22,7 @@ export default function RegisterPage() {
     const router = useRouter();
     const { login } = useAuth();
 
-    const API_URL = `${process.env.NEXT_PUBLIC_BACKEND_URL || 'http://localhost:3001'}/api`;
+    const API_URL = `${API_CONFIG.BACKEND_URL}/api`;
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         setFormData({ ...formData, [e.target.name]: e.target.value });

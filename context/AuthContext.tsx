@@ -3,6 +3,7 @@
 import React, { createContext, useContext, useEffect, useState } from "react";
 import axios from "axios";
 import { useRouter } from "next/navigation";
+import { API_CONFIG } from "../lib/api-config";
 
 interface User {
     email: string;
@@ -29,7 +30,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     const [loading, setLoading] = useState(true);
     const router = useRouter();
 
-    const API_URL = `${process.env.NEXT_PUBLIC_BACKEND_URL || 'http://localhost:3001'}/api`;
+    const API_URL = `${API_CONFIG.BACKEND_URL}/api`;
 
     // Initialize auth state
     useEffect(() => {

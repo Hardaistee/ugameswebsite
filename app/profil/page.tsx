@@ -5,6 +5,7 @@ import { useRouter } from 'next/navigation';
 import axios from 'axios';
 import { useAuth } from '../../context/AuthContext';
 import { FaUser, FaHistory, FaBox, FaCreditCard, FaCalendar, FaSpinner, FaSignOutAlt, FaPhone } from 'react-icons/fa';
+import { API_CONFIG } from '../../lib/api-config';
 
 interface OrderItem {
     name: string;
@@ -27,7 +28,7 @@ export default function ProfilePage() {
     const [loading, setLoading] = useState(true);
     const router = useRouter();
 
-    const API_URL = `${process.env.NEXT_PUBLIC_BACKEND_URL || 'http://localhost:3001'}/api`;
+    const API_URL = `${API_CONFIG.BACKEND_URL}/api`;
 
     useEffect(() => {
         if (!authLoading && !user) {

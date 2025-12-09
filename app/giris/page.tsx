@@ -6,6 +6,7 @@ import { useRouter } from 'next/navigation';
 import axios from 'axios';
 import { useAuth } from '../../context/AuthContext';
 import { FaEnvelope, FaLock, FaSpinner } from 'react-icons/fa';
+import { API_CONFIG } from '../../lib/api-config';
 
 export default function LoginPage() {
     const [email, setEmail] = useState('');
@@ -16,7 +17,7 @@ export default function LoginPage() {
     const router = useRouter();
     const { login } = useAuth();
 
-    const API_URL = `${process.env.NEXT_PUBLIC_BACKEND_URL || 'http://localhost:3001'}/api`;
+    const API_URL = `${API_CONFIG.BACKEND_URL}/api`;
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();

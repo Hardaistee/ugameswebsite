@@ -1,4 +1,5 @@
 import WooCommerceRestApi from "@woocommerce/woocommerce-rest-api";
+import { API_ENDPOINTS } from './api-config';
 
 // İstemci tarafında bu kütüphaneyi doğrudan kullanmamalıyız (Secret Key güvenliği için).
 // Bu dosya sadece Server Component'ler veya API Route'lar içinde kullanılmalı.
@@ -28,28 +29,39 @@ export const getProducts = async (page = 1, perPage = 20) => {
     }
 };
 
-// Tüm ürünleri sayfalama ile çeken fonksiyon (100+ ürün için)
-// Dev mode optimizasyonu: Ürünler bellekte cache'lenir
+// Tüm ürünleri Redis cache'den veya WooCommerce'den çek
+// Önce backend Redis cache'i dener, yoksa WooCommerce'e fallback yapar
 
-// Global cache for development mode
-let productsCache: any[] | null = null;
-let cacheTimestamp: number | null = null;
-const CACHE_DURATION = 5 * 60 * 1000; // 5 dakika cache süresi (dev mode için)
+// Önce backend Redis cache'i dener, yoksa WooCommerce'e fallback yapar
 
 export const getAllProducts = async () => {
-    // Dev mode'da cache'i kontrol et
-    if (process.env.NODE_ENV === 'development') {
-        const now = Date.now();
-        if (productsCache && cacheTimestamp && (now - cacheTimestamp) < CACHE_DURATION) {
-            console.log(`[WooCommerce] Cache'den ${productsCache.length} ürün yüklendi.`);
-            return productsCache;
+    // 1. Önce Redis cache'den çekmeyi dene (Backend API üzerinden)
+    try {
+        console.log(`[WooCommerce] Redis cache'den çekiliyor...`);
+        const cacheResponse = await fetch(API_ENDPOINTS.PRODUCTS, {
+            cache: 'no-store', // SSR'da her zaman güncel data
+            headers: {
+                'Content-Type': 'application/json',
+            },
+        });
+
+        if (cacheResponse.ok) {
+            const cacheData = await cacheResponse.json();
+            if (cacheData.success && cacheData.products && cacheData.products.length > 0) {
+                console.log(`[WooCommerce] ✅ Redis cache'den ${cacheData.products.length} ürün çekildi`);
+                return cacheData.products;
+            }
         }
+        console.log(`[WooCommerce] Cache boş veya hata, WooCommerce'den çekilecek...`);
+    } catch (cacheError) {
+        console.log(`[WooCommerce] ⚠️ Cache erişilemedi, fallback yapılıyor: ${cacheError}`);
     }
 
+    // 2. Fallback: WooCommerce API'den direkt çek
     try {
         let allProducts: any[] = [];
         let page = 1;
-        const perPage = 100; // WooCommerce max limit
+        const perPage = 100;
 
         while (true) {
             const response = await api.get("products", {
@@ -63,26 +75,18 @@ export const getAllProducts = async () => {
 
             console.log(`[WooCommerce] Sayfa ${page}: ${products.length} ürün çekildi (Toplam: ${allProducts.length})`);
 
-            // Son sayfa kontrolü
             if (products.length < perPage) break;
             page++;
         }
 
-        console.log(`[WooCommerce] Toplam ${allProducts.length} ürün başarıyla çekildi.`);
-
-        // Dev mode'da cache'e kaydet
-        if (process.env.NODE_ENV === 'development') {
-            productsCache = allProducts;
-            cacheTimestamp = Date.now();
-            console.log(`[WooCommerce] Ürünler cache'e alındı (5 dk geçerli).`);
-        }
-
+        console.log(`[WooCommerce] Toplam ${allProducts.length} ürün WooCommerce'den çekildi.`);
         return allProducts;
     } catch (error) {
         console.error("WooCommerce getAllProducts Error:", error);
         return [];
     }
 };
+
 
 export const getProduct = async (slug: string) => {
     try {

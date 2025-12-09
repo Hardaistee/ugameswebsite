@@ -1,6 +1,7 @@
 import Link from 'next/link'
 import ReactMarkdown from 'react-markdown'
 import { FaCalendar, FaUser, FaTag, FaArrowLeft } from 'react-icons/fa'
+import { API_ENDPOINTS } from '../../../lib/api-config'
 
 export const dynamic = 'force-dynamic'
 
@@ -18,8 +19,7 @@ interface Blog {
 
 async function getBlog(slug: string): Promise<Blog | null> {
     try {
-        const backendUrl = process.env.NEXT_PUBLIC_BACKEND_URL || 'http://localhost:3001'
-        const res = await fetch(`${backendUrl}/api/blogs/${slug}`, {
+        const res = await fetch(API_ENDPOINTS.BLOG_BY_SLUG(slug), {
             cache: 'no-store'
         })
 

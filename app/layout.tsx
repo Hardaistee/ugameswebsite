@@ -23,11 +23,11 @@ export const metadata: Metadata = {
         address: false,
         telephone: false,
     },
-    metadataBase: new URL('https://ugames.com'), // Update with your actual domain
+    metadataBase: new URL('https://ugames.com.tr'),
     openGraph: {
         type: 'website',
         locale: 'tr_TR',
-        url: 'https://ugames.com',
+        url: 'https://ugames.com.tr',
         siteName: 'uGames',
         title: 'uGames - Dijital Ürün Platformu',
         description: 'Oyun hesapları, e-pinler ve dijital ürünleri güvenilir şekilde alıp satın.',
@@ -87,7 +87,7 @@ export default function RootLayout({
                 <meta name="theme-color" content="#1c1c1c" />
 
                 {/* Performance: DNS prefetch for API */}
-                <link rel="dns-prefetch" href="https://ugames.com" />
+                <link rel="dns-prefetch" href="https://ugames.com.tr" />
 
                 <ThemeScript />
             </head>

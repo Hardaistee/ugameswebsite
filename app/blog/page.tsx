@@ -1,6 +1,7 @@
 import Link from 'next/link'
 import BlogList from './components/BlogList'
 import { FadeIn } from '../components/animations/FadeIn'
+import { API_ENDPOINTS } from '../../lib/api-config'
 
 interface Blog {
     slug: string
@@ -17,8 +18,7 @@ export const dynamic = 'force-dynamic'
 
 async function getBlogs(): Promise<Blog[]> {
     try {
-        const backendUrl = process.env.NEXT_PUBLIC_BACKEND_URL || 'http://localhost:3001'
-        const res = await fetch(`${backendUrl}/api/blogs`, {
+        const res = await fetch(API_ENDPOINTS.BLOGS, {
             cache: 'no-store'
         })
 

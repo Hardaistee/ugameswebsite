@@ -1,5 +1,6 @@
 'use client'
 import React, { useState, useRef, useEffect } from 'react'
+import { API_ENDPOINTS } from '../../lib/api-config'
 
 interface Message {
     id: string
@@ -46,8 +47,7 @@ export default function ChatWidget() {
         setIsLoading(true)
 
         try {
-            const backendUrl = process.env.NEXT_PUBLIC_BACKEND_URL || 'http://localhost:3001'
-            const response = await fetch(`${backendUrl}/api/chat`, {
+            const response = await fetch(API_ENDPOINTS.CHAT, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ message: userMessage.text })
