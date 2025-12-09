@@ -158,7 +158,7 @@ function GameSearchContent({ products: allProducts }: GameSearchClientProps) {
     }, [filters])
 
     return (
-        <div className="min-h-screen pb-12" style={{ background: 'var(--bg)' }}>
+        <div className="min-h-screen pb-24 md:pb-12" style={{ background: 'var(--bg)' }}>
             <div className="max-w-7xl mx-auto px-4 py-6">
                 {/* Breadcrumb */}
                 <div className="flex items-center gap-2 mb-4 text-sm">

@@ -78,10 +78,10 @@ export default function ChatWidget() {
     }
 
     return (
-        <div className="fixed bottom-24 md:bottom-6 right-4 md:right-6 z-40 flex flex-col items-end pointer-events-none">
-            {/* Chat Window */}
+        <div className="fixed bottom-24 md:bottom-6 right-4 md:right-6 z-40 flex flex-col items-end">
+            {/* Chat Window - only captures events when open */}
             <div
-                className={`pointer-events-auto bg-[#1a1a1a] w-[calc(100vw-2rem)] sm:w-[380px] max-h-[70vh] sm:h-[500px] rounded-2xl shadow-2xl flex flex-col overflow-hidden transition-all duration-300 origin-bottom-right mb-4 border border-[#333] ${isOpen ? 'scale-100 opacity-100 translate-y-0' : 'scale-95 opacity-0 translate-y-10 pointer-events-none'
+                className={`bg-[#1a1a1a] w-[calc(100vw-2rem)] sm:w-[380px] max-h-[70vh] sm:h-[500px] rounded-2xl shadow-2xl flex flex-col overflow-hidden transition-all duration-300 origin-bottom-right mb-4 border border-[#333] ${isOpen ? 'scale-100 opacity-100 translate-y-0' : 'scale-95 opacity-0 translate-y-10 pointer-events-none hidden'
                     }`}
             >
                 {/* Header */}
@@ -197,7 +197,7 @@ export default function ChatWidget() {
             {/* Toggle Button */}
             <button
                 onClick={() => setIsOpen(!isOpen)}
-                className="pointer-events-auto w-14 h-14 rounded-full bg-black text-white shadow-xl hover:scale-110 active:scale-95 transition-all duration-300 flex items-center justify-center group z-50 overflow-hidden"
+                className="w-14 h-14 rounded-full bg-black text-white shadow-xl hover:scale-110 active:scale-95 transition-all duration-300 flex items-center justify-center group z-50 overflow-hidden"
                 aria-label="Chat assistant"
             >
                 <div className="relative w-6 h-6">
