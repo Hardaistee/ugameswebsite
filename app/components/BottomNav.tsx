@@ -1,13 +1,15 @@
 'use client'
 
-import React, { useState } from 'react'
+import React, { useState, useRef, useEffect } from 'react'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 
 export default function BottomNav() {
     const router = useRouter()
     const [showSearch, setShowSearch] = useState(false)
+    const [searchQuery, setSearchQuery] = useState('')
     const [isMobile, setIsMobile] = useState(true)
+    const inputRef = useRef<HTMLInputElement>(null)
 
     // Check screen size
     React.useEffect(() => {
@@ -25,16 +27,23 @@ export default function BottomNav() {
         }
     }
 
-    const handleSearch = (e: React.KeyboardEvent<HTMLInputElement>) => {
-        if (e.key === 'Enter') {
-            const query = (e.target as HTMLInputElement).value.trim()
-            if (query) {
-                // Homepage modunu kontrol et
-                const mode = process.env.NEXT_PUBLIC_HOMEPAGE_MODE || 'marketplace'
-                const searchPath = mode === 'games_only' ? '/oyun-ara' : '/ilanlar'
-                router.push(`${searchPath}?search=${encodeURIComponent(query)}`)
-                setShowSearch(false)
-            }
+    // Auto focus when search opens
+    useEffect(() => {
+        if (showSearch && inputRef.current) {
+            inputRef.current.focus()
+        }
+    }, [showSearch])
+
+    const handleSearch = (e?: React.FormEvent) => {
+        e?.preventDefault()
+        const query = searchQuery.trim()
+        if (query) {
+            // Homepage modunu kontrol et
+            const mode = process.env.NEXT_PUBLIC_HOMEPAGE_MODE || 'marketplace'
+            const searchPath = mode === 'games_only' ? '/oyun-ara' : '/ilanlar'
+            router.push(`${searchPath}?search=${encodeURIComponent(query)}`)
+            setSearchQuery('')
+            setShowSearch(false)
         }
     }
 
@@ -45,30 +54,55 @@ export default function BottomNav() {
         <>
             {/* Search Overlay */}
             {showSearch && (
-                <div className="md:hidden fixed inset-0 z-50 flex items-end" style={{ background: 'rgba(0,0,0,0.5)' }}>
+                <div
+                    className="md:hidden fixed inset-0 z-50 flex items-end"
+                    style={{ background: 'rgba(0,0,0,0.5)' }}
+                    onClick={(e) => {
+                        if (e.target === e.currentTarget) setShowSearch(false)
+                    }}
+                >
                     <div className="w-full p-4 pb-24" style={{ background: 'var(--surface)' }}>
-                        <div className="flex items-center gap-3">
+                        <form onSubmit={handleSearch} className="flex items-center gap-3">
                             <input
-                                autoFocus
+                                ref={inputRef}
                                 type="text"
-                                placeholder="Ara..."
-                                onKeyDown={handleSearch}
-                                className="flex-1 px-4 py-3 rounded-lg border text-base"
+                                inputMode="search"
+                                enterKeyHint="search"
+                                placeholder="Oyun ara..."
+                                value={searchQuery}
+                                onChange={(e) => setSearchQuery(e.target.value)}
+                                className="flex-1 px-4 py-3 rounded-lg border"
                                 style={{
                                     background: 'var(--bg)',
                                     borderColor: 'var(--border)',
-                                    color: 'var(--text)'
+                                    color: 'var(--text)',
+                                    fontSize: '16px' // Prevents iOS zoom
                                 }}
                             />
                             <button
-                                onClick={() => setShowSearch(false)}
-                                aria-label="Aramayı kapat"
-                                className="px-4 py-3 rounded-lg font-medium min-w-[44px] min-h-[44px]"
-                                style={{ color: 'var(--text)' }}
+                                type="submit"
+                                aria-label="Ara"
+                                className="px-4 py-3 rounded-lg font-bold min-w-[44px] min-h-[44px]"
+                                style={{
+                                    background: 'var(--accent)',
+                                    color: '#000'
+                                }}
                             >
-                                İptal
+                                Ara
                             </button>
-                        </div>
+                            <button
+                                type="button"
+                                onClick={() => {
+                                    setSearchQuery('')
+                                    setShowSearch(false)
+                                }}
+                                aria-label="Aramayı kapat"
+                                className="px-3 py-3 rounded-lg font-medium min-w-[44px] min-h-[44px]"
+                                style={{ color: 'var(--muted)' }}
+                            >
+                                ✕
+                            </button>
+                        </form>
                     </div>
                 </div>
             )}

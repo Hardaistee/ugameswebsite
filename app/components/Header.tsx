@@ -247,8 +247,13 @@ export default function Header() {
             aria-label="Ara"
             placeholder={isGamesPage ? "Oyun ara..." : "Ara..."}
             onKeyDown={onSearchSubmit}
-            className="w-full border rounded-lg px-4 py-2.5 text-sm"
-            style={{ background: 'var(--bg)', borderColor: 'var(--border)', color: 'var(--text)' }}
+            className="w-full border rounded-lg px-4 py-2.5"
+            style={{
+              background: 'var(--bg)',
+              borderColor: 'var(--border)',
+              color: 'var(--text)',
+              fontSize: '16px' // Prevents iOS zoom
+            }}
           />
         </div>
 

@@ -1,5 +1,5 @@
 'use client'
-import React, { useEffect, useRef, useState } from 'react'
+import React, { useEffect, useRef, useState, TouchEvent } from 'react'
 import Link from 'next/link'
 
 interface FeaturedSliderProps {
@@ -11,6 +11,11 @@ export default function FeaturedSlider({ games }: FeaturedSliderProps) {
     const [isPaused, setIsPaused] = useState(false)
     const timerRef = useRef<number | null>(null)
     const intervalMs = 5000
+
+    // Touch/Swipe handling
+    const touchStartX = useRef<number>(0)
+    const touchEndX = useRef<number>(0)
+    const minSwipeDistance = 50
 
     useEffect(() => {
         startAuto()
@@ -33,6 +38,28 @@ export default function FeaturedSlider({ games }: FeaturedSliderProps) {
         }
     }
 
+    // Touch handlers for swipe
+    const handleTouchStart = (e: TouchEvent) => {
+        touchStartX.current = e.targetTouches[0].clientX
+    }
+
+    const handleTouchMove = (e: TouchEvent) => {
+        touchEndX.current = e.targetTouches[0].clientX
+    }
+
+    const handleTouchEnd = () => {
+        const distance = touchStartX.current - touchEndX.current
+        if (Math.abs(distance) > minSwipeDistance) {
+            if (distance > 0) {
+                // Swipe left - next
+                setIndex(i => (i + 1) % games.length)
+            } else {
+                // Swipe right - prev
+                setIndex(i => (i - 1 + games.length) % games.length)
+            }
+        }
+    }
+
     if (games.length === 0) return null
 
     const currentGame = games[index]
@@ -44,7 +71,7 @@ export default function FeaturedSlider({ games }: FeaturedSliderProps) {
     }
 
     return (
-        <div className="relative rounded-xl overflow-hidden shadow-2xl mb-8 border" style={{ borderColor: 'var(--border)' }}>
+        <div className="relative rounded-xl sm:rounded-2xl overflow-hidden shadow-2xl mb-6 sm:mb-8 border" style={{ borderColor: 'var(--border)' }}>
             <div
                 role="region"
                 aria-roledescription="carousel"
@@ -59,7 +86,10 @@ export default function FeaturedSlider({ games }: FeaturedSliderProps) {
                 }}
                 onMouseEnter={() => setIsPaused(true)}
                 onMouseLeave={() => setIsPaused(false)}
-                className="relative w-full h-[26rem] sm:h-[30rem] lg:h-[35rem]"
+                onTouchStart={handleTouchStart}
+                onTouchMove={handleTouchMove}
+                onTouchEnd={handleTouchEnd}
+                className="relative w-full h-[280px] sm:h-[340px] md:h-[400px] lg:h-[420px]"
             >
                 {/* Main Content Grid */}
                 <div className="absolute inset-0 flex">
@@ -69,7 +99,7 @@ export default function FeaturedSlider({ games }: FeaturedSliderProps) {
                             <Link
                                 key={game.id}
                                 href={`/urun/${game.slug}`}
-                                className={`absolute inset-0 transition-all duration-700 block ${index === i ? 'opacity-100 z-10 scale-100' : 'opacity-0 z-0 scale-95 pointer-events-none'}`}
+                                className={`absolute inset-0 transition-all duration-500 block ${index === i ? 'opacity-100 z-10 scale-100' : 'opacity-0 z-0 scale-100 pointer-events-none'}`}
                             >
                                 <img
                                     src={game.images?.[0] || game.image}
@@ -79,35 +109,63 @@ export default function FeaturedSlider({ games }: FeaturedSliderProps) {
                                     decoding="async"
                                     fetchPriority={i === 0 ? 'high' : 'low'}
                                 />
-                                {/* Gradient overlays */}
-                                <div className="absolute inset-0 bg-gradient-to-t from-black via-black/40 to-transparent" />
+                                {/* Gradient overlays - Optimized for mobile */}
+                                <div className="absolute inset-0 bg-gradient-to-t from-black via-black/50 to-transparent" />
                                 <div className="absolute inset-0 bg-gradient-to-r from-transparent via-transparent to-black/80 hidden lg:block" />
 
-                                {/* Mobile/Tablet Content - Shown on smaller screens */}
-                                <div className="lg:hidden absolute bottom-0 left-0 right-0 p-6">
-                                    {game.discount > 0 && (
-                                        <div className="inline-block bg-red-500 text-white text-sm font-bold px-3 py-1 rounded-lg mb-3">
-                                            -%{game.discount} İNDİRİM
+                                {/* Mobile/Tablet Content - Improved Layout */}
+                                <div className="lg:hidden absolute bottom-0 left-0 right-0 p-4 sm:p-6">
+                                    {/* Top Row: Badge + Counter */}
+                                    <div className="flex items-center justify-between mb-2">
+                                        {game.discount > 0 ? (
+                                            <div className="inline-block bg-red-500 text-white text-xs sm:text-sm font-bold px-2.5 py-1 sm:px-3 sm:py-1.5 rounded-lg">
+                                                -%{game.discount}
+                                            </div>
+                                        ) : (
+                                            <div />
+                                        )}
+                                        <div className="text-white/70 text-xs sm:text-sm font-medium bg-black/40 px-2 py-1 rounded-md backdrop-blur-sm">
+                                            {index + 1}/{games.length}
+                                        </div>
+                                    </div>
+
+                                    {/* Category Tags */}
+                                    {game.categories?.length > 0 && (
+                                        <div className="flex gap-1.5 mb-2 overflow-x-auto scrollbar-hide">
+                                            {game.categories.slice(0, 2).map((cat: any) => (
+                                                <span
+                                                    key={cat.id}
+                                                    className="text-[10px] sm:text-xs px-2 py-0.5 rounded-full bg-white/20 text-white/90 whitespace-nowrap backdrop-blur-sm"
+                                                >
+                                                    {cat.name}
+                                                </span>
+                                            ))}
                                         </div>
                                     )}
-                                    <h3 className="text-2xl sm:text-3xl font-black text-white drop-shadow-2xl mb-2 line-clamp-2">
+
+                                    {/* Title */}
+                                    <h3 className="text-lg sm:text-2xl font-black text-white drop-shadow-2xl mb-2 line-clamp-2 leading-tight">
                                         {game.title || game.name}
                                     </h3>
-                                    <div className="flex items-center gap-3 mb-4">
-                                        {game.oldPrice && (
-                                            <span className="text-white/60 line-through text-lg">₺{formatPrice(game.oldPrice)}</span>
-                                        )}
-                                        <span className="text-2xl font-black text-white">₺{formatPrice(game.price)}</span>
+
+                                    {/* Price + CTA Row */}
+                                    <div className="flex items-center justify-between gap-3">
+                                        <div className="flex items-center gap-2">
+                                            {game.oldPrice && (
+                                                <span className="text-white/50 line-through text-sm sm:text-base">₺{formatPrice(game.oldPrice)}</span>
+                                            )}
+                                            <span className="text-xl sm:text-2xl font-black text-white">₺{formatPrice(game.price)}</span>
+                                        </div>
+                                        <span
+                                            className="inline-flex items-center gap-1.5 px-4 py-2 sm:px-5 sm:py-2.5 rounded-lg font-bold text-xs sm:text-sm whitespace-nowrap"
+                                            style={{ background: 'var(--accent)', color: '#000' }}
+                                        >
+                                            İncele
+                                            <svg className="w-3.5 h-3.5 sm:w-4 sm:h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M9 5l7 7-7 7" />
+                                            </svg>
+                                        </span>
                                     </div>
-                                    <span
-                                        className="inline-flex items-center gap-2 px-5 py-2.5 rounded-lg font-bold text-sm"
-                                        style={{ background: 'var(--accent)', color: '#000' }}
-                                    >
-                                        İncele
-                                        <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7l5 5m0 0l-5 5m5-5H6" />
-                                        </svg>
-                                    </span>
                                 </div>
                             </Link>
                         ))}
@@ -179,7 +237,7 @@ export default function FeaturedSlider({ games }: FeaturedSliderProps) {
                     </div>
                 </div>
 
-                {/* Navigation Arrows */}
+                {/* Navigation Arrows - Hidden on small mobile, visible from sm+ */}
                 {games.length > 1 && (
                     <>
                         <button
@@ -187,10 +245,10 @@ export default function FeaturedSlider({ games }: FeaturedSliderProps) {
                                 e.preventDefault()
                                 setIndex(i => (i - 1 + games.length) % games.length)
                             }}
-                            className="absolute left-2 sm:left-4 top-1/2 -translate-y-1/2 z-20 w-10 h-10 sm:w-12 sm:h-12 bg-black/40 hover:bg-black/60 backdrop-blur-md rounded-full flex items-center justify-center text-white transition-all hover:scale-110"
+                            className="absolute left-2 sm:left-4 top-1/3 sm:top-1/2 -translate-y-1/2 z-20 w-9 h-9 sm:w-11 sm:h-11 bg-black/40 hover:bg-black/60 backdrop-blur-md rounded-full hidden sm:flex items-center justify-center text-white transition-all hover:scale-110"
                             aria-label="Önceki oyun"
                         >
-                            <svg className="w-5 h-5 sm:w-6 sm:h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M15 19l-7-7 7-7" />
                             </svg>
                         </button>
@@ -200,19 +258,33 @@ export default function FeaturedSlider({ games }: FeaturedSliderProps) {
                                 e.preventDefault()
                                 setIndex(i => (i + 1) % games.length)
                             }}
-                            className="absolute right-2 sm:right-4 lg:right-auto lg:left-[calc(66.666%-3rem)] top-1/2 -translate-y-1/2 z-20 w-10 h-10 sm:w-12 sm:h-12 bg-black/40 hover:bg-black/60 backdrop-blur-md rounded-full flex items-center justify-center text-white transition-all hover:scale-110"
+                            className="absolute right-2 sm:right-4 lg:right-auto lg:left-[calc(66.666%-3rem)] top-1/3 sm:top-1/2 -translate-y-1/2 z-20 w-9 h-9 sm:w-11 sm:h-11 bg-black/40 hover:bg-black/60 backdrop-blur-md rounded-full hidden sm:flex items-center justify-center text-white transition-all hover:scale-110"
                             aria-label="Sonraki oyun"
                         >
-                            <svg className="w-5 h-5 sm:w-6 sm:h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M9 5l7 7-7 7" />
                             </svg>
                         </button>
                     </>
                 )}
 
-                {/* Indicators */}
+                {/* Swipe Hint for Mobile - Shows only on first load */}
+                <div className="sm:hidden absolute top-1/2 -translate-y-1/2 left-0 right-0 flex justify-between px-2 pointer-events-none z-20">
+                    <div className="w-8 h-8 rounded-full bg-white/10 backdrop-blur-sm flex items-center justify-center animate-pulse">
+                        <svg className="w-4 h-4 text-white/60" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
+                        </svg>
+                    </div>
+                    <div className="w-8 h-8 rounded-full bg-white/10 backdrop-blur-sm flex items-center justify-center animate-pulse">
+                        <svg className="w-4 h-4 text-white/60" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                        </svg>
+                    </div>
+                </div>
+
+                {/* Indicators - Optimized for touch */}
                 {games.length > 1 && (
-                    <div className="absolute left-1/2 lg:left-1/3 -translate-x-1/2 bottom-2 flex gap-1 z-20">
+                    <div className="absolute left-1/2 lg:left-1/3 -translate-x-1/2 bottom-16 sm:bottom-2 lg:bottom-2 flex gap-2 z-20">
                         {games.map((_, i) => (
                             <button
                                 key={i}
@@ -221,9 +293,12 @@ export default function FeaturedSlider({ games }: FeaturedSliderProps) {
                                     e.preventDefault()
                                     setIndex(i)
                                 }}
-                                className="group p-3 min-w-[44px] min-h-[44px] flex items-center justify-center"
+                                className="group p-1.5 sm:p-2 flex items-center justify-center"
                             >
-                                <span className={`block rounded-full transition-all ${index === i ? 'w-8 h-2 bg-white' : 'w-2 h-2 bg-white/50 hover:bg-white/70'}`} />
+                                <span className={`block rounded-full transition-all ${index === i
+                                    ? 'w-6 sm:w-8 h-2 bg-white shadow-lg'
+                                    : 'w-2 h-2 bg-white/40 hover:bg-white/60'}`
+                                } />
                             </button>
                         ))}
                     </div>
