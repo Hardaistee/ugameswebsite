@@ -30,16 +30,17 @@ export const getProducts = async (page = 1, perPage = 20) => {
 };
 
 // Tüm ürünleri Redis cache'den veya WooCommerce'den çek
-// Önce backend Redis cache'i dener, yoksa WooCommerce'e fallback yapar
+// NEXT_PUBLIC_REDIS_ONLY=true → Sadece Redis'ten çeker (hızlı)
+// NEXT_PUBLIC_REDIS_ONLY=false → Redis + WooCommerce fallback (hybrid)
 
-// Önce backend Redis cache'i dener, yoksa WooCommerce'e fallback yapar
+const REDIS_ONLY = process.env.NEXT_PUBLIC_REDIS_ONLY === 'true';
 
 export const getAllProducts = async () => {
-    // 1. Önce Redis cache'den çekmeyi dene (Backend API üzerinden)
+    // 1. Redis cache'den çekmeyi dene (Backend API üzerinden)
     try {
-        console.log(`[WooCommerce] Redis cache'den çekiliyor...`);
+        console.log(`[WooCommerce] Redis cache'den çekiliyor... (Redis Only: ${REDIS_ONLY})`);
         const cacheResponse = await fetch(API_ENDPOINTS.PRODUCTS, {
-            cache: 'no-store', // SSR'da her zaman güncel data
+            next: { revalidate: 60 }, // 60 saniye cache - build sırasında da çalışır
             headers: {
                 'Content-Type': 'application/json',
             },
@@ -52,12 +53,23 @@ export const getAllProducts = async () => {
                 return cacheData.products;
             }
         }
+
+        // Redis boş veya hata
+        if (REDIS_ONLY) {
+            console.log(`[WooCommerce] ⚠️ Redis cache boş ve REDIS_ONLY=true, boş dizi dönüyor`);
+            return [];
+        }
+
         console.log(`[WooCommerce] Cache boş veya hata, WooCommerce'den çekilecek...`);
     } catch (cacheError) {
+        if (REDIS_ONLY) {
+            console.log(`[WooCommerce] ❌ Redis erişilemedi ve REDIS_ONLY=true: ${cacheError}`);
+            return [];
+        }
         console.log(`[WooCommerce] ⚠️ Cache erişilemedi, fallback yapılıyor: ${cacheError}`);
     }
 
-    // 2. Fallback: WooCommerce API'den direkt çek
+    // 2. Fallback: WooCommerce API'den direkt çek (sadece hybrid modda)
     try {
         let allProducts: any[] = [];
         let page = 1;
