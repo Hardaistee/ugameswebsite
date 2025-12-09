@@ -10,17 +10,9 @@ interface ProductCardProps {
   size?: 'normal' | 'large'
 }
 
-// useCart üstte zaten import edilmiş
-import { useRouter } from 'next/navigation'
-
-// ... (interface aynı kalıyor)
-
 export default function ProductCard({ product, variant = 'epin', size = 'normal' }: ProductCardProps) {
-  const router = useRouter()
   const [fav, setFav] = useState(false)
   const [popping, setPopping] = useState(false)
-  // loaded state kullanılmıyor, kaldırabiliriz veya kalsın
-  const [isPressed, setIsPressed] = useState(false) // Visual feedback için
   const [imageError, setImageError] = useState(false)
 
   const isGame = variant === 'game'
@@ -36,7 +28,7 @@ export default function ProductCard({ product, variant = 'epin', size = 'normal'
     return isNaN(num) ? '0.00' : num.toFixed(2)
   }
 
-  function handleFav(e: React.MouseEvent) {
+  function handleFav(e: React.MouseEvent | React.TouchEvent) {
     e.preventDefault()
     e.stopPropagation()
     setFav(v => {
@@ -55,7 +47,7 @@ export default function ProductCard({ product, variant = 'epin', size = 'normal'
   // Sepete Ekle Butonu
   function handleAddToCart(e: React.MouseEvent | React.TouchEvent) {
     e.preventDefault()
-    e.stopPropagation() // Kart tıklamasını engelle
+    e.stopPropagation()
 
     if (buttonState !== 'idle') return
 
@@ -75,47 +67,15 @@ export default function ProductCard({ product, variant = 'epin', size = 'normal'
     }, 2000)
   }
 
-  // Touch event handlers for better mobile response
-  function handleTouchStart(e: React.TouchEvent) {
-    setIsPressed(true)
-  }
-
-  function handleTouchEnd(e: React.TouchEvent) {
-    setIsPressed(false)
-    // Prevent ghost clicks
-    e.preventDefault()
-    // Navigate immediately on touch
-    router.push(linkPath)
-  }
-
-  function handleTouchCancel() {
-    setIsPressed(false)
-  }
-
-  // Fallback for desktop
-  function handleClick(e: React.MouseEvent) {
-    router.push(linkPath)
-  }
-
   return (
-    <div
-      onTouchStart={handleTouchStart}
-      onTouchEnd={handleTouchEnd}
-      onTouchCancel={handleTouchCancel}
-      onClick={handleClick}
-      role="link"
-      tabIndex={0}
-      onKeyDown={(e) => e.key === 'Enter' && router.push(linkPath)}
-      className={`block h-full group cursor-pointer select-none ${isPressed ? 'opacity-80' : ''}`}
-      style={{
-        WebkitTapHighlightColor: 'transparent',
-        touchAction: 'manipulation',
-        transition: 'opacity 0.1s ease'
-      }}
+    <Link
+      href={linkPath}
+      className="block h-full group cursor-pointer select-none"
+      style={{ WebkitTapHighlightColor: 'transparent' }}
     >
       <div
-        className={`border rounded-lg overflow-hidden card-shadow h-full flex flex-col transition-all duration-200 ${isLarge ? '' : ''}
-          ${isPressed ? 'scale-[0.98]' : 'scale-100'}
+        className={`border rounded-lg overflow-hidden card-shadow h-full flex flex-col transition-all duration-200
+          active:scale-[0.98]
           md:hover:shadow-xl 
           md:hover:-translate-y-1 
           md:hover:scale-[1.01]
@@ -318,6 +278,6 @@ export default function ProductCard({ product, variant = 'epin', size = 'normal'
           )}
         </div>
       </div>
-    </div>
+    </Link>
   )
 }
