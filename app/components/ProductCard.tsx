@@ -19,6 +19,7 @@ export default function ProductCard({ product, variant = 'epin', size = 'normal'
   const [fav, setFav] = useState(false)
   const [popping, setPopping] = useState(false)
   // loaded state kullanılmıyor, kaldırabiliriz veya kalsın
+  const [isPressed, setIsPressed] = useState(false) // Visual feedback için
 
   const isGame = variant === 'game'
   const isLarge = size === 'large'
@@ -47,7 +48,7 @@ export default function ProductCard({ product, variant = 'epin', size = 'normal'
   const [buttonState, setButtonState] = useState<'idle' | 'success' | 'exiting'>('idle')
 
   // Sepete Ekle Butonu
-  function handleAddToCart(e: React.BaseSyntheticEvent) {
+  function handleAddToCart(e: React.MouseEvent | React.TouchEvent) {
     e.preventDefault()
     e.stopPropagation() // Kart tıklamasını engelle
 
@@ -69,27 +70,50 @@ export default function ProductCard({ product, variant = 'epin', size = 'normal'
     }, 2000)
   }
 
-  // Kart Tıklaması (Navigasyon)
-  function handleCardClick(e: React.BaseSyntheticEvent) {
-    // Eğer tıklanan yer buton veya favori ise işlem yapma (gerçi stopPropagation bunu çözer ama garanti olsun)
-    // useRouter push ile git
+  // Touch event handlers for better mobile response
+  function handleTouchStart(e: React.TouchEvent) {
+    setIsPressed(true)
+  }
+
+  function handleTouchEnd(e: React.TouchEvent) {
+    setIsPressed(false)
+    // Prevent ghost clicks
+    e.preventDefault()
+    // Navigate immediately on touch
+    router.push(linkPath)
+  }
+
+  function handleTouchCancel() {
+    setIsPressed(false)
+  }
+
+  // Fallback for desktop
+  function handleClick(e: React.MouseEvent) {
     router.push(linkPath)
   }
 
   return (
     <div
-      onClick={handleCardClick}
+      onTouchStart={handleTouchStart}
+      onTouchEnd={handleTouchEnd}
+      onTouchCancel={handleTouchCancel}
+      onClick={handleClick}
       role="link"
       tabIndex={0}
       onKeyDown={(e) => e.key === 'Enter' && router.push(linkPath)}
-      className="block h-full group touch-manipulation cursor-pointer select-none"
+      className={`block h-full group cursor-pointer select-none ${isPressed ? 'opacity-80' : ''}`}
+      style={{
+        WebkitTapHighlightColor: 'transparent',
+        touchAction: 'manipulation',
+        transition: 'opacity 0.1s ease'
+      }}
     >
       <div
-        className={`border rounded-lg overflow-hidden card-shadow h-full flex flex-col active:scale-[0.98] transition-transform duration-200 ${isLarge ? '' : ''}
-          /* Desktop Hover Effects Only */
-          [@media(hover:hover)]:hover:shadow-xl 
-          [@media(hover:hover)]:hover:-translate-y-1 
-          [@media(hover:hover)]:hover:scale-[1.01]
+        className={`border rounded-lg overflow-hidden card-shadow h-full flex flex-col transition-all duration-200 ${isLarge ? '' : ''}
+          ${isPressed ? 'scale-[0.98]' : 'scale-100'}
+          md:hover:shadow-xl 
+          md:hover:-translate-y-1 
+          md:hover:scale-[1.01]
         `}
         style={{
           background: 'var(--surface)',
@@ -108,9 +132,10 @@ export default function ProductCard({ product, variant = 'epin', size = 'normal'
           <img
             src={product.images?.[0] || product.image}
             alt={product.title}
-            className="w-full h-full object-cover transition-all duration-300 group-hover:scale-110 pointer-events-none" // pointer-events-none resme tıklamayı engeller, click parent'a düşer (daha iyi performans)
+            className="w-full h-full object-cover transition-all duration-300 md:group-hover:scale-110"
             loading="lazy"
             decoding="async"
+            draggable={false}
           />
 
           {/* ... Badges and Overlays (Aynı kalıyor) ... */}
@@ -155,11 +180,14 @@ export default function ProductCard({ product, variant = 'epin', size = 'normal'
           {!isGame && (
             <button
               onClick={handleFav}
-              // onTouchStart={e => e.stopPropagation()} // Mobilde touch bubble'ı engelle
+              onTouchEnd={(e) => {
+                e.stopPropagation()
+                handleFav(e as any)
+              }}
               aria-pressed={fav}
               aria-label={fav ? 'Favorilerden çıkar' : 'Favorilere ekle'}
-              className="absolute right-3 top-3 rounded-full p-2 shadow-md transition-transform hover:scale-110 min-w-[44px] min-h-[44px] flex items-center justify-center z-10"
-              style={{ background: 'rgba(255,255,255,0.95)', backdropFilter: 'blur(8px)' }}
+              className="absolute right-3 top-3 rounded-full p-2 shadow-md transition-transform md:hover:scale-110 min-w-[44px] min-h-[44px] flex items-center justify-center z-10"
+              style={{ background: 'rgba(255,255,255,0.95)', backdropFilter: 'blur(8px)', touchAction: 'manipulation' }}
             >
               <svg
                 className={`w-5 h-5 transition-all ${fav ? 'text-red-500 scale-110' : 'text-gray-400'} ${popping ? 'pop' : ''}`}
@@ -176,10 +204,7 @@ export default function ProductCard({ product, variant = 'epin', size = 'normal'
         </div>
 
         {/* Content */}
-        <div className={`${isLarge ? 'p-4' : 'p-3'} flex flex-col flex-1 pointer-events-none`}>
-          {/* İçerik container'ını pointer-events-none yaparak tıklamayı parent div'e geçirmesini sağlıyoruz. 
-                Sadece buton pointer-events-auto olacak. */}
-
+        <div className={`${isLarge ? 'p-4' : 'p-3'} flex flex-col flex-1`}>
           {/* Seller */}
           {!isGame && product.seller && (
             <div className="text-sm mb-1" style={{ color: 'var(--muted)' }}>
@@ -189,7 +214,7 @@ export default function ProductCard({ product, variant = 'epin', size = 'normal'
 
           {/* Title */}
           <h3
-            className={`font-semibold ${isLarge ? 'text-base mb-2' : 'text-sm mb-2'} line-clamp-2 ${isGame ? 'min-h-[2.5rem] group-hover:text-opacity-80' : 'min-h-[3rem]'
+            className={`font-semibold ${isLarge ? 'text-base mb-2' : 'text-sm mb-2'} line-clamp-2 ${isGame ? 'min-h-[2.5rem] md:group-hover:text-opacity-80' : 'min-h-[3rem]'
               } transition-colors`}
             style={{ color: 'var(--text)' }}
           >
@@ -242,43 +267,44 @@ export default function ProductCard({ product, variant = 'epin', size = 'normal'
 
           {/* Action Button - POINTER EVENTS AUTO OLMALI */}
           {isGame && (
-            <div className="pointer-events-auto mt-2"> {/* Wrapper div for pointer events restoration */}
-              <button
-                onClick={handleAddToCart}
-                // onTouchEnd={e => e.stopPropagation()} 
-                disabled={buttonState !== 'idle'}
-                className={`relative w-full text-center z-20 ${isLarge ? 'py-3' : 'py-2'} rounded font-semibold transition-transform overflow-hidden
-                    ${buttonState === 'idle' ? 'active:scale-95' : ''}
-                `}
-                style={{
-                  background: 'var(--accent)',
-                  color: '#000'
-                }}
-              >
-                {/* ... Button Content ... */}
-                <div className={`flex justify-center items-center gap-2 transition-opacity duration-300 ${buttonState !== 'idle' ? 'opacity-0' : 'opacity-100'}`}>
-                  <span>Sepete Ekle</span>
-                </div>
+            <button
+              onClick={handleAddToCart}
+              onTouchEnd={(e) => {
+                e.stopPropagation()
+                handleAddToCart(e)
+              }}
+              disabled={buttonState !== 'idle'}
+              className={`relative w-full text-center z-20 ${isLarge ? 'py-3' : 'py-2'} rounded font-semibold transition-transform overflow-hidden
+                ${buttonState === 'idle' ? 'active:scale-95' : ''}
+              `}
+              style={{
+                background: 'var(--accent)',
+                color: '#000',
+                touchAction: 'manipulation'
+              }}
+            >
+              {/* Original Content */}
+              <div className={`flex justify-center items-center gap-2 transition-opacity duration-300 ${buttonState !== 'idle' ? 'opacity-0' : 'opacity-100'}`}>
+                <span>Sepete Ekle</span>
+              </div>
 
-                {/* Slide Overlay */}
-                <div
-                  className={`absolute inset-0 bg-green-600 flex items-center justify-center gap-2 text-white font-bold text-sm
-                            ${buttonState === 'idle' ? '-translate-x-full transition-none' : ''}
-                            ${buttonState === 'success' ? 'translate-x-0 transition-transform duration-300 ease-out' : ''}
-                            ${buttonState === 'exiting' ? 'translate-x-full transition-transform duration-300 ease-in' : ''}
-                        `}
-                >
-                  <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
-                  </svg>
-                  <span>Eklendi</span>
-                </div>
-              </button>
-            </div>
+              {/* Slide Overlay */}
+              <div
+                className={`absolute inset-0 bg-green-600 flex items-center justify-center gap-2 text-white font-bold text-sm
+                  ${buttonState === 'idle' ? '-translate-x-full transition-none' : ''}
+                  ${buttonState === 'success' ? 'translate-x-0 transition-transform duration-300 ease-out' : ''}
+                  ${buttonState === 'exiting' ? 'translate-x-full transition-transform duration-300 ease-in' : ''}
+                `}
+              >
+                <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                </svg>
+                <span>Eklendi</span>
+              </div>
+            </button>
           )}
         </div>
       </div>
     </div>
   )
 }
-
