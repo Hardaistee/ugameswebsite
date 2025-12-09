@@ -89,7 +89,7 @@ export default function FeaturedSlider({ games }: FeaturedSliderProps) {
                 onTouchStart={handleTouchStart}
                 onTouchMove={handleTouchMove}
                 onTouchEnd={handleTouchEnd}
-                className="relative w-full h-[280px] sm:h-[340px] md:h-[400px] lg:h-[420px]"
+                className="relative w-full h-[280px] sm:h-[380px] md:h-[420px] lg:h-[35rem]"
             >
                 {/* Main Content Grid */}
                 <div className="absolute inset-0 flex">
@@ -237,54 +237,11 @@ export default function FeaturedSlider({ games }: FeaturedSliderProps) {
                     </div>
                 </div>
 
-                {/* Navigation Arrows - Hidden on small mobile, visible from sm+ */}
+
+
+                {/* Indicators - Desktop only */}
                 {games.length > 1 && (
-                    <>
-                        <button
-                            onClick={(e) => {
-                                e.preventDefault()
-                                setIndex(i => (i - 1 + games.length) % games.length)
-                            }}
-                            className="absolute left-2 sm:left-4 top-1/3 sm:top-1/2 -translate-y-1/2 z-20 w-9 h-9 sm:w-11 sm:h-11 bg-black/40 hover:bg-black/60 backdrop-blur-md rounded-full hidden sm:flex items-center justify-center text-white transition-all hover:scale-110"
-                            aria-label="Önceki oyun"
-                        >
-                            <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M15 19l-7-7 7-7" />
-                            </svg>
-                        </button>
-
-                        <button
-                            onClick={(e) => {
-                                e.preventDefault()
-                                setIndex(i => (i + 1) % games.length)
-                            }}
-                            className="absolute right-2 sm:right-4 lg:right-auto lg:left-[calc(66.666%-3rem)] top-1/3 sm:top-1/2 -translate-y-1/2 z-20 w-9 h-9 sm:w-11 sm:h-11 bg-black/40 hover:bg-black/60 backdrop-blur-md rounded-full hidden sm:flex items-center justify-center text-white transition-all hover:scale-110"
-                            aria-label="Sonraki oyun"
-                        >
-                            <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M9 5l7 7-7 7" />
-                            </svg>
-                        </button>
-                    </>
-                )}
-
-                {/* Swipe Hint for Mobile - Shows only on first load */}
-                <div className="sm:hidden absolute top-1/2 -translate-y-1/2 left-0 right-0 flex justify-between px-2 pointer-events-none z-20">
-                    <div className="w-8 h-8 rounded-full bg-white/10 backdrop-blur-sm flex items-center justify-center animate-pulse">
-                        <svg className="w-4 h-4 text-white/60" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
-                        </svg>
-                    </div>
-                    <div className="w-8 h-8 rounded-full bg-white/10 backdrop-blur-sm flex items-center justify-center animate-pulse">
-                        <svg className="w-4 h-4 text-white/60" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-                        </svg>
-                    </div>
-                </div>
-
-                {/* Indicators - Optimized for touch */}
-                {games.length > 1 && (
-                    <div className="absolute left-1/2 lg:left-1/3 -translate-x-1/2 bottom-16 sm:bottom-2 lg:bottom-2 flex gap-2 z-20">
+                    <div className="absolute left-1/3 -translate-x-1/2 bottom-2 hidden lg:flex gap-2 z-20">
                         {games.map((_, i) => (
                             <button
                                 key={i}
@@ -293,16 +250,17 @@ export default function FeaturedSlider({ games }: FeaturedSliderProps) {
                                     e.preventDefault()
                                     setIndex(i)
                                 }}
-                                className="group p-1.5 sm:p-2 flex items-center justify-center"
+                                className="group p-2 flex items-center justify-center"
                             >
                                 <span className={`block rounded-full transition-all ${index === i
-                                    ? 'w-6 sm:w-8 h-2 bg-white shadow-lg'
+                                    ? 'w-8 h-2 bg-white shadow-lg'
                                     : 'w-2 h-2 bg-white/40 hover:bg-white/60'}`
                                 } />
                             </button>
                         ))}
                     </div>
                 )}
+
 
                 {/* Progress Bar */}
                 {games.length > 1 && (
