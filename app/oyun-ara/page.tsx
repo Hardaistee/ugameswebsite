@@ -1,6 +1,7 @@
 import React, { Suspense } from 'react'
 import GameSearchClient from './GameSearchClient'
 import { getAllProducts } from '../../lib/woocommerce'
+import { ProductGridSkeleton } from '../components/ProductCardSkeleton'
 
 export const revalidate = 3600
 
@@ -41,6 +42,32 @@ function mapProduct(p: any) {
   }
 }
 
+// Skeleton Loading Component
+function GameSearchSkeleton() {
+  return (
+    <div className="min-h-screen pb-12" style={{ background: 'var(--bg)' }}>
+      <div className="max-w-[1600px] mx-auto px-3 sm:px-4 lg:px-8 pt-4">
+        {/* Search Bar Skeleton */}
+        <div className="mb-6">
+          <div className="h-12 bg-gray-700/50 rounded-lg animate-pulse" />
+        </div>
+
+        {/* Filter Bar Skeleton */}
+        <div className="flex gap-2 mb-6 overflow-x-auto">
+          {[1, 2, 3, 4].map(i => (
+            <div key={i} className="h-10 w-24 bg-gray-700/50 rounded-lg animate-pulse flex-shrink-0" />
+          ))}
+        </div>
+
+        {/* Product Grid Skeleton */}
+        <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-3 sm:gap-4">
+          <ProductGridSkeleton count={15} variant="game" />
+        </div>
+      </div>
+    </div>
+  )
+}
+
 export default async function GameSearchPage() {
   let products: any[] = []
 
@@ -52,14 +79,7 @@ export default async function GameSearchPage() {
   }
 
   return (
-    <Suspense fallback={
-      <div className="min-h-screen pb-12 flex items-center justify-center" style={{ background: 'var(--bg)' }}>
-        <div className="text-center">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 mx-auto mb-4" style={{ borderColor: 'var(--accent)' }}></div>
-          <p style={{ color: 'var(--muted)' }}>Yükleniyor...</p>
-        </div>
-      </div>
-    }>
+    <Suspense fallback={<GameSearchSkeleton />}>
       <GameSearchClient products={products} />
     </Suspense>
   )

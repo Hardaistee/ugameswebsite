@@ -41,19 +41,17 @@ export default function FeaturedSlider({ games }: FeaturedSliderProps) {
     // Touch handlers for swipe
     const handleTouchStart = (e: TouchEvent) => {
         touchStartX.current = e.targetTouches[0].clientX
-        touchEndX.current = e.targetTouches[0].clientX // Reset end to start
+        touchEndX.current = e.targetTouches[0].clientX
     }
 
     const handleTouchMove = (e: TouchEvent) => {
         touchEndX.current = e.targetTouches[0].clientX
     }
 
-    const handleTouchEnd = (e: TouchEvent) => {
+    const handleTouchEnd = () => {
         const distance = touchStartX.current - touchEndX.current
         // Only change slide if swipe distance is significant
-        // Small movements (< minSwipeDistance) won't trigger slide change, allowing clicks to work
         if (Math.abs(distance) > minSwipeDistance) {
-            e.preventDefault() // Prevent link click only on real swipe
             if (distance > 0) {
                 // Swipe left - next
                 setIndex(i => (i + 1) % games.length)
@@ -62,7 +60,7 @@ export default function FeaturedSlider({ games }: FeaturedSliderProps) {
                 setIndex(i => (i - 1 + games.length) % games.length)
             }
         }
-        // If distance is small, the click will naturally proceed to the link
+        // Link click will work naturally - no preventDefault
     }
 
     if (games.length === 0) return null

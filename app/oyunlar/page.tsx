@@ -1,6 +1,8 @@
 import React, { Suspense } from 'react'
 import ClientGamesPage from './ClientGamesPage'
 import { getAllProducts, getBestSellers } from '../../lib/woocommerce'
+import FeaturedSliderSkeleton from '../components/FeaturedSliderSkeleton'
+import { ProductGridSkeleton } from '../components/ProductCardSkeleton'
 
 // Revalidate every hour
 export const revalidate = 3600
@@ -45,6 +47,29 @@ function mapProduct(p: any): MappedProduct {
     }
 }
 
+// Skeleton Loading Component
+function GamesPageSkeleton() {
+    return (
+        <div className="min-h-screen pb-12" style={{ background: 'var(--bg)' }}>
+            <div className="max-w-[1600px] mx-auto px-3 sm:px-4 lg:px-8 pt-4">
+                {/* Featured Slider Skeleton */}
+                <FeaturedSliderSkeleton />
+
+                {/* Section Title Skeleton */}
+                <div className="flex items-center justify-between mb-4">
+                    <div className="h-8 w-40 bg-gray-700/50 rounded animate-pulse" />
+                    <div className="h-6 w-24 bg-gray-700/50 rounded animate-pulse" />
+                </div>
+
+                {/* Product Grid Skeleton */}
+                <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-3 sm:gap-4">
+                    <ProductGridSkeleton count={10} variant="game" />
+                </div>
+            </div>
+        </div>
+    )
+}
+
 export default async function GamesPage() {
     const [allProducts, bestSellers] = await Promise.all([
         getAllProducts(),
@@ -63,14 +88,7 @@ export default async function GamesPage() {
     }
 
     return (
-        <Suspense fallback={
-            <div className="min-h-screen pb-12 flex items-center justify-center" style={{ background: 'var(--bg)' }}>
-                <div className="text-center">
-                    <div className="animate-spin rounded-full h-12 w-12 border-b-2 mx-auto mb-4" style={{ borderColor: 'var(--accent)' }}></div>
-                    <p style={{ color: 'var(--muted)' }}>Yükleniyor...</p>
-                </div>
-            </div>
-        }>
+        <Suspense fallback={<GamesPageSkeleton />}>
             <ClientGamesPage categorizedProducts={categorizedProducts} />
         </Suspense>
     )
