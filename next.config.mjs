@@ -12,6 +12,11 @@ const nextConfig = {
                 hostname: 'payment.ugames.com.tr',
                 pathname: '/wp-content/uploads/**',
             },
+            {
+                protocol: 'https',
+                hostname: 'pay.ugames.com.tr',
+                pathname: '/wp-content/uploads/**',
+            },
         ],
         // Optimize images with modern formats
         formats: ['image/avif', 'image/webp'],
