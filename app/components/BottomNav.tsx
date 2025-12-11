@@ -9,6 +9,7 @@ export default function BottomNav() {
     const [showSearch, setShowSearch] = useState(false)
     const [searchQuery, setSearchQuery] = useState('')
     const [isMobile, setIsMobile] = useState(true)
+    const [bottomOffset, setBottomOffset] = useState(0)
     const inputRef = useRef<HTMLInputElement>(null)
 
     // Check screen size
@@ -19,6 +20,26 @@ export default function BottomNav() {
         checkMobile()
         window.addEventListener('resize', checkMobile)
         return () => window.removeEventListener('resize', checkMobile)
+    }, [])
+
+    // Handle mobile browser viewport changes (address bar hide/show)
+    React.useEffect(() => {
+        if (typeof window === 'undefined' || !window.visualViewport) return
+
+        const handleViewportChange = () => {
+            // Calculate offset when visual viewport is smaller than layout viewport
+            const offset = window.innerHeight - (window.visualViewport?.height || window.innerHeight)
+            setBottomOffset(Math.max(0, offset))
+        }
+
+        window.visualViewport.addEventListener('resize', handleViewportChange)
+        window.visualViewport.addEventListener('scroll', handleViewportChange)
+        handleViewportChange()
+
+        return () => {
+            window.visualViewport?.removeEventListener('resize', handleViewportChange)
+            window.visualViewport?.removeEventListener('scroll', handleViewportChange)
+        }
     }, [])
 
     const handleMenuClick = () => {
@@ -109,11 +130,13 @@ export default function BottomNav() {
 
             {/* Bottom Navigation Bar - Only on Mobile */}
             <nav
-                className="md:hidden fixed bottom-0 left-0 right-0 z-40 border-t"
+                className="md:hidden fixed left-0 right-0 z-40 border-t"
                 style={{
+                    bottom: bottomOffset,
                     background: 'var(--surface)',
                     borderColor: 'var(--border)',
-                    boxShadow: '0 -2px 10px rgba(0,0,0,0.1)'
+                    boxShadow: '0 -2px 10px rgba(0,0,0,0.1)',
+                    transition: 'bottom 0.1s ease-out'
                 }}
             >
                 <div
