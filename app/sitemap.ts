@@ -27,13 +27,21 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
         priority: route === '' ? 1 : 0.8,
     }))
 
+    // Helper function to safely parse dates
+    const safeDate = (dateString: string | undefined | null): Date => {
+        if (!dateString) return new Date()
+        const date = new Date(dateString)
+        // Check if date is valid
+        return isNaN(date.getTime()) ? new Date() : date
+    }
+
     // Dynamic Product Pages
     let productRoutes: MetadataRoute.Sitemap = []
     try {
         const products = await getAllProducts()
         productRoutes = products.map((product: any) => ({
             url: `${baseUrl}/urun/${product.slug}`,
-            lastModified: new Date(product.date_modified || product.date_created),
+            lastModified: safeDate(product.date_modified || product.date_created),
             changeFrequency: 'daily' as const,
             priority: 0.9,
         }))
