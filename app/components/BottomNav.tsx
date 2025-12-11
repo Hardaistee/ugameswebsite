@@ -138,7 +138,7 @@ export default function BottomNav() {
 
                     {/* Login Button */}
                     <Link
-                        href="/login"
+                        href="/giris"
                         className="flex flex-col items-center justify-center gap-1 transition-all active:scale-95"
                         style={{ color: 'var(--text)' }}
                     >

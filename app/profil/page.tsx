@@ -121,8 +121,8 @@ export default function ProfilePage() {
                             <p className="opacity-70 mb-6">İhtiyacınız olan oyun ve ürünleri hemen keşfedin.</p>
                             <button
                                 onClick={() => router.push('/oyunlar')}
-                                className="py-2 px-6 rounded-lg font-bold text-white transition-all transform hover:scale-105"
-                                style={{ backgroundColor: 'var(--accent)' }}
+                                className="py-2 px-6 rounded-lg font-bold transition-all transform hover:scale-105"
+                                style={{ backgroundColor: 'var(--accent)', color: 'var(--accent-contrast)' }}
                             >
                                 Alışverişe Başla
                             </button>

@@ -194,9 +194,10 @@ export default function RegisterPage() {
                     <button
                         type="submit"
                         disabled={loading}
-                        className="w-full py-3 px-4 rounded-lg font-bold text-white transition-all transform hover:scale-[1.02] flex items-center justify-center space-x-2 mt-2"
+                        className="w-full py-3 px-4 rounded-lg font-bold transition-all transform hover:scale-[1.02] flex items-center justify-center space-x-2 mt-2"
                         style={{
                             backgroundColor: 'var(--accent)',
+                            color: 'var(--accent-contrast)',
                             opacity: loading ? 0.7 : 1
                         }}
                     >
