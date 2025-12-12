@@ -174,4 +174,14 @@ export const createOrder = async (data: any) => {
     }
 };
 
+export const getOrder = async (orderId: number) => {
+    try {
+        const response = await api.get(`orders/${orderId}`);
+        return response.data;
+    } catch (error) {
+        console.error("WooCommerce getOrder Error:", error);
+        throw error;
+    }
+};
+
 export default api;
