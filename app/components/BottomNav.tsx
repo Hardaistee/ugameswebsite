@@ -1,15 +1,12 @@
 'use client'
 
-import React, { useState, useRef, useEffect } from 'react'
+import React, { useState, useEffect } from 'react'
 import Link from 'next/link'
-import { useRouter } from 'next/navigation'
+import { useAuth } from '../../context/AuthContext'
 
 export default function BottomNav() {
-    const router = useRouter()
-    const [showSearch, setShowSearch] = useState(false)
-    const [searchQuery, setSearchQuery] = useState('')
+    const { user, loading } = useAuth()
     const [isMobile, setIsMobile] = useState(true)
-    const inputRef = useRef<HTMLInputElement>(null)
 
     // Check screen size
     React.useEffect(() => {
@@ -73,24 +70,20 @@ export default function BottomNav() {
         }
     }
 
-    // Auto focus when search opens
-    useEffect(() => {
-        if (showSearch && inputRef.current) {
-            inputRef.current.focus()
+    const handleAIClick = () => {
+        if (typeof window !== 'undefined' && (window as any).__toggleAIChat) {
+            (window as any).__toggleAIChat()
         }
-    }, [showSearch])
+    }
 
-    const handleSearch = (e?: React.FormEvent) => {
-        e?.preventDefault()
-        const query = searchQuery.trim()
-        if (query) {
-            // Homepage modunu kontrol et
-            const mode = process.env.NEXT_PUBLIC_HOMEPAGE_MODE || 'marketplace'
-            const searchPath = mode === 'games_only' ? '/oyun-ara' : '/ilanlar'
-            router.push(`${searchPath}?search=${encodeURIComponent(query)}`)
-            setSearchQuery('')
-            setShowSearch(false)
+    // Get user initials for avatar
+    const getUserInitials = () => {
+        if (!user?.name) return 'U'
+        const names = user.name.split(' ')
+        if (names.length >= 2) {
+            return (names[0][0] + names[1][0]).toUpperCase()
         }
+        return names[0].substring(0, 2).toUpperCase()
     }
 
     // Don't render on desktop
@@ -98,61 +91,6 @@ export default function BottomNav() {
 
     return (
         <>
-            {/* Search Overlay */}
-            {showSearch && (
-                <div
-                    className="md:hidden fixed inset-0 z-50 flex items-end"
-                    style={{ background: 'rgba(0,0,0,0.5)' }}
-                    onClick={(e) => {
-                        if (e.target === e.currentTarget) setShowSearch(false)
-                    }}
-                >
-                    <div className="w-full p-4 pb-24" style={{ background: 'var(--surface)' }}>
-                        <form onSubmit={handleSearch} className="flex items-center gap-3">
-                            <input
-                                ref={inputRef}
-                                type="text"
-                                inputMode="search"
-                                enterKeyHint="search"
-                                placeholder="Oyun ara..."
-                                value={searchQuery}
-                                onChange={(e) => setSearchQuery(e.target.value)}
-                                className="flex-1 px-4 py-3 rounded-lg border"
-                                style={{
-                                    background: 'var(--bg)',
-                                    borderColor: 'var(--border)',
-                                    color: 'var(--text)',
-                                    fontSize: '16px' // Prevents iOS zoom
-                                }}
-                            />
-                            <button
-                                type="submit"
-                                aria-label="Ara"
-                                className="px-4 py-3 rounded-lg font-bold min-w-[44px] min-h-[44px]"
-                                style={{
-                                    background: 'var(--accent)',
-                                    color: '#000'
-                                }}
-                            >
-                                Ara
-                            </button>
-                            <button
-                                type="button"
-                                onClick={() => {
-                                    setSearchQuery('')
-                                    setShowSearch(false)
-                                }}
-                                aria-label="Aramayı kapat"
-                                className="px-3 py-3 rounded-lg font-medium min-w-[44px] min-h-[44px]"
-                                style={{ color: 'var(--muted)' }}
-                            >
-                                ✕
-                            </button>
-                        </form>
-                    </div>
-                </div>
-            )}
-
             {/* Bottom Navigation Bar - Only on Mobile, hidden when keyboard is open */}
             <nav
                 className={`md:hidden fixed left-0 right-0 z-40 border-t transition-all duration-200 ${isKeyboardOpen ? 'translate-y-full opacity-0 pointer-events-none' : 'translate-y-0 opacity-100'}`}
@@ -183,29 +121,49 @@ export default function BottomNav() {
                         <span className="text-xs font-medium">Menü</span>
                     </button>
 
-                    {/* Login Button */}
-                    <Link
-                        href="/giris"
-                        className="flex flex-col items-center justify-center gap-1 transition-all active:scale-95"
-                        style={{ color: 'var(--text)' }}
-                    >
-                        <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11 16l-4-4m0 0l4-4m-4 4h14m-5 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h7a3 3 0 013 3v1" />
-                        </svg>
-                        <span className="text-xs font-medium">Giriş Yap</span>
-                    </Link>
+                    {/* Profile/Login Button - Shows user avatar if logged in */}
+                    {!loading && user ? (
+                        <Link
+                            href="/profil"
+                            className="flex flex-col items-center justify-center gap-1 transition-all active:scale-95"
+                            style={{ color: 'var(--text)' }}
+                        >
+                            {/* User Avatar with initials */}
+                            <div
+                                className="w-7 h-7 rounded-full flex items-center justify-center text-xs font-bold"
+                                style={{
+                                    background: 'var(--accent)',
+                                    color: 'var(--accent-contrast, #000)'
+                                }}
+                            >
+                                {getUserInitials()}
+                            </div>
+                            <span className="text-xs font-medium">Profil</span>
+                        </Link>
+                    ) : (
+                        <Link
+                            href="/giris"
+                            className="flex flex-col items-center justify-center gap-1 transition-all active:scale-95"
+                            style={{ color: 'var(--text)' }}
+                        >
+                            <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11 16l-4-4m0 0l4-4m-4 4h14m-5 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h7a3 3 0 013 3v1" />
+                            </svg>
+                            <span className="text-xs font-medium">Giriş Yap</span>
+                        </Link>
+                    )}
 
-                    {/* Search Button */}
+                    {/* AI Asistan Button */}
                     <button
-                        onClick={() => setShowSearch(true)}
-                        aria-label="Ara"
+                        onClick={handleAIClick}
+                        aria-label="AI Asistan"
                         className="flex flex-col items-center justify-center gap-1 transition-all active:scale-95 min-h-[44px]"
-                        style={{ color: 'var(--text)' }}
+                        style={{ color: 'var(--accent)' }}
                     >
                         <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z" />
                         </svg>
-                        <span className="text-xs font-medium">Ara</span>
+                        <span className="text-xs font-medium">AI Asistan</span>
                     </button>
                 </div>
             </nav>

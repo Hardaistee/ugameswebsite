@@ -27,6 +27,28 @@ export default function ChatWidget() {
         messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' })
     }
 
+    // Clean markdown formatting from text
+    const cleanMarkdown = (text: string): string => {
+        return text
+            // Remove bold (**text** or __text__)
+            .replace(/\*\*([^*]+)\*\*/g, '$1')
+            .replace(/__([^_]+)__/g, '$1')
+            // Remove italic (*text* or _text_)
+            .replace(/\*([^*]+)\*/g, '$1')
+            .replace(/_([^_]+)_/g, '$1')
+            // Convert bullet points to simple dashes
+            .replace(/^\* /gm, '• ')
+            .replace(/^- /gm, '• ')
+            // Remove headers (#, ##, ###)
+            .replace(/^#+\s*/gm, '')
+            // Remove code blocks
+            .replace(/```[^`]*```/gs, '')
+            .replace(/`([^`]+)`/g, '$1')
+            // Clean up extra whitespace
+            .replace(/\n{3,}/g, '\n\n')
+            .trim();
+    };
+
     useEffect(() => {
         scrollToBottom()
     }, [messages, isOpen])
@@ -57,7 +79,7 @@ export default function ChatWidget() {
 
             const botMessage: Message = {
                 id: (Date.now() + 1).toString(),
-                text: data.success ? data.message : 'Üzgünüm, şu anda yanıt veremiyorum.',
+                text: data.success ? cleanMarkdown(data.message) : 'Üzgünüm, şu anda yanıt veremiyorum.',
                 sender: 'bot',
                 timestamp: new Date()
             }
@@ -76,6 +98,22 @@ export default function ChatWidget() {
             setIsLoading(false)
         }
     }
+
+    // Expose toggle function globally for BottomNav
+    useEffect(() => {
+        if (typeof window !== 'undefined') {
+            (window as any).__toggleAIChat = () => setIsOpen(prev => !prev);
+            (window as any).__openAIChat = () => setIsOpen(true);
+            (window as any).__closeAIChat = () => setIsOpen(false);
+        }
+        return () => {
+            if (typeof window !== 'undefined') {
+                delete (window as any).__toggleAIChat;
+                delete (window as any).__openAIChat;
+                delete (window as any).__closeAIChat;
+            }
+        };
+    }, []);
 
     return (
         <div className="fixed bottom-24 md:bottom-6 right-4 md:right-6 z-40 flex flex-col items-end">
@@ -194,10 +232,10 @@ export default function ChatWidget() {
                 </form>
             </div>
 
-            {/* Toggle Button */}
+            {/* Toggle Button - Hidden on mobile (use BottomNav instead) */}
             <button
                 onClick={() => setIsOpen(!isOpen)}
-                className="w-14 h-14 rounded-full bg-black text-white shadow-xl hover:scale-110 active:scale-95 transition-all duration-300 flex items-center justify-center group z-50 overflow-hidden"
+                className="hidden md:flex w-14 h-14 rounded-full bg-black text-white shadow-xl hover:scale-110 active:scale-95 transition-all duration-300 items-center justify-center group z-50 overflow-hidden"
                 aria-label="Chat assistant"
             >
                 <div className="relative w-6 h-6">

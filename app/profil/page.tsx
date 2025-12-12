@@ -48,7 +48,12 @@ export default function ProfilePage() {
             });
 
             if (response.data.success) {
-                setOrders(response.data.orders);
+                // Filter duplicate orders (same orderId)
+                const uniqueOrders = response.data.orders.filter(
+                    (order: any, index: number, self: any[]) =>
+                        index === self.findIndex((o) => o.orderId === order.orderId)
+                );
+                setOrders(uniqueOrders);
             }
         } catch (error) {
             console.error('Fetch orders error:', error);
@@ -129,8 +134,8 @@ export default function ProfilePage() {
                         </div>
                     ) : (
                         <div className="space-y-6">
-                            {orders.map((order) => (
-                                <div key={order.orderId} className="rounded-xl overflow-hidden shadow-md" style={{ backgroundColor: 'var(--surface)' }}>
+                            {orders.map((order, index) => (
+                                <div key={`order-${order.orderId}-${index}`} className="rounded-xl overflow-hidden shadow-md" style={{ backgroundColor: 'var(--surface)' }}>
                                     {/* Sipariş Başlığı */}
                                     <div className="p-4 border-b flex flex-wrap justify-between items-center gap-4" style={{ borderColor: 'var(--border)' }}>
                                         <div>
