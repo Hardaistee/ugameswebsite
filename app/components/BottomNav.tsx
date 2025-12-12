@@ -9,7 +9,6 @@ export default function BottomNav() {
     const [showSearch, setShowSearch] = useState(false)
     const [searchQuery, setSearchQuery] = useState('')
     const [isMobile, setIsMobile] = useState(true)
-    const [bottomOffset, setBottomOffset] = useState(0)
     const inputRef = useRef<HTMLInputElement>(null)
 
     // Check screen size
@@ -22,23 +21,49 @@ export default function BottomNav() {
         return () => window.removeEventListener('resize', checkMobile)
     }, [])
 
-    // Handle mobile browser viewport changes (address bar hide/show)
-    React.useEffect(() => {
-        if (typeof window === 'undefined' || !window.visualViewport) return
+    // Detect keyboard open/close and hide navbar when keyboard is open
+    const [isKeyboardOpen, setIsKeyboardOpen] = useState(false)
 
-        const handleViewportChange = () => {
-            // Calculate offset when visual viewport is smaller than layout viewport
-            const offset = window.innerHeight - (window.visualViewport?.height || window.innerHeight)
-            setBottomOffset(Math.max(0, offset))
+    React.useEffect(() => {
+        if (typeof window === 'undefined') return
+
+        const detectKeyboard = () => {
+            // On mobile, when keyboard opens, visualViewport height becomes smaller
+            const viewportHeight = window.visualViewport?.height || window.innerHeight
+            const windowHeight = window.innerHeight
+            const heightDiff = windowHeight - viewportHeight
+
+            // If difference is more than 150px, keyboard is probably open
+            setIsKeyboardOpen(heightDiff > 150)
         }
 
-        window.visualViewport.addEventListener('resize', handleViewportChange)
-        window.visualViewport.addEventListener('scroll', handleViewportChange)
-        handleViewportChange()
+        // Use visualViewport API if available (better support)
+        if (window.visualViewport) {
+            window.visualViewport.addEventListener('resize', detectKeyboard)
+            window.visualViewport.addEventListener('scroll', detectKeyboard)
+        }
+
+        // Fallback: listen to focus events on inputs
+        const handleFocus = (e: FocusEvent) => {
+            const target = e.target as HTMLElement
+            if (target.tagName === 'INPUT' || target.tagName === 'TEXTAREA') {
+                // Small delay to let keyboard animation start
+                setTimeout(detectKeyboard, 300)
+            }
+        }
+
+        const handleBlur = () => {
+            setTimeout(() => setIsKeyboardOpen(false), 100)
+        }
+
+        document.addEventListener('focusin', handleFocus)
+        document.addEventListener('focusout', handleBlur)
 
         return () => {
-            window.visualViewport?.removeEventListener('resize', handleViewportChange)
-            window.visualViewport?.removeEventListener('scroll', handleViewportChange)
+            window.visualViewport?.removeEventListener('resize', detectKeyboard)
+            window.visualViewport?.removeEventListener('scroll', detectKeyboard)
+            document.removeEventListener('focusin', handleFocus)
+            document.removeEventListener('focusout', handleBlur)
         }
     }, [])
 
@@ -128,15 +153,14 @@ export default function BottomNav() {
                 </div>
             )}
 
-            {/* Bottom Navigation Bar - Only on Mobile */}
+            {/* Bottom Navigation Bar - Only on Mobile, hidden when keyboard is open */}
             <nav
-                className="md:hidden fixed left-0 right-0 z-40 border-t"
+                className={`md:hidden fixed left-0 right-0 z-40 border-t transition-all duration-200 ${isKeyboardOpen ? 'translate-y-full opacity-0 pointer-events-none' : 'translate-y-0 opacity-100'}`}
                 style={{
-                    bottom: bottomOffset,
+                    bottom: 0,
                     background: 'var(--surface)',
                     borderColor: 'var(--border)',
                     boxShadow: '0 -2px 10px rgba(0,0,0,0.1)',
-                    transition: 'bottom 0.1s ease-out'
                 }}
             >
                 <div
