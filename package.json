@@ -10,6 +10,7 @@
   },
   "dependencies": {
     "@tailwindcss/typography": "^0.5.19",
+    "@vercel/analytics": "^1.6.1",
     "@woocommerce/woocommerce-rest-api": "^1.0.2",
     "axios": "^1.13.2",
     "framer-motion": "^12.23.25",

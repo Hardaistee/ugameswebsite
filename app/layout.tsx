@@ -10,6 +10,7 @@ import ThemeScript from './components/ThemeScript'
 import BottomNav from './components/BottomNav'
 import DynamicComponents from './components/DynamicComponents'
 import ReferralListener from './components/ReferralListener'
+import { Analytics } from "@vercel/analytics/next"
 
 // Next.js Font Optimization - Self-hosted, no render blocking
 const inter = Inter({
