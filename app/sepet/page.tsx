@@ -7,6 +7,65 @@ import { useCart } from '../../context/CartContext'
 export default function CartPage() {
     const { cart, removeFromCart, cartTotal, clearCart } = useCart()
     const [loading, setLoading] = useState(false)
+    const [couponCode, setCouponCode] = useState('')
+    const [couponStatus, setCouponStatus] = useState<'idle' | 'validating' | 'valid' | 'invalid'>('idle')
+    const [couponMessage, setCouponMessage] = useState('')
+    const [discountAmount, setDiscountAmount] = useState(0)
+
+    // Load referral code from localStorage on mount
+    React.useEffect(() => {
+        const storedRef = localStorage.getItem('referral_code')
+        if (storedRef) {
+            setCouponCode(storedRef)
+            validateCoupon(storedRef)
+        }
+    }, [])
+
+    const validateCoupon = async (code: string) => {
+        if (!code) return
+        setCouponStatus('validating')
+        setCouponMessage('Kontrol ediliyor...')
+
+        try {
+            const res = await fetch('/api/validate-coupon', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ code })
+            })
+            const data = await res.json()
+
+            if (data.valid) {
+                setCouponStatus('valid')
+                setCouponMessage(`%${data.amount} indirim uygulandı! (${data.description})`)
+
+                // Calculate discount
+                if (data.discount_type === 'percent') {
+                    const discount = cartTotal * (parseFloat(data.amount) / 100)
+                    setDiscountAmount(discount)
+                } else if (data.discount_type === 'fixed_cart') {
+                    setDiscountAmount(parseFloat(data.amount))
+                } else if (data.discount_type === 'fixed_product') {
+                    // Calculate based on matching items
+                    let totalDiscount = 0
+                    cart.forEach(item => {
+                        // Check if item is in the allowed product list for this coupon
+                        if (data.product_ids && data.product_ids.includes(item.id)) {
+                            totalDiscount += parseFloat(data.amount) * item.quantity
+                        }
+                    })
+                    setDiscountAmount(totalDiscount)
+                }
+            } else {
+                setCouponStatus('invalid')
+                setCouponMessage(data.message)
+                setDiscountAmount(0)
+            }
+        } catch (error) {
+            setCouponStatus('invalid')
+            setCouponMessage('Hata oluştu')
+            setDiscountAmount(0)
+        }
+    }
 
     const [formData, setFormData] = useState({
         first_name: '',
@@ -59,7 +118,8 @@ export default function CartPage() {
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({
                     items: cart,
-                    customer: customer
+                    customer: customer,
+                    couponCode: couponCode || undefined
                 })
             })
 
@@ -385,9 +445,53 @@ export default function CartPage() {
                             <span>₺{cartTotal.toFixed(2)}</span>
                         </div>
 
+                        {/* Coupon Code Input */}
+                        <div className="mb-4">
+                            <label className="block text-sm font-medium mb-1.5" style={{ color: 'var(--text)' }}>
+                                İndirim Kodu
+                            </label>
+                            <div className="flex gap-2">
+                                <input
+                                    type="text"
+                                    value={couponCode}
+                                    onChange={(e) => {
+                                        setCouponCode(e.target.value)
+                                        setCouponStatus('idle')
+                                        setDiscountAmount(0)
+                                    }}
+                                    placeholder="Kupon giriniz"
+                                    className="flex-1 border rounded px-3 py-2 text-sm uppercase"
+                                    style={{ background: 'var(--bg)', borderColor: 'var(--border)', color: 'var(--text)' }}
+                                />
+                                <button
+                                    onClick={() => validateCoupon(couponCode)}
+                                    disabled={couponStatus === 'validating' || !couponCode}
+                                    className="px-4 py-2 rounded text-sm font-bold bg-gray-200 hover:bg-gray-300 text-black transition-colors"
+                                >
+                                    {couponStatus === 'validating' ? '...' : 'Uygula'}
+                                </button>
+                            </div>
+
+                            {/* Coupon Status Message */}
+                            {couponMessage && (
+                                <p className={`text-xs mt-1.5 ${couponStatus === 'valid' ? 'text-green-500' :
+                                    couponStatus === 'invalid' ? 'text-red-500' : 'text-gray-500'
+                                    }`}>
+                                    {couponStatus === 'valid' ? '✓ ' : ''}{couponMessage}
+                                </p>
+                            )}
+                        </div>
+
+                        {discountAmount > 0 && (
+                            <div className="flex justify-between items-center mb-4 text-green-500">
+                                <span>İndirim</span>
+                                <span>-₺{discountAmount.toFixed(2)}</span>
+                            </div>
+                        )}
+
                         <div className="border-t pt-4 mb-6 flex justify-between items-center font-bold text-xl">
                             <span>Toplam</span>
-                            <span>₺{cartTotal.toFixed(2)}</span>
+                            <span>₺{(cartTotal - discountAmount).toFixed(2)}</span>
                         </div>
 
                         <button

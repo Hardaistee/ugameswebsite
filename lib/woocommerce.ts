@@ -184,4 +184,16 @@ export const getOrder = async (orderId: number) => {
     }
 };
 
+export const getCoupon = async (code: string) => {
+    try {
+        const response = await api.get("coupons", {
+            code: code,
+        });
+        return response.data[0] || null;
+    } catch (error) {
+        console.error("WooCommerce getCoupon Error:", error);
+        return null;
+    }
+};
+
 export default api;

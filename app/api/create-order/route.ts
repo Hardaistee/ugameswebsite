@@ -4,7 +4,7 @@ import { createOrder } from '../../../lib/woocommerce'
 export async function POST(request: Request) {
     try {
         const body = await request.json()
-        const { items, customer } = body
+        const { items, customer, couponCode } = body
 
         if (!items || items.length === 0) {
             return NextResponse.json({ error: 'Cart is empty' }, { status: 400 })
@@ -52,7 +52,12 @@ export async function POST(request: Request) {
                 product_id: item.id,
                 quantity: item.quantity
             })),
-            customer_note: "Order created via Headless Frontend"
+            customer_note: "Order created via Headless Frontend",
+            coupon_lines: couponCode ? [
+                {
+                    code: couponCode
+                }
+            ] : []
         }
 
         const order = await createOrder(orderData)

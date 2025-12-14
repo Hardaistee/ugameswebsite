@@ -1,5 +1,6 @@
 import type { Metadata } from 'next'
 import { Inter } from 'next/font/google'
+import { Suspense } from 'react'
 import './globals.css'
 import { CartProvider } from '../context/CartContext'
 import { AuthProvider } from '../context/AuthContext'
@@ -8,6 +9,7 @@ import Footer from './components/Footer'
 import ThemeScript from './components/ThemeScript'
 import BottomNav from './components/BottomNav'
 import DynamicComponents from './components/DynamicComponents'
+import ReferralListener from './components/ReferralListener'
 
 // Next.js Font Optimization - Self-hosted, no render blocking
 const inter = Inter({
@@ -101,6 +103,9 @@ export default function RootLayout({
                         <Footer />
                         <BottomNav />
                         <DynamicComponents />
+                        <Suspense fallback={null}>
+                            <ReferralListener />
+                        </Suspense>
                     </CartProvider>
                 </AuthProvider>
             </body>
