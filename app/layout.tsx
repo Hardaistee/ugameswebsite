@@ -107,6 +107,7 @@ export default function RootLayout({
                         <Suspense fallback={null}>
                             <ReferralListener />
                         </Suspense>
+                        <Analytics />
                     </CartProvider>
                 </AuthProvider>
             </body>
