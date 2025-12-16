@@ -45,7 +45,63 @@ export default function ClientGamesPage({ categorizedProducts }: ClientGamesPage
                     </FadeIn>
                 )}
 
-                {/* All Games Section - 20 Random Games */}
+                {/* App Download Banner - Slider'ın Altında */}
+                <FadeIn direction="up" delay={0.15}>
+                    <Link
+                        href="/indir"
+                        className="block mt-6 mb-4"
+                    >
+                        <div
+                            className="relative overflow-hidden rounded-xl p-3 md:p-4 border group hover:scale-[1.005] transition-all duration-300"
+                            style={{
+                                background: 'var(--surface)',
+                                borderColor: 'var(--border)'
+                            }}
+                        >
+                            {/* Background hover effect */}
+                            <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500" style={{ background: 'var(--bg)' }} />
+
+                            <div className="relative flex items-center justify-between gap-3">
+                                <div className="flex items-center gap-3">
+                                    {/* Logo */}
+                                    <div className="w-10 h-10 md:w-11 md:h-11 rounded-lg flex items-center justify-center flex-shrink-0" style={{ background: 'var(--bg)' }}>
+                                        <img
+                                            src="/images/Yeni Proje-17.png"
+                                            alt="uGames"
+                                            className="w-8 h-8 md:w-9 md:h-9 object-contain"
+                                        />
+                                    </div>
+
+                                    <div>
+                                        <div className="font-bold text-xs md:text-sm" style={{ color: 'var(--text)' }}>
+                                            Masaüstü Uygulamamız Yayında!
+                                        </div>
+                                        <div className="text-[10px] md:text-xs flex items-center gap-1.5" style={{ color: 'var(--muted)' }}>
+                                            <span>Windows</span>
+                                            <span>•</span>
+                                            <span>macOS</span>
+                                            <span>•</span>
+                                            <span>Linux</span>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                {/* CTA Button */}
+                                <div className="hidden sm:flex items-center gap-2 px-3 py-1.5 rounded-lg font-semibold text-xs group-hover:opacity-80 transition-opacity" style={{ background: 'var(--accent)', color: 'var(--accent-contrast)' }}>
+                                    <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
+                                    </svg>
+                                    Hemen İndir
+                                </div>
+
+                                {/* Mobile arrow */}
+                                <svg className="sm:hidden w-5 h-5 group-hover:translate-x-1 transition-transform" style={{ color: 'var(--accent)' }} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                                </svg>
+                            </div>
+                        </div>
+                    </Link>
+                </FadeIn>
                 <section className="mb-10 mt-8">
                     <FadeIn delay={0.1}>
                         <div className="flex items-center justify-between mb-6">

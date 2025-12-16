@@ -57,6 +57,7 @@ export default function Footer() {
               <li><Link href="/cekilisler" className="hover:underline transition-colors hover:text-[var(--accent)]">Çekilişler</Link></li>
               <li><Link href="/iletisim" className="hover:underline transition-colors hover:text-[var(--accent)]">Yardım Merkezi</Link></li>
               <li><Link href="/iletisim" className="hover:underline transition-colors hover:text-[var(--accent)]">İletişim</Link></li>
+              <li><Link href="/indir" className="hover:underline transition-colors hover:text-[var(--accent)]">📱 Uygulama İndir</Link></li>
             </ul>
           </nav>
 
