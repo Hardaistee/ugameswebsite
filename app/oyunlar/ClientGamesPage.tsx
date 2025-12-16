@@ -36,7 +36,7 @@ export default function ClientGamesPage({ categorizedProducts }: ClientGamesPage
 
     return (
         <div className="pb-24 md:pb-12" style={{ background: 'var(--bg)' }}>
-            <div className="max-w-7xl mx-auto px-4 py-6">
+            <div className="max-w-7xl mx-auto px-4 pt-1 pb-6">
 
                 {/* Featured Games Slider - En Üstte */}
                 {featured.length > 0 && (
