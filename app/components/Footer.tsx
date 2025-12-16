@@ -36,7 +36,9 @@ export default function Footer() {
                 </svg>
               </a>
               <a
-                href="#"
+                href="https://www.instagram.com/ugamescomtr/"
+                target="_blank"
+                rel="noopener noreferrer"
                 aria-label="Instagram"
                 className="w-9 h-9 flex items-center justify-center rounded-lg transition-all hover:scale-110 hover:shadow-md"
                 style={{ background: 'var(--bg)', border: '1px solid var(--border)' }}
@@ -101,6 +103,11 @@ export default function Footer() {
               {/* MasterCard Logo */}
               <div className="h-auto w-auto flex items-center justify-center rounded">
                 <img src="/images/mastercard.svg" alt="MasterCard ödeme yöntemi" width={48} height={48} className="h-12 w-12 object-contain p-1" loading="lazy" />
+              </div>
+
+              {/* Shopier Logo */}
+              <div className="h-auto w-auto flex items-center justify-center rounded">
+                <img src="/shopierlogo.png" alt="Shopier ödeme yöntemi" width={48} height={48} className="h-12 w-12 object-contain p-1" loading="lazy" />
               </div>
             </div>
           </div>
