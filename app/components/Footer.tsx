@@ -52,7 +52,7 @@ export default function Footer() {
           <div>
             <div className="font-semibold mb-4 text-sm" style={{ color: 'var(--text)' }}>Hızlı Erişim</div>
             <ul className="space-y-2.5 text-sm" style={{ color: 'var(--muted)' }}>
-              <li><Link href="/ilanlar" className="hover:underline transition-colors hover:text-[var(--accent)]">Tüm İlanlar</Link></li>
+              {/* <li><Link href="/ilanlar" className="hover:underline transition-colors hover:text-[var(--accent)]">Tüm İlanlar</Link></li> */}
               <li><Link href="/tek-oyunculu" className="hover:underline transition-colors hover:text-[var(--accent)]">Tek Oyunculu Oyunlar</Link></li>
               <li><Link href="/cekilisler" className="hover:underline transition-colors hover:text-[var(--accent)]">Çekilişler</Link></li>
               <li><Link href="/iletisim" className="hover:underline transition-colors hover:text-[var(--accent)]">Yardım Merkezi</Link></li>

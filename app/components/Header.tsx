@@ -2,14 +2,13 @@
 
 import React, { useState, useEffect } from 'react'
 import Link from 'next/link'
-import { useRouter, usePathname, useSearchParams } from 'next/navigation'
+import { useRouter, usePathname } from 'next/navigation'
 import MobileNav from './MobileNav'
 import Icon from './Icon'
 
 export default function Header() {
   const [open, setOpen] = useState(false)
   const [showCategoryPanel, setShowCategoryPanel] = useState(false)
-  const [showCS2Panel, setShowCS2Panel] = useState(false)
   const [mounted, setMounted] = useState(false)
   const [theme, setTheme] = useState<'dark' | 'light'>(() => {
     if (typeof window !== 'undefined') {
@@ -41,44 +40,20 @@ export default function Header() {
   }, [theme])
 
   const router = useRouter()
-  const pathname = usePathname()
 
-  // Homepage modunu kontrol et
-  const mode = process.env.NEXT_PUBLIC_HOMEPAGE_MODE || 'marketplace'
-  const isGamesPage = pathname === '/oyunlar' ||
-    pathname?.startsWith('/oyunlar') ||
-    pathname?.startsWith('/oyun-ara') ||
-    pathname?.startsWith('/oyun/') ||
-    pathname?.startsWith('/odeme/') ||
-    (mode === 'games_only' && pathname === '/')
-
-  // Sayfa moduna ve games_only ayarına göre kategoriler
-  const categories = (isGamesPage || mode === 'games_only') ? [
+  // Sadece oyun kategorileri
+  const categories = [
     { name: 'PC Oyunları', path: '/oyun-ara?platform=pc', icon: 'gamepad', color: 'from-blue-500 to-cyan-500' },
     { name: 'PlayStation Oyunları', path: '/oyun-ara?platform=playstation', icon: 'gamepad', color: 'from-blue-500 to-indigo-500' },
     { name: 'Xbox Oyunları', path: '/oyun-ara?platform=xbox', icon: 'gamepad', color: 'from-green-500 to-emerald-500' },
     { name: 'İndirimdeki Oyunlar', path: '/oyun-ara?category=discounted', icon: 'fire', color: 'from-red-500 to-orange-500' },
     { name: 'Çok Satanlar', path: '/oyun-ara?category=bestsellers', icon: 'crown', color: 'from-yellow-500 to-orange-500' }
-  ] : [
-    { name: 'Sosyal Medya', path: '/ilanlar?category=sosyal-medya', icon: 'mobile', color: 'from-pink-500 to-rose-500' },
-    { name: 'PUBG', path: '/ilanlar?category=pubg', icon: 'gamepad', color: 'from-orange-500 to-red-500' },
-    { name: 'Valorant', path: '/ilanlar?category=valorant', icon: 'valorant', color: 'from-red-500 to-pink-500' },
-    { name: 'LoL', path: '/ilanlar?category=lol', icon: 'sword', color: 'from-blue-500 to-cyan-500' },
-    { name: 'CS2', path: '/ilanlar?category=cs2', icon: 'gun', color: 'from-gray-600 to-gray-800' },
-    { name: 'İlan Pazarı', path: '/ilan-pazari', icon: 'shop', color: 'from-teal-500 to-cyan-500' },
-    { name: 'Günün Fırsatları', path: '/ilanlar?badge=Günün Fırsatı', icon: 'fire', color: 'from-yellow-500 to-orange-500' },
-    { name: 'Çekilişler', path: '/cekilisler', icon: 'gift', color: 'from-green-500 to-emerald-500' }
   ]
 
   function onSearchSubmit(e: React.KeyboardEvent<HTMLInputElement>) {
     if (e.key === 'Enter') {
       const q = (e.target as HTMLInputElement).value.trim()
-      // Oyun sayfasındaysa oyun arama sayfasına yönlendir
-      if (isGamesPage) {
-        router.push(`/oyun-ara${q ? `?search=${encodeURIComponent(q)}` : ''}`)
-      } else {
-        router.push(`/ilanlar${q ? `?search=${encodeURIComponent(q)}` : ''}`)
-      }
+      router.push(`/oyun-ara${q ? `?search=${encodeURIComponent(q)}` : ''}`)
     }
   }
 
@@ -107,7 +82,7 @@ export default function Header() {
           <div className="hidden lg:block flex-1 px-4">
             <input
               aria-label="Ara"
-              placeholder="Arama yapın..."
+              placeholder="Oyun ara..."
               onKeyDown={onSearchSubmit}
               className="w-full border rounded px-3 py-2"
               style={{ background: 'var(--bg)', borderColor: 'var(--border)', color: 'var(--text)' }}
@@ -140,7 +115,7 @@ export default function Header() {
         <div className="lg:hidden px-4 py-3 border-t" style={{ borderColor: 'var(--border)' }}>
           <input
             aria-label="Ara"
-            placeholder={isGamesPage ? "Oyun ara..." : "Ara..."}
+            placeholder="Oyun ara..."
             onKeyDown={onSearchSubmit}
             className="w-full border rounded-lg px-4 py-2.5 text-sm"
             style={{ background: 'var(--bg)', borderColor: 'var(--border)', color: 'var(--text)' }}
@@ -243,26 +218,13 @@ export default function Header() {
                           <div className="flex-1 relative z-10">
                             <div className="font-semibold text-sm">{cat.name}</div>
                             <div className="text-xs mt-0.5" style={{ color: 'var(--muted)' }}>
-                              {isGamesPage ? (
-                                <>
-                                  {cat.name === 'PC Oyunları' && 'Steam, Epic Games, Origin'}
-                                  {cat.name === 'PlayStation Oyunları' && 'PS4, PS5 Oyunları'}
-                                  {cat.name === 'Xbox Oyunları' && 'Xbox One, Series X/S'}
-                                  {cat.name === 'İndirimdeki Oyunlar' && 'Sınırlı Süreli İndirimler'}
-                                  {cat.name === 'Çok Satanlar' && 'En Popüler Oyunlar'}
-                                </>
-                              ) : (
-                                <>
-                                  {cat.name === 'Sosyal Medya' && 'Instagram, TikTok, Twitter'}
-                                  {cat.name === 'PUBG' && 'UC, Hesaplar, Skinler'}
-                                  {cat.name === 'Valorant' && 'VP, Hesaplar, Skinler'}
-                                  {cat.name === 'LoL' && 'RP, Hesaplar, Skinler'}
-                                  {cat.name === 'CS2' && 'Hesaplar, Skinler, Prime'}
-                                  {cat.name === 'İlan Pazarı' && 'Tüm İlanlar'}
-                                  {cat.name === 'Günün Fırsatları' && 'Sınırlı Süreli İndirimler'}
-                                  {cat.name === 'Çekilişler' && 'Ücretsiz Kazanç Fırsatları'}
-                                </>
-                              )}
+
+                              {cat.name === 'PC Oyunları' && 'Steam, Epic Games, Origin'}
+                              {cat.name === 'PlayStation Oyunları' && 'PS4, PS5 Oyunları'}
+                              {cat.name === 'Xbox Oyunları' && 'Xbox One, Series X/S'}
+                              {cat.name === 'İndirimdeki Oyunlar' && 'Sınırlı Süreli İndirimler'}
+                              {cat.name === 'Çok Satanlar' && 'En Popüler Oyunlar'}
+
                             </div>
                           </div>
 
@@ -275,14 +237,14 @@ export default function Header() {
 
                     <div className="p-3 border-t" style={{ borderColor: 'var(--border)', background: 'var(--bg)' }}>
                       <Link
-                        href={isGamesPage ? "/oyunlar" : "/ilanlar"}
+                        href="/oyunlar"
                         className="block text-center py-2.5 px-4 rounded-lg font-semibold text-sm transition-all hover:scale-[1.02] hover:shadow-lg"
                         style={{
                           background: 'var(--accent)',
                           color: theme === 'dark' ? '#1a1a1a' : 'white'
                         }}
                       >
-                        {isGamesPage ? 'Tüm Oyunları Gör →' : 'Tüm İlanları Gör →'}
+                        Tüm Oyunları Gör →
                       </Link>
                     </div>
                   </div>
@@ -291,124 +253,6 @@ export default function Header() {
 
               {/* Tüm Kategoriler - Orijinal linkler */}
               {categories.map((cat) => {
-                // CS2 için özel dropdown - sadece ilan pazarı sayfalarında
-                if (cat.name === 'CS2' && !isGamesPage) {
-                  return (
-                    <div
-                      key={cat.name}
-                      className="relative"
-                      onMouseEnter={() => setShowCS2Panel(true)}
-                      onMouseLeave={() => setShowCS2Panel(false)}
-                    >
-                      <button
-                        className="flex items-center gap-1.5 px-3 py-2 rounded-lg whitespace-nowrap text-sm font-medium transition-all hover:scale-105 relative overflow-hidden group"
-                        style={{ color: 'var(--text)', background: showCS2Panel ? 'var(--surface)' : 'transparent' }}
-                      >
-                        <div className={`absolute inset-0 bg-gradient-to-r ${cat.color} opacity-0 group-hover:opacity-10 transition-opacity`} />
-                        <Icon name={cat.icon} className="w-4 h-4 relative z-10" style={{ color: 'var(--accent)' }} />
-                        <span className="relative z-10">{cat.name}</span>
-                        <svg className={`w-3 h-3 relative z-10 transition-transform ${showCS2Panel ? 'rotate-180' : ''}`} fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
-                        </svg>
-                      </button>
-
-                      {/* CS2 Dropdown Panel */}
-                      {showCS2Panel && (
-                        <div
-                          className="absolute top-full left-0 mt-0.5 w-72 rounded-lg shadow-2xl border overflow-hidden z-50 animate-slide-in"
-                          style={{
-                            background: 'var(--surface)',
-                            borderColor: 'var(--border)'
-                          }}
-                        >
-                          <div className="p-3 border-b" style={{ borderColor: 'var(--border)', background: 'var(--bg)' }}>
-                            <h3 className="font-bold text-sm flex items-center gap-2" style={{ color: 'var(--text)' }}>
-                              <Icon name="gun" className="w-4 h-4" style={{ color: 'var(--accent)' }} />
-                              CS2 Kategorileri
-                            </h3>
-                          </div>
-                          <div className="p-2">
-                            <Link
-                              href="/cs2-skin-pazari"
-                              className="flex items-center gap-3 px-3 py-2.5 rounded-lg transition-all hover:scale-[1.02] relative overflow-hidden group"
-                              style={{ color: 'var(--text)' }}
-                              onMouseEnter={(e) => {
-                                e.currentTarget.style.background = 'var(--bg)'
-                              }}
-                              onMouseLeave={(e) => {
-                                e.currentTarget.style.background = 'transparent'
-                              }}
-                            >
-                              <div
-                                className="w-9 h-9 rounded-lg flex items-center justify-center shadow-sm"
-                                style={{
-                                  background: theme === 'dark' ? 'rgba(255, 255, 255, 0.1)' : 'rgba(0, 0, 0, 0.06)'
-                                }}
-                              >
-                                <Icon name="gun" className="w-5 h-5" style={{ color: 'var(--accent)' }} />
-                              </div>
-                              <div className="flex-1">
-                                <div className="font-semibold text-sm">CS2 Skin Pazarı</div>
-                                <div className="text-xs" style={{ color: 'var(--muted)' }}>Silah skinleri</div>
-                              </div>
-                            </Link>
-
-                            <Link
-                              href="/cs2-hesap"
-                              className="flex items-center gap-3 px-3 py-2.5 rounded-lg transition-all hover:scale-[1.02] relative overflow-hidden group"
-                              style={{ color: 'var(--text)' }}
-                              onMouseEnter={(e) => {
-                                e.currentTarget.style.background = 'var(--bg)'
-                              }}
-                              onMouseLeave={(e) => {
-                                e.currentTarget.style.background = 'transparent'
-                              }}
-                            >
-                              <div
-                                className="w-9 h-9 rounded-lg flex items-center justify-center shadow-sm"
-                                style={{
-                                  background: theme === 'dark' ? 'rgba(255, 255, 255, 0.1)' : 'rgba(0, 0, 0, 0.06)'
-                                }}
-                              >
-                                <Icon name="user" className="w-5 h-5" style={{ color: 'var(--accent)' }} />
-                              </div>
-                              <div className="flex-1">
-                                <div className="font-semibold text-sm">CS2 Hesap</div>
-                                <div className="text-xs" style={{ color: 'var(--muted)' }}>Prime hesaplar</div>
-                              </div>
-                            </Link>
-
-                            <Link
-                              href="/cs2-kasa"
-                              className="flex items-center gap-3 px-3 py-2.5 rounded-lg transition-all hover:scale-[1.02] relative overflow-hidden group"
-                              style={{ color: 'var(--text)' }}
-                              onMouseEnter={(e) => {
-                                e.currentTarget.style.background = 'var(--bg)'
-                              }}
-                              onMouseLeave={(e) => {
-                                e.currentTarget.style.background = 'transparent'
-                              }}
-                            >
-                              <div
-                                className="w-9 h-9 rounded-lg flex items-center justify-center shadow-sm"
-                                style={{
-                                  background: theme === 'dark' ? 'rgba(255, 255, 255, 0.1)' : 'rgba(0, 0, 0, 0.06)'
-                                }}
-                              >
-                                <Icon name="shop" className="w-5 h-5" style={{ color: 'var(--accent)' }} />
-                              </div>
-                              <div className="flex-1">
-                                <div className="font-semibold text-sm">CS2 Kasa</div>
-                                <div className="text-xs" style={{ color: 'var(--muted)' }}>Kasalar ve anahtarlar</div>
-                              </div>
-                            </Link>
-                          </div>
-                        </div>
-                      )}
-                    </div>
-                  )
-                }
-
                 // Diğer kategoriler için normal link
                 return (
                   <Link

@@ -1,24 +1,14 @@
-'use client'
-import React, { useState, useEffect } from 'react'
-import { useRouter } from 'next/navigation'
-import gamesData from '@/app/data/games.json'
+import React from 'react'
+import { redirect } from 'next/navigation'
+import { getGameById } from '@/lib/games'
 
-export default function Checkout({ params }: { params: Promise<{ id: string }> }) {
-    const { id } = React.use(params)
-    const router = useRouter()
-    const [product, setProduct] = useState<any>(null)
+export default async function Checkout({ params }: { params: Promise<{ id: string }> }) {
+    const { id } = await params
 
-    useEffect(() => {
-        const game = gamesData.find((g: any) => g.id === id)
-        if (game) {
-            setProduct(game)
-        } else {
-            router.push('/tek-oyunculu')
-        }
-    }, [id, router])
+    const product = await getGameById(id)
 
     if (!product) {
-        return <div style={{ background: 'var(--bg)', minHeight: '100vh' }} />
+        redirect('/oyunlar')
     }
 
     return (
@@ -146,7 +136,7 @@ export default function Checkout({ params }: { params: Promise<{ id: string }> }
                             <div className="mb-6">
                                 <div className="aspect-video rounded-lg overflow-hidden mb-4">
                                     <img
-                                        src={product.images?.[0]}
+                                        src={product.images?.[0] || product.image}
                                         alt={product.title}
                                         className="w-full h-full object-cover"
                                     />
@@ -158,7 +148,7 @@ export default function Checkout({ params }: { params: Promise<{ id: string }> }
                                     <span className="px-2 py-1 rounded text-xs font-medium" style={{ background: 'var(--bg)' }}>
                                         {product.platform}
                                     </span>
-                                    {product.discount > 0 && (
+                                    {product.discount && product.discount > 0 && (
                                         <span className="bg-red-500 text-white px-2 py-1 rounded text-xs font-bold">
                                             -{product.discount}%
                                         </span>

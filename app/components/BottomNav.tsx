@@ -29,10 +29,7 @@ export default function BottomNav() {
         if (e.key === 'Enter') {
             const query = (e.target as HTMLInputElement).value.trim()
             if (query) {
-                // Homepage modunu kontrol et
-                const mode = process.env.NEXT_PUBLIC_HOMEPAGE_MODE || 'marketplace'
-                const searchPath = mode === 'games_only' ? '/oyun-ara' : '/ilanlar'
-                router.push(`${searchPath}?search=${encodeURIComponent(query)}`)
+                router.push(`/oyun-ara?search=${encodeURIComponent(query)}`)
                 setShowSearch(false)
             }
         }

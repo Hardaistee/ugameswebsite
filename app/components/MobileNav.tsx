@@ -6,7 +6,6 @@ import Icon from './Icon'
 
 export default function MobileNav({ open, onClose }: { open: boolean, onClose: () => void }) {
   const pathname = usePathname()
-  const mode = process.env.NEXT_PUBLIC_HOMEPAGE_MODE || 'multiple'
 
   // Theme detection
   const [theme, setTheme] = useState<'dark' | 'light'>('dark')
@@ -18,15 +17,7 @@ export default function MobileNav({ open, onClose }: { open: boolean, onClose: (
     }
   }, [])
 
-  // Context-aware kategoriler - oyun veya pazaryeri sayfasına göre
-  const isGamesPage = pathname === '/oyunlar' ||
-    pathname?.startsWith('/oyunlar') ||
-    pathname?.startsWith('/oyun-ara') ||
-    pathname?.startsWith('/oyun/') ||
-    pathname?.startsWith('/odeme/') ||
-    (mode === 'games_only' && pathname === '/')
-
-  const gameCategories = [
+  const categories = [
     { name: 'Anasayfa', path: '/oyunlar', icon: 'home', color: 'from-blue-500 to-cyan-500' },
     { name: 'PC Oyunları', path: '/oyun-ara?platform=pc', icon: 'gamepad', color: 'from-blue-500 to-cyan-500' },
     { name: 'PlayStation Oyunları', path: '/oyun-ara?platform=playstation', icon: 'gamepad', color: 'from-blue-500 to-indigo-500' },
@@ -34,21 +25,6 @@ export default function MobileNav({ open, onClose }: { open: boolean, onClose: (
     { name: 'İndirimdeki Oyunlar', path: '/oyun-ara?category=discounted', icon: 'fire', color: 'from-red-500 to-orange-500' },
     { name: 'Çok Satanlar', path: '/oyun-ara?category=bestsellers', icon: 'crown', color: 'from-yellow-500 to-orange-500' }
   ]
-
-  const marketplaceCategories = [
-    { name: 'Anasayfa', path: '/pazaryeri', icon: 'home', color: 'from-pink-500 to-rose-500' },
-    { name: 'Sosyal Medya', path: '/ilanlar?category=sosyal-medya', icon: 'mobile', color: 'from-pink-500 to-rose-500' },
-    { name: 'PUBG', path: '/ilanlar?category=pubg', icon: 'gamepad', color: 'from-orange-500 to-red-500' },
-    { name: 'Valorant', path: '/ilanlar?category=valorant', icon: 'target', color: 'from-red-500 to-pink-500' },
-    { name: 'LoL', path: '/ilanlar?category=lol', icon: 'sword', color: 'from-blue-500 to-cyan-500' },
-    { name: 'CS2', path: '/ilanlar?category=cs2', icon: 'gun', color: 'from-gray-600 to-gray-800' },
-    { name: 'İlan Pazari', path: '/ilan-pazari', icon: 'shop', color: 'from-teal-500 to-cyan-500' },
-    { name: 'Günün Fırsatları', path: '/ilanlar?badge=Günün Fırsatı', icon: 'fire', color: 'from-yellow-500 to-orange-500' },
-    { name: 'Çekilisler', path: '/cekilisler', icon: 'gift', color: 'from-green-500 to-emerald-500' }
-  ]
-
-  // games_only modunda sadece oyun kategorileri, multiple modunda sayfa bazlı
-  const categories = (mode === 'games_only' || isGamesPage) ? gameCategories : marketplaceCategories
 
   // Early return AFTER all hooks
   if (!open) return null
@@ -100,49 +76,10 @@ export default function MobileNav({ open, onClose }: { open: boolean, onClose: (
           </div>
         </div>
 
-        {/* Page Selector - Sadece multiple modda göster */}
-        {mode === 'multiple' && (
-          <div className="px-6 py-4 border-b" style={{ borderColor: 'var(--border)' }}>
-            <div className="text-xs font-bold mb-3" style={{ color: 'var(--muted)' }}>SAYFA SEÇİMİ</div>
-            <div className="grid grid-cols-2 gap-2">
-              <Link
-                href="/oyunlar"
-                onClick={onClose}
-                className={`px-4 py-3 rounded-lg font-semibold text-sm text-center transition-all ${isGamesPage ? 'shadow-lg' : 'opacity-70'}`}
-                style={isGamesPage ? {
-                  background: 'var(--accent)',
-                  color: 'var(--bg)'
-                } : {
-                  background: 'var(--surface)',
-                  color: 'var(--text)',
-                  border: '1px solid var(--border)'
-                }}
-              >
-                Oyunlar
-              </Link>
-              <Link
-                href="/pazaryeri"
-                onClick={onClose}
-                className={`px-4 py-3 rounded-lg font-semibold text-sm text-center transition-all ${!isGamesPage ? 'shadow-lg' : 'opacity-70'}`}
-                style={!isGamesPage ? {
-                  background: 'var(--accent)',
-                  color: 'var(--bg)'
-                } : {
-                  background: 'var(--surface)',
-                  color: 'var(--text)',
-                  border: '1px solid var(--border)'
-                }}
-              >
-                Pazaryeri
-              </Link>
-            </div>
-          </div>
-        )}
-
         {/* Categories */}
         <div className="px-6 py-4">
           <div className="text-xs font-bold mb-3" style={{ color: 'var(--muted)' }}>
-            {isGamesPage ? 'OYUN KATEGORİLERİ' : 'PAZARYERI KATEGORİLERİ'}
+            OYUN KATEGORİLERİ
           </div>
           <nav className="flex flex-col gap-1">
             {categories.map((cat) => {

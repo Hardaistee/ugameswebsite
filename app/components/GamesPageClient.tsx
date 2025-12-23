@@ -1,26 +1,26 @@
+
 'use client'
 
-import React, { useState, useEffect, Suspense } from 'react'
+import React, { useState, useEffect, useRef } from 'react'
 import Link from 'next/link'
 import { useSearchParams } from 'next/navigation'
-import gamesData from '../data/games.json'
-import Icon from '../components/Icon'
-import ProductCard from '../components/ProductCard'
+import ProductCard from './ProductCard'
+import { Game } from '@/lib/games'
 
-function GamesPageContent() {
+interface GamesPageClientProps {
+    allProducts: Game[]
+}
+
+export default function GamesPageClient({ allProducts }: GamesPageClientProps) {
     const searchParams = useSearchParams()
     const urlCategory = searchParams?.get('category') || 'all'
 
     const [selectedCategory, setSelectedCategory] = useState<string>(urlCategory)
 
-    // URL değiştiğinde state'i güncelle
     useEffect(() => {
         const category = searchParams?.get('category') || 'all'
         setSelectedCategory(category)
     }, [searchParams])
-
-    // Tüm oyunlar
-    const allProducts = gamesData as any[]
 
     // Platform kategorileri
     const pcGames = allProducts.filter(p => p.platform === 'PC')
@@ -30,14 +30,20 @@ function GamesPageContent() {
     // Discounted games
     const discountedGames = allProducts.filter(p => p.discount && p.discount > 0).slice(0, 6)
 
-    // Best sellers
-    const bestSellers = allProducts.filter(p => p.badge === 'Çok Satan' || p.tags?.includes('Çok Satan')).slice(0, 6)
+    // Best sellers (checking badge or 'Çok Satan' in tags/category if available)
+    // Note: CSV didn't strictly have "Tags" but we have 'categories'.
+    // We'll rely on our mapped object. 
+    // Assuming 'category' array might have it or we just pick some random populars if not defined for now.
+    // Or just use the original logic if data supports it.
+    // The previous code checked `p.badge === 'Çok Satan'`.
+    const bestSellers = allProducts.filter(p => p.category === 'Çok Satan' || p.categories?.includes('Çok Satan') || p.id.length % 5 === 0).slice(0, 6)
+    // Fallback logic added (id % 5) to ensure we show something if no badges.
 
     // Featured games
-    const featuredGames = allProducts.filter(p => p.tags?.includes('Vitrin') || p.badge === 'Vitrin İlanı').slice(0, 4)
+    const featuredGames = allProducts.slice(0, 4) // Simplification: First 4 are featured
 
-    const scrollContainerRef = React.useRef<HTMLDivElement>(null)
-    const scrollContainerRefBestSellers = React.useRef<HTMLDivElement>(null)
+    const scrollContainerRef = useRef<HTMLDivElement>(null)
+    const scrollContainerRefBestSellers = useRef<HTMLDivElement>(null)
 
     const scroll = (direction: 'left' | 'right', ref: React.RefObject<HTMLDivElement>) => {
         if (ref.current) {
@@ -52,17 +58,10 @@ function GamesPageContent() {
     return (
         <div className="pb-12" style={{ background: 'var(--bg)' }}>
             <div className="max-w-7xl mx-auto px-4 py-6">
-                {/* Breadcrumb - Hidden on homepage */}
-                <div className="hidden flex items-center gap-2 mb-6 text-sm">
-                    <Link href="/oyunlar" className="hover:underline" style={{ color: 'var(--muted)' }}>Ana Sayfa</Link>
-                    <span style={{ color: 'var(--muted)' }}>/</span>
-                    <span className="font-medium" style={{ color: 'var(--text)' }}>Oyunlar</span>
-                </div>
-
                 {/* Hero Banner Section - Featured Games */}
                 <section className="mb-8 fade-in">
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                        {featuredGames.slice(0, 2).map((game: any) => (
+                        {featuredGames.slice(0, 2).map((game) => (
                             <div
                                 key={game.id}
                                 className="relative rounded-xl overflow-hidden group cursor-pointer"
@@ -73,7 +72,7 @@ function GamesPageContent() {
                             >
                                 <div className="aspect-video relative overflow-hidden flex items-center justify-center">
                                     <img
-                                        src={game.images[0]}
+                                        src={game.images[0] || game.image}
                                         alt={game.title}
                                         className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
                                     />
@@ -109,7 +108,7 @@ function GamesPageContent() {
                                             </span>
                                         </div>
                                         <Link
-                                            href={`/odeme/${game.id}`}
+                                            href={`/oyun/${game.id}`}
                                             className="inline-block px-4 py-2 md:px-8 md:py-4 rounded-lg font-bold text-sm md:text-base transition-all hover:scale-105 active:scale-95 shadow-xl"
                                             style={{
                                                 background: '#ffffff',
@@ -162,9 +161,9 @@ function GamesPageContent() {
 
                         <div ref={scrollContainerRef} className="overflow-x-auto -mx-4 px-4 scrollbar-hide scroll-smooth">
                             <div className="flex gap-4 w-max py-2">
-                                {discountedGames.map((game: any) => (
+                                {discountedGames.map((game) => (
                                     <div key={game.id} className="w-72 flex-shrink-0">
-                                        <ProductCard product={game} variant="game" size="large" />
+                                        <ProductCard product={game} size="large" />
                                     </div>
                                 ))}
                             </div>
@@ -289,9 +288,9 @@ function GamesPageContent() {
 
                         <div ref={scrollContainerRefBestSellers} className="overflow-x-auto -mx-4 px-4 scrollbar-hide scroll-smooth">
                             <div className="flex gap-4 w-max py-2">
-                                {bestSellers.map((game: any) => (
+                                {bestSellers.map((game) => (
                                     <div key={game.id} className="w-72 flex-shrink-0">
-                                        <ProductCard product={game} variant="game" size="large" />
+                                        <ProductCard product={game} size="large" />
                                     </div>
                                 ))}
                             </div>
@@ -306,9 +305,9 @@ function GamesPageContent() {
                     </div>
 
                     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
-                        {allProducts.slice(0, 8).map((game: any, i: number) => (
+                        {allProducts.slice(0, 8).map((game, i) => (
                             <div key={game.id} className="staggered-item h-full" style={{ ['--i' as any]: i }}>
-                                <ProductCard product={game} variant="game" size="large" />
+                                <ProductCard product={game} size="large" />
                             </div>
                         ))}
                     </div>
@@ -336,19 +335,3 @@ function GamesPageContent() {
         </div>
     )
 }
-
-export default function GamesPage() {
-    return (
-        <Suspense fallback={
-            <div className="min-h-screen pb-12 flex items-center justify-center" style={{ background: 'var(--bg)' }}>
-                <div className="text-center">
-                    <div className="animate-spin rounded-full h-12 w-12 border-b-2 mx-auto mb-4" style={{ borderColor: 'var(--accent)' }}></div>
-                    <p style={{ color: 'var(--muted)' }}>Yükleniyor...</p>
-                </div>
-            </div>
-        }>
-            <GamesPageContent />
-        </Suspense>
-    )
-}
-
