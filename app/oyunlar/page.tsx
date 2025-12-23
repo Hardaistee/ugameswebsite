@@ -1,6 +1,6 @@
 import React, { Suspense } from 'react'
 import ClientGamesPage from './ClientGamesPage'
-import { getAllProducts, getBestSellers } from '../../lib/woocommerce'
+import { getAllProducts, getBestSellers } from '../../lib/products'
 import FeaturedSliderSkeleton from '../components/FeaturedSliderSkeleton'
 import { ProductGridSkeleton } from '../components/ProductCardSkeleton'
 

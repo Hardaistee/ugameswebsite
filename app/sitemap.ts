@@ -1,5 +1,5 @@
 import { MetadataRoute } from 'next'
-import { getAllProducts } from '../lib/woocommerce'
+import { getAllProducts } from '../lib/products'
 
 export const revalidate = 3600 // Her 1 saatte bir yenile
 

@@ -1,78 +1,75 @@
 import { NextResponse } from 'next/server'
-import { createOrder } from '../../../lib/woocommerce'
+import { API_CONFIG } from '../../../lib/api-config'
 
+/**
+ * Shopier Checkout Başlat
+ * POST /api/checkout
+ * 
+ * Frontend'den gelen sepet verilerini backend'e yönlendirir.
+ * Backend Shopier ödeme formunu oluşturur.
+ */
 export async function POST(request: Request) {
     try {
         const body = await request.json()
-        const { items, customer, couponCode } = body
+        const { items, customer, total, couponCode } = body
 
         if (!items || items.length === 0) {
             return NextResponse.json({ error: 'Cart is empty' }, { status: 400 })
         }
 
-        // Prepare billing/shipping data
-        // Use provided customer data from frontend, or fallback to sensible defaults for testing
-        const billingData = customer ? {
-            first_name: customer.first_name,
-            last_name: customer.last_name,
-            address_1: customer.address_1,
-            address_2: customer.address_2 || "",
-            city: customer.city,
-            state: customer.state || customer.city,
-            postcode: customer.postcode || "34000",
-            country: customer.country || "TR",
-            email: customer.email,
-            phone: customer.phone
-        } : {
-            first_name: "Misafir",
-            last_name: "Kullanıcı",
-            address_1: "Merkez Mah. Ataturk Cad. No:1",
-            address_2: "",
-            city: "Sisli",
-            state: "Istanbul",
-            postcode: "34000",
-            country: "TR",
-            email: `guest_${Date.now()}@ugames.com.tr`,
-            phone: "05555555555"
+        if (!customer || !customer.email) {
+            return NextResponse.json({ error: 'Customer email required' }, { status: 400 })
         }
 
-        const ip = request.headers.get('x-forwarded-for') || '176.88.23.172'
-        const userAgent = request.headers.get('user-agent') || 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36'
+        // Backend'e checkout isteği gönder
+        const response = await fetch(`${API_CONFIG.BACKEND_URL}/api/checkout`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                items: items.map((item: any) => ({
+                    id: item.id,
+                    name: item.name || item.title,
+                    price: item.price,
+                    quantity: item.quantity || 1
+                })),
+                customer: {
+                    email: customer.email,
+                    first_name: customer.first_name || customer.name?.split(' ')[0] || '',
+                    last_name: customer.last_name || customer.name?.split(' ').slice(1).join(' ') || '',
+                    phone: customer.phone || '',
+                    address: customer.address_1 || customer.address || '',
+                    city: customer.city || 'İstanbul',
+                    postcode: customer.postcode || '34000'
+                },
+                total: total || items.reduce((sum: number, item: any) => {
+                    return sum + (parseFloat(item.price) * (item.quantity || 1))
+                }, 0)
+            }),
+        })
 
-        // Prepare order data for WooCommerce
-        const orderData = {
-            set_paid: false,
-            status: 'pending',
-            customer_id: 0, // Force guest
-            customer_ip_address: ip,
-            customer_user_agent: userAgent,
-            billing: billingData,
-            shipping: billingData, // Use same for shipping for digital goods
-            line_items: items.map((item: any) => ({
-                product_id: item.id,
-                quantity: item.quantity
-            })),
-            customer_note: "Order created via Headless Frontend",
-            coupon_lines: couponCode ? [
-                {
-                    code: couponCode
-                }
-            ] : []
+        if (!response.ok) {
+            const error = await response.json()
+            return NextResponse.json(
+                { error: 'Checkout failed', details: error.message || error.error },
+                { status: response.status }
+            )
         }
 
-        const order = await createOrder(orderData)
+        const data = await response.json()
 
         return NextResponse.json({
             success: true,
-            orderId: order.id,
-            orderKey: order.order_key,
-            paymentUrl: order.payment_url
+            orderId: data.orderId,
+            paymentUrl: data.paymentUrl,
+            paymentFormData: data.paymentFormData
         })
 
     } catch (error: any) {
-        console.error('Order creation failed:', error)
+        console.error('Checkout error:', error)
         return NextResponse.json(
-            { error: 'Order creation failed', details: error.message },
+            { error: 'Checkout failed', details: error.message },
             { status: 500 }
         )
     }

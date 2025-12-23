@@ -1,6 +1,6 @@
 import React, { Suspense } from 'react'
 import GameSearchClient from './GameSearchClient'
-import { getAllProducts } from '../../lib/woocommerce'
+import { getAllProducts } from '../../lib/products'
 import { ProductGridSkeleton } from '../components/ProductCardSkeleton'
 
 export const revalidate = 3600

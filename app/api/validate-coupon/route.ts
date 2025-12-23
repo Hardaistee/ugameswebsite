@@ -1,6 +1,12 @@
 import { NextResponse } from 'next/server'
-import { getCoupon } from '../../../lib/woocommerce'
 
+/**
+ * Kupon Doğrulama - Artık Desteklenmiyor
+ * POST /api/validate-coupon
+ * 
+ * WooCommerce kaldırıldığı için kupon sistemi devre dışı.
+ * İleride admin panelden kupon yönetimi eklenebilir.
+ */
 export async function POST(request: Request) {
     try {
         const { code } = await request.json()
@@ -9,28 +15,10 @@ export async function POST(request: Request) {
             return NextResponse.json({ valid: false, message: 'Kupon kodu boş olamaz.' }, { status: 400 })
         }
 
-        const coupon = await getCoupon(code)
-
-        if (!coupon) {
-            return NextResponse.json({ valid: false, message: 'Geçersiz kupon kodu.' })
-        }
-
-        // Check if expired
-        if (coupon.date_expires) {
-            const expireDate = new Date(coupon.date_expires)
-            if (expireDate < new Date()) {
-                return NextResponse.json({ valid: false, message: 'Bu kuponun süresi dolmuş.' })
-            }
-        }
-
-        // Return coupon details
+        // Kupon sistemi şu anda devre dışı
         return NextResponse.json({
-            valid: true,
-            code: coupon.code,
-            amount: coupon.amount,
-            discount_type: coupon.discount_type, // 'percent', 'fixed_cart', or 'fixed_product'
-            description: coupon.description,
-            product_ids: coupon.product_ids || []
+            valid: false,
+            message: 'Kupon sistemi şu anda kullanılamıyor.'
         })
 
     } catch (error: any) {

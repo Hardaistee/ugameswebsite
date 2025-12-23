@@ -1,5 +1,5 @@
 import { Suspense } from 'react'
-import { getProduct } from '../../../lib/woocommerce'
+import { getProduct } from '../../../lib/products'
 import ProductDetailClient from './ProductDetailClient'
 
 interface ProductPageProps {
