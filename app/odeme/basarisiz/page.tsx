@@ -1,13 +1,7 @@
-'use client'
-
-import React from 'react'
+import React, { Suspense } from 'react'
 import Link from 'next/link'
-import { useSearchParams } from 'next/navigation'
 
-export default function PaymentFailed() {
-    const searchParams = useSearchParams()
-    const orderId = searchParams?.get('orderId')
-
+function PaymentFailedContent() {
     return (
         <div className="min-h-screen flex items-center justify-center pb-12" style={{ background: 'var(--bg)' }}>
             <div className="max-w-md w-full mx-4">
@@ -27,30 +21,21 @@ export default function PaymentFailed() {
                         Ödeme işlemi tamamlanamadı. Lütfen tekrar deneyin veya farklı bir ödeme yöntemi kullanın.
                     </p>
 
-                    {orderId && (
-                        <div className="rounded-lg p-4 mb-6" style={{ background: 'var(--bg)' }}>
-                            <p className="text-sm" style={{ color: 'var(--muted)' }}>Sipariş Numarası</p>
-                            <p className="font-mono font-bold" style={{ color: 'var(--text)' }}>
-                                {orderId}
-                            </p>
-                        </div>
-                    )}
-
                     <div className="space-y-3">
-                        <button
-                            onClick={() => window.history.back()}
-                            className="block w-full py-3 rounded-lg font-semibold transition-all hover:scale-[1.02] cursor-pointer"
-                            style={{ background: 'var(--accent)', color: 'var(--bg)' }}
-                        >
-                            Tekrar Dene
-                        </button>
-
                         <Link
                             href="/"
                             className="block w-full py-3 rounded-lg font-semibold transition-all hover:scale-[1.02]"
-                            style={{ background: 'var(--bg)', color: 'var(--text)', border: '1px solid var(--border)' }}
+                            style={{ background: 'var(--accent)', color: 'var(--bg)' }}
                         >
                             Ana Sayfaya Dön
+                        </Link>
+
+                        <Link
+                            href="/oyun-ara"
+                            className="block w-full py-3 rounded-lg font-semibold transition-all hover:scale-[1.02]"
+                            style={{ background: 'var(--bg)', color: 'var(--text)', border: '1px solid var(--border)' }}
+                        >
+                            Alışverişe Devam Et
                         </Link>
                     </div>
 
@@ -60,5 +45,13 @@ export default function PaymentFailed() {
                 </div>
             </div>
         </div>
+    )
+}
+
+export default function PaymentFailed() {
+    return (
+        <Suspense fallback={<div className="min-h-screen flex items-center justify-center" style={{ background: 'var(--bg)' }}>Yükleniyor...</div>}>
+            <PaymentFailedContent />
+        </Suspense>
     )
 }
