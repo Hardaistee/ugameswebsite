@@ -79,11 +79,7 @@ export default function BottomNav() {
                 }}
             >
                 <div
-                    className="h-16"
-                    style={{
-                        display: 'grid',
-                        gridTemplateColumns: '1fr 1fr 1fr'
-                    }}
+                    className="h-16 flex items-center justify-between px-8"
                 >
                     {/* Menu Button */}
                     <button
@@ -97,16 +93,16 @@ export default function BottomNav() {
                         <span className="text-xs font-medium">Menü</span>
                     </button>
 
-                    {/* Login Button */}
+                    {/* Logo - Center */}
                     <Link
-                        href="/login"
-                        className="flex flex-col items-center justify-center gap-1 transition-all active:scale-95"
-                        style={{ color: 'var(--text)' }}
+                        href="/"
+                        className="flex items-center justify-center transition-all active:scale-95"
                     >
-                        <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11 16l-4-4m0 0l4-4m-4 4h14m-5 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h7a3 3 0 013 3v1" />
-                        </svg>
-                        <span className="text-xs font-medium">Giriş Yap</span>
+                        <img
+                            src="/images/Yeni Proje-16.png"
+                            alt="uGames"
+                            className="h-10 w-auto"
+                        />
                     </Link>
 
                     {/* Search Button */}

@@ -5,6 +5,7 @@ import Footer from './components/Footer'
 import CookieConsent from './components/CookieConsent'
 import ThemeScript from './components/ThemeScript'
 import BottomNav from './components/BottomNav'
+import SnowEffect from './components/SnowEffect'
 
 export const metadata: Metadata = {
     title: {
@@ -67,6 +68,7 @@ export default function RootLayout({
                 <ThemeScript />
             </head>
             <body>
+                <SnowEffect />
                 <div className="min-h-screen flex flex-col" style={{ background: 'var(--bg)' }}>
                     <Header />
                     <main className="flex-1 w-full pb-20 md:pb-0">
