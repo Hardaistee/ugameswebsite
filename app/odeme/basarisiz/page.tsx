@@ -1,11 +1,13 @@
+'use client'
+
 import React from 'react'
 import Link from 'next/link'
+import { useSearchParams } from 'next/navigation'
 
-export default function PaymentFailed({
-    searchParams
-}: {
-    searchParams: { orderId?: string }
-}) {
+export default function PaymentFailed() {
+    const searchParams = useSearchParams()
+    const orderId = searchParams?.get('orderId')
+
     return (
         <div className="min-h-screen flex items-center justify-center pb-12" style={{ background: 'var(--bg)' }}>
             <div className="max-w-md w-full mx-4">
@@ -25,11 +27,11 @@ export default function PaymentFailed({
                         Ödeme işlemi tamamlanamadı. Lütfen tekrar deneyin veya farklı bir ödeme yöntemi kullanın.
                     </p>
 
-                    {searchParams?.orderId && (
+                    {orderId && (
                         <div className="rounded-lg p-4 mb-6" style={{ background: 'var(--bg)' }}>
                             <p className="text-sm" style={{ color: 'var(--muted)' }}>Sipariş Numarası</p>
                             <p className="font-mono font-bold" style={{ color: 'var(--text)' }}>
-                                {searchParams.orderId}
+                                {orderId}
                             </p>
                         </div>
                     )}

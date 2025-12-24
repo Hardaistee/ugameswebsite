@@ -1,11 +1,13 @@
 import React from 'react'
 import Link from 'next/link'
 
-export default function PaymentSuccess({
+export default async function PaymentSuccess({
     searchParams
 }: {
-    searchParams: { orderId?: string }
+    searchParams: Promise<{ orderId?: string }>
 }) {
+    const params = await searchParams
+
     return (
         <div className="min-h-screen flex items-center justify-center pb-12" style={{ background: 'var(--bg)' }}>
             <div className="max-w-md w-full mx-4">
@@ -25,11 +27,11 @@ export default function PaymentSuccess({
                         Siparişiniz alındı ve ürün bilgileri e-posta adresinize gönderildi.
                     </p>
 
-                    {searchParams?.orderId && (
+                    {params?.orderId && (
                         <div className="rounded-lg p-4 mb-6" style={{ background: 'var(--bg)' }}>
                             <p className="text-sm" style={{ color: 'var(--muted)' }}>Sipariş Numarası</p>
                             <p className="font-mono font-bold" style={{ color: 'var(--text)' }}>
-                                {searchParams.orderId}
+                                {params.orderId}
                             </p>
                         </div>
                     )}
