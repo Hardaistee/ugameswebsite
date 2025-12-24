@@ -158,11 +158,6 @@ export default function GameSearchClient({ allGames }: { allGames: Game[] }) {
                             alt={game.title}
                             className="w-full h-full object-contain transition-all duration-300 group-hover:scale-110"
                         />
-                        {game.discount && (
-                            <div className="absolute top-2 left-2 bg-red-500 text-white text-[10px] font-bold px-2 py-1 rounded shadow-lg">
-                                -%{game.discount}
-                            </div>
-                        )}
                         {(game.categories?.includes('Çok Satan')) && (
                             <div className="absolute top-2 right-2 bg-gradient-to-r from-orange-500 to-red-500 text-white text-[10px] font-bold px-2 py-1 rounded shadow-lg">
                                 Hot
@@ -181,15 +176,20 @@ export default function GameSearchClient({ allGames }: { allGames: Game[] }) {
                         <h3 className="font-semibold text-xs md:text-sm mb-1 md:mb-2 line-clamp-2 group-hover:text-opacity-80 transition-colors" style={{ color: 'var(--text)' }}>
                             {game.title}
                         </h3>
-                        <div className="flex items-center gap-1 md:gap-2 mb-2 md:mb-3">
+                        <div className="flex items-center gap-1 md:gap-2 mb-2 md:mb-3 flex-wrap">
+                            <span className="text-sm md:text-base font-bold price-text">
+                                ₺{game.price}
+                            </span>
                             {game.oldPrice && (
                                 <span className="text-[10px] md:text-xs line-through" style={{ color: 'var(--muted)' }}>
                                     ₺{game.oldPrice}
                                 </span>
                             )}
-                            <span className="text-sm md:text-base font-bold price-text">
-                                ₺{game.price}
-                            </span>
+                            {game.discount && (
+                                <span className="text-[10px] md:text-xs font-semibold text-green-600">
+                                    %{game.discount} indirim
+                                </span>
+                            )}
                         </div>
                         <div className="w-full text-center py-1.5 md:py-2 rounded font-semibold transition-all hover:scale-105 active:scale-95 text-xs md:text-sm" style={{
                             background: 'var(--accent)',

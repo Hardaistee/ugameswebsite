@@ -1,0 +1,13 @@
+# Robots.txt for uGames
+# https://www.robotstxt.org/robotstxt.html
+
+User-agent: *
+Allow: /
+
+# Sitemap
+Sitemap: https://ugames.com.tr/sitemap.xml
+
+# Disallow
+Disallow: /api/
+Disallow: /odeme/
+Disallow: /_next/

@@ -1,9 +1,53 @@
 import React from 'react'
 import Link from 'next/link'
+import { Metadata } from 'next'
 import { getGameById, getAllGames } from '@/lib/games'
 import ProductCard from '@/app/components/ProductCard'
 
 export const revalidate = 60; // Revalidate every 60 seconds
+
+// SEO: Dinamik metadata oluştur
+export async function generateMetadata({ params }: { params: Promise<{ id: string }> }): Promise<Metadata> {
+  const { id } = await params
+  const game = await getGameById(id)
+
+  if (!game) {
+    return {
+      title: 'Oyun Bulunamadı',
+      description: 'Aradığınız oyun bulunamadı.'
+    }
+  }
+
+  const title = `${game.title} - ${game.platform} | uGames`
+  const description = game.shortDescription ||
+    `${game.title} ${game.platform} için dijital oyun kodu. Anında teslimat, güvenli ödeme. ₺${game.price}`
+
+  return {
+    title,
+    description,
+    keywords: [game.title, game.platform, 'oyun kodu', 'dijital oyun', 'anında teslimat', ...game.categories],
+    openGraph: {
+      title,
+      description,
+      type: 'website',
+      url: `https://ugames.com.tr/oyun/${game.id}`,
+      images: game.images?.[0] ? [
+        {
+          url: game.images[0],
+          width: 600,
+          height: 600,
+          alt: game.title,
+        }
+      ] : [],
+    },
+    twitter: {
+      card: 'summary_large_image',
+      title,
+      description,
+      images: game.images?.[0] ? [game.images[0]] : [],
+    },
+  }
+}
 
 export default async function ProductDetail({ params }: { params: Promise<{ id: string }> }) {
   const { id } = await params

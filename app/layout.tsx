@@ -21,11 +21,11 @@ export const metadata: Metadata = {
         address: false,
         telephone: false,
     },
-    metadataBase: new URL('https://ugames.com'), // Update with your actual domain
+    metadataBase: new URL('https://ugames.com.tr'),
     openGraph: {
         type: 'website',
         locale: 'tr_TR',
-        url: 'https://ugames.com',
+        url: 'https://ugames.com.tr',
         siteName: 'uGames',
         title: 'uGames - Dijital Ürün Platformu',
         description: 'Oyun hesapları, e-pinler ve dijital ürünleri güvenilir şekilde alıp satın.',

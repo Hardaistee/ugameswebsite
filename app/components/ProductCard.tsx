@@ -34,13 +34,6 @@ export default function ProductCard({ product }: ProductCardProps) {
             className="w-full h-full object-contain transition-all duration-300 group-hover:scale-110"
           />
 
-          {/* Discount Badge - Top Left */}
-          {product.discount && (
-            <div className="absolute top-2 left-2 bg-red-500 text-white text-[10px] font-bold px-2 py-1 rounded shadow-lg">
-              -%{product.discount}
-            </div>
-          )}
-
           {/* Hot Badge - Top Right */}
           {(product.categories?.includes('Çok Satan')) && (
             <div className="absolute top-2 right-2 bg-gradient-to-r from-orange-500 to-red-500 text-white text-[10px] font-bold px-2 py-1 rounded shadow-lg">
@@ -70,15 +63,20 @@ export default function ProductCard({ product }: ProductCardProps) {
           </h3>
 
           {/* Price Section */}
-          <div className="flex items-center gap-1 md:gap-2 mb-2 md:mb-3">
+          <div className="flex items-center gap-1 md:gap-2 mb-2 md:mb-3 flex-wrap">
+            <span className="text-sm md:text-base font-bold price-text">
+              ₺{product.price}
+            </span>
             {product.oldPrice && (
               <span className="text-[10px] md:text-xs line-through" style={{ color: 'var(--muted)' }}>
                 ₺{product.oldPrice}
               </span>
             )}
-            <span className="text-sm md:text-base font-bold price-text">
-              ₺{product.price}
-            </span>
+            {product.discount && (
+              <span className="text-[10px] md:text-xs font-semibold text-green-600">
+                %{product.discount} indirim
+              </span>
+            )}
           </div>
 
           {/* Action Button */}
