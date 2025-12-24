@@ -1,6 +1,19 @@
 import { Suspense } from 'react'
+import { Metadata } from 'next'
 import { getAllGames } from '@/lib/games'
 import GamesPageClient from './components/GamesPageClient'
+
+export const metadata: Metadata = {
+    title: 'uGames - Dijital Oyun Mağazası | PC, PlayStation, Xbox Oyunları',
+    description: 'uGames ile en uygun fiyatlı dijital oyun kodlarını satın alın. PC, PlayStation ve Xbox oyunları için anında teslimat, güvenli ödeme. Steam, Epic Games, PSN ve Xbox Game Pass kodları.',
+    keywords: ['dijital oyun', 'oyun kodu', 'steam', 'playstation', 'xbox', 'pc oyunları', 'indirimli oyun'],
+    openGraph: {
+        title: 'uGames - Dijital Oyun Mağazası',
+        description: 'En uygun fiyatlı dijital oyun kodları. Anında teslimat, güvenli ödeme.',
+        type: 'website',
+        url: 'https://ugames.com.tr',
+    }
+}
 
 export const revalidate = 60; // Revalidate data every 60 seconds
 

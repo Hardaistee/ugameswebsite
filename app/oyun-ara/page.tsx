@@ -1,6 +1,19 @@
 import { Suspense } from 'react'
+import { Metadata } from 'next'
 import { getAllGames } from '@/lib/games'
 import GameSearchClient from '@/app/components/GameSearchClient'
+
+export const metadata: Metadata = {
+  title: 'Oyun Ara | uGames',
+  description: 'PC, PlayStation ve Xbox için dijital oyun kodlarını arayın ve satın alın. İndirimli oyunlar, çok satanlar ve tüm kategorilerde binlerce oyun.',
+  keywords: ['oyun ara', 'dijital oyun', 'indirimli oyunlar', 'pc oyunları', 'playstation oyunları', 'xbox oyunları'],
+  openGraph: {
+    title: 'Oyun Ara | uGames',
+    description: 'Binlerce dijital oyun arasından arama yapın.',
+    type: 'website',
+    url: 'https://ugames.com.tr/oyun-ara',
+  }
+}
 
 export const revalidate = 60; // Revalidate data every 60 seconds
 

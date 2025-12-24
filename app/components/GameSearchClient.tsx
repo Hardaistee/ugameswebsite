@@ -143,7 +143,7 @@ export default function GameSearchClient({ allGames }: { allGames: Game[] }) {
     const GameCard = ({ game }: { game: Game }) => {
         return (
             <Link href={`/oyun/${game.id}`} className="block h-full group">
-                <div className="border rounded-lg overflow-hidden card-shadow hover:shadow-xl transition-all duration-300 hover:-translate-y-2 h-full" style={{
+                <div className="border rounded-lg overflow-hidden card-shadow hover:shadow-xl transition-all duration-300 hover:-translate-y-2 h-full flex flex-col" style={{
                     background: 'var(--surface)',
                     borderColor: 'var(--border)'
                 }}>
@@ -172,7 +172,7 @@ export default function GameSearchClient({ allGames }: { allGames: Game[] }) {
                             </div>
                         )}
                     </div>
-                    <div className="p-2 md:p-3">
+                    <div className="p-2 md:p-3 flex flex-col flex-1">
                         <h3 className="font-semibold text-xs md:text-sm mb-1 md:mb-2 line-clamp-2 group-hover:text-opacity-80 transition-colors" style={{ color: 'var(--text)' }}>
                             {game.title}
                         </h3>
@@ -191,7 +191,8 @@ export default function GameSearchClient({ allGames }: { allGames: Game[] }) {
                                 </span>
                             )}
                         </div>
-                        <div className="w-full text-center py-1.5 md:py-2 rounded font-semibold transition-all hover:scale-105 active:scale-95 text-xs md:text-sm" style={{
+                        <div className="flex-1"></div>
+                        <div className="w-full text-center py-1.5 md:py-2 rounded font-semibold transition-all hover:scale-105 active:scale-95 text-xs md:text-sm mt-auto" style={{
                             background: 'var(--accent)',
                             color: 'var(--bg)'
                         }}>

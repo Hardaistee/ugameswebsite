@@ -12,7 +12,7 @@ export default function ProductCard({ product }: ProductCardProps) {
   return (
     <Link href={linkPath} className="block h-full group">
       <div
-        className="border rounded-lg overflow-hidden card-shadow hover:shadow-xl transition-all duration-300 hover:-translate-y-2 h-full"
+        className="border rounded-lg overflow-hidden card-shadow hover:shadow-xl transition-all duration-300 hover:-translate-y-2 h-full flex flex-col"
         style={{
           background: 'var(--surface)',
           borderColor: 'var(--border)'
@@ -53,7 +53,7 @@ export default function ProductCard({ product }: ProductCardProps) {
         </div>
 
         {/* Content */}
-        <div className="p-2 md:p-3">
+        <div className="p-2 md:p-3 flex flex-col flex-1">
           {/* Title */}
           <h3
             className="font-semibold text-xs md:text-sm mb-1 md:mb-2 line-clamp-2 group-hover:text-opacity-80 transition-colors"
@@ -79,9 +79,12 @@ export default function ProductCard({ product }: ProductCardProps) {
             )}
           </div>
 
+          {/* Spacer to push button to bottom */}
+          <div className="flex-1"></div>
+
           {/* Action Button */}
           <div
-            className="w-full text-center py-1.5 md:py-2 rounded font-semibold transition-all hover:scale-105 active:scale-95 text-xs md:text-sm cursor-pointer"
+            className="w-full text-center py-1.5 md:py-2 rounded font-semibold transition-all hover:scale-105 active:scale-95 text-xs md:text-sm cursor-pointer mt-auto"
             style={{
               background: 'var(--accent)',
               color: 'var(--bg)'
