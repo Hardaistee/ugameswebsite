@@ -12,9 +12,7 @@ export default function DistanceSalesAgreement() {
                     <strong>1.1. SATICI:</strong><br />
                     Ünvanı: Unifor Yazılım ve Teknoloji<br />
                     Adres: Pınarbaşı Mah. Pınarbaşı Cd. No:46, Konyaaltı/Antalya<br />
-                    Telefon: +90 530 909 62 18<br />
-                    E-posta: support@unifor.info<br />
-                    Vergi No: 4140662799
+                    E-posta: support@unifor.info
                 </p>
 
                 <p className="mb-4">

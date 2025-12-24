@@ -17,8 +17,7 @@ export default function PrivacyPolicy() {
                 <p className="mb-4">
                     <strong>Ünvan:</strong> Unifor Yazılım ve Teknoloji<br />
                     <strong>Adres:</strong> Pınarbaşı Mah. Pınarbaşı Cd. No:46, Konyaaltı/Antalya<br />
-                    <strong>E-posta:</strong> support@unifor.info<br />
-                    <strong>Telefon:</strong> +90 530 909 62 18
+                    <strong>E-posta:</strong> support@unifor.info
                 </p>
 
                 <h3 className="text-lg font-bold mt-6 mb-3">Toplanan Veriler</h3>

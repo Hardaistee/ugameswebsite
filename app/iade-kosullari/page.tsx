@@ -40,7 +40,6 @@ export default function ReturnConditions() {
                 </p>
                 <ul className="list-disc pl-5 mb-4 space-y-2">
                     <li><strong>E-posta:</strong> support@unifor.info</li>
-                    <li><strong>Telefon:</strong> +90 530 909 62 18</li>
                     <li><strong>Adres:</strong> Pınarbaşı Mah. Pınarbaşı Cd. No:46, Konyaaltı/Antalya</li>
                 </ul>
                 <p className="mb-4">

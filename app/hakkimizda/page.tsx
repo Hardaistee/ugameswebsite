@@ -40,9 +40,7 @@ export default function About() {
                     <strong>Şirket Ünvanı:</strong> Unifor Yazılım ve Teknoloji<br />
                     <strong>Marka:</strong> uGames<br />
                     <strong>Adres:</strong> Pınarbaşı Mah. Pınarbaşı Cd. No:46, Konyaaltı/Antalya<br />
-                    <strong>E-posta:</strong> support@unifor.info<br />
-                    <strong>Telefon:</strong> +90 530 909 62 18<br />
-                    <strong>Vergi No:</strong> 4140662799
+                    <strong>E-posta:</strong> support@unifor.info
                 </p>
             </div>
         </div>

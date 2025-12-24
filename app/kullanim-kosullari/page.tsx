@@ -40,7 +40,6 @@ export default function TermsOfUse() {
                 <p className="mb-4">
                     Kullanım koşulları ile ilgili sorularınız için bizimle iletişime geçebilirsiniz:<br />
                     <strong>E-posta:</strong> support@unifor.info<br />
-                    <strong>Telefon:</strong> +90 530 909 62 18<br />
                     <strong>Adres:</strong> Pınarbaşı Mah. Pınarbaşı Cd. No:46, Konyaaltı/Antalya
                 </p>
 
