@@ -6,7 +6,7 @@ export default function SnowEffect() {
     return (
         <Snowfall
             color="#c8d4d5ff"
-            snowflakeCount={200}
+            snowflakeCount={100}
             style={{
                 position: "fixed",
                 width: "100vw",
