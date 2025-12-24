@@ -47,12 +47,20 @@ export default async function ProductDetail({ params }: { params: Promise<{ id: 
         <div className="grid gap-6 lg:grid-cols-3">
           <div className="lg:col-span-2">
             <div className="border rounded-lg overflow-hidden" style={{ background: 'var(--surface)', borderColor: 'var(--border)' }}>
-              <div className="h-96 flex items-center justify-center overflow-hidden" style={{ background: 'var(--bg)' }}>
+              <div
+                className="h-96 flex items-center justify-center overflow-hidden"
+                style={{
+                  background: 'var(--bg)',
+                  backgroundImage: 'url(/images/placeholder.png)',
+                  backgroundSize: 'cover',
+                  backgroundPosition: 'center'
+                }}
+              >
                 {images[0] ? (
                   <img
                     src={images[0]}
                     alt={product.title}
-                    className="w-full h-full object-cover"
+                    className="w-full h-full object-contain"
                   />
                 ) : (
                   <div className="text-center">

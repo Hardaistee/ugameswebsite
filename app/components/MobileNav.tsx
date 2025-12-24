@@ -1,21 +1,11 @@
 'use client'
-import React, { useState, useEffect } from 'react'
+import React from 'react'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import Icon from './Icon'
 
 export default function MobileNav({ open, onClose }: { open: boolean, onClose: () => void }) {
   const pathname = usePathname()
-
-  // Theme detection
-  const [theme, setTheme] = useState<'dark' | 'light'>('dark')
-
-  useEffect(() => {
-    if (typeof window !== 'undefined') {
-      const currentTheme = localStorage.getItem('theme') as 'dark' | 'light' || 'dark'
-      setTheme(currentTheme)
-    }
-  }, [])
 
   const categories = [
     { name: 'Anasayfa', path: '/oyunlar', icon: 'home', color: 'from-blue-500 to-cyan-500' },
@@ -37,14 +27,14 @@ export default function MobileNav({ open, onClose }: { open: boolean, onClose: (
         <div className="sticky top-0 z-10 px-6 py-4 border-b flex items-center justify-between" style={{ background: 'var(--surface)', borderColor: 'var(--border)' }}>
           <div className="flex items-center gap-3">
             <img
-              src="/images/Yeni Proje-17.png"
+              src="/images/Yeni Proje-16.png"
               alt="uGames"
               className="h-8 w-auto"
             />
           </div>
           <button
             onClick={onClose}
-            className="p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-white/5 transition-colors"
+            className="p-2 rounded-lg hover:bg-gray-100 transition-colors"
             style={{ color: 'var(--text)' }}
             aria-label="Menüyü kapat"
           >
@@ -52,28 +42,6 @@ export default function MobileNav({ open, onClose }: { open: boolean, onClose: (
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
             </svg>
           </button>
-        </div>
-
-        {/* Auth Buttons */}
-        <div className="px-6 py-4 border-b" style={{ borderColor: 'var(--border)' }}>
-          <div className="flex gap-3">
-            <Link
-              href="/login"
-              onClick={onClose}
-              className="flex-1 px-4 py-2.5 rounded-lg font-semibold text-center transition-all hover:scale-[1.02] active:scale-95"
-              style={{ background: 'var(--surface)', color: 'var(--text)', border: '1px solid var(--border)' }}
-            >
-              Giriş Yap
-            </Link>
-            <Link
-              href="/register"
-              onClick={onClose}
-              className="flex-1 px-4 py-2.5 rounded-lg font-semibold text-center transition-all hover:scale-[1.02] active:scale-95"
-              style={{ background: 'var(--accent)', color: 'var(--bg)' }}
-            >
-              Kayıt Ol
-            </Link>
-          </div>
         </div>
 
         {/* Categories */}
@@ -110,7 +78,7 @@ export default function MobileNav({ open, onClose }: { open: boolean, onClose: (
                   {/* Platform-specific icons */}
                   {cat.name === 'PC Oyunları' ? (
                     <img
-                      src={theme === 'dark' ? '/images/pciconlight.png' : '/images/pcicondark.png'}
+                      src="/images/pcicondark.png"
                       alt="PC"
                       className="w-5 h-5 relative z-10"
                     />

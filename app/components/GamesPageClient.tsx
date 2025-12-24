@@ -1,9 +1,8 @@
 
 'use client'
 
-import React, { useState, useEffect, useRef } from 'react'
+import React, { useState, useEffect } from 'react'
 import Link from 'next/link'
-import { useSearchParams } from 'next/navigation'
 import ProductCard from './ProductCard'
 import { Game } from '@/lib/games'
 
@@ -12,320 +11,170 @@ interface GamesPageClientProps {
 }
 
 export default function GamesPageClient({ allProducts }: GamesPageClientProps) {
-    const searchParams = useSearchParams()
-    const urlCategory = searchParams?.get('category') || 'all'
+    // Hero carousel state
+    const [currentSlide, setCurrentSlide] = useState(0)
+    const heroGames = allProducts.filter(p => p.discount && p.discount > 0).slice(0, 8)
 
-    const [selectedCategory, setSelectedCategory] = useState<string>(urlCategory)
-
+    // Auto-slide every 5 seconds
     useEffect(() => {
-        const category = searchParams?.get('category') || 'all'
-        setSelectedCategory(category)
-    }, [searchParams])
+        if (heroGames.length === 0) return
+        const interval = setInterval(() => {
+            setCurrentSlide(prev => (prev + 1) % heroGames.length)
+        }, 5000)
+        return () => clearInterval(interval)
+    }, [heroGames.length])
 
-    // Platform kategorileri
-    const pcGames = allProducts.filter(p => p.platform === 'PC')
-    const psGames = allProducts.filter(p => p.platform === 'PlayStation')
-    const xboxGames = allProducts.filter(p => p.platform === 'Xbox')
+    const goToSlide = (index: number) => {
+        setCurrentSlide(index)
+    }
 
-    // Discounted games
-    const discountedGames = allProducts.filter(p => p.discount && p.discount > 0).slice(0, 6)
+    const nextSlide = () => {
+        setCurrentSlide(prev => (prev + 1) % heroGames.length)
+    }
 
-    // Best sellers (checking badge or 'Çok Satan' in tags/category if available)
-    // Note: CSV didn't strictly have "Tags" but we have 'categories'.
-    // We'll rely on our mapped object. 
-    // Assuming 'category' array might have it or we just pick some random populars if not defined for now.
-    // Or just use the original logic if data supports it.
-    // The previous code checked `p.badge === 'Çok Satan'`.
-    const bestSellers = allProducts.filter(p => p.category === 'Çok Satan' || p.categories?.includes('Çok Satan') || p.id.length % 5 === 0).slice(0, 6)
-    // Fallback logic added (id % 5) to ensure we show something if no badges.
-
-    // Featured games
-    const featuredGames = allProducts.slice(0, 4) // Simplification: First 4 are featured
-
-    const scrollContainerRef = useRef<HTMLDivElement>(null)
-    const scrollContainerRefBestSellers = useRef<HTMLDivElement>(null)
-
-    const scroll = (direction: 'left' | 'right', ref: React.RefObject<HTMLDivElement>) => {
-        if (ref.current) {
-            const scrollAmount = 300
-            ref.current.scrollBy({
-                left: direction === 'left' ? -scrollAmount : scrollAmount,
-                behavior: 'smooth'
-            })
-        }
+    const prevSlide = () => {
+        setCurrentSlide(prev => (prev - 1 + heroGames.length) % heroGames.length)
     }
 
     return (
         <div className="pb-12" style={{ background: 'var(--bg)' }}>
             <div className="max-w-7xl mx-auto px-4 py-6">
-                {/* Hero Banner Section - Featured Games */}
-                <section className="mb-8 fade-in">
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                        {featuredGames.slice(0, 2).map((game) => (
-                            <div
-                                key={game.id}
-                                className="relative rounded-xl overflow-hidden group cursor-pointer"
-                                style={{
-                                    background: 'var(--surface)',
-                                    border: '1px solid var(--border)'
-                                }}
-                            >
-                                <div className="aspect-video relative overflow-hidden flex items-center justify-center">
-                                    <img
-                                        src={game.images[0] || game.image}
-                                        alt={game.title}
-                                        className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
-                                    />
-                                    <div className="absolute inset-0 bg-gradient-to-t from-black/100 via-black/60 to-transparent" />
+                {/* Hero Carousel */}
+                {heroGames.length > 0 && (
+                    <section className="mb-8 fade-in">
+                        <div className="relative rounded-xl overflow-hidden" style={{ background: 'var(--surface)', border: '1px solid var(--border)' }}>
+                            {/* Slides */}
+                            <div className="relative aspect-[16/9] md:aspect-[21/9] overflow-hidden">
+                                {heroGames.map((game, index) => (
+                                    <Link
+                                        key={game.id}
+                                        href={`/oyun/${game.id}`}
+                                        className={`absolute inset-0 transition-opacity duration-500 ${index === currentSlide ? 'opacity-100 z-10' : 'opacity-0 z-0'}`}
+                                        style={{
+                                            backgroundImage: 'url(/images/placeholder.png)',
+                                            backgroundSize: 'cover',
+                                            backgroundPosition: 'center'
+                                        }}
+                                    >
+                                        <img
+                                            src={game.images[0] || game.image}
+                                            alt={game.title}
+                                            className="w-full h-full object-contain"
+                                        />
+                                        <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/40 to-transparent" />
 
-                                    {/* Discount Badge */}
-                                    {game.discount && (
-                                        <div className="absolute top-2 left-2 md:top-4 md:left-4 bg-red-500 text-white text-xs md:text-base font-bold px-2 py-1 md:px-4 md:py-2 rounded-lg shadow-xl">
-                                            -%{game.discount}
+                                        {/* Discount Badge */}
+                                        {game.discount && (
+                                            <div className="absolute top-3 left-3 md:top-4 md:left-4 bg-red-500 text-white text-xs md:text-sm font-bold px-2 py-1 md:px-3 md:py-1.5 rounded-lg shadow-lg">
+                                                -%{game.discount}
+                                            </div>
+                                        )}
+
+                                        {/* Category Badge */}
+                                        <div className="absolute top-3 left-16 md:top-4 md:left-20 text-white text-[10px] md:text-xs font-medium px-2 py-1 rounded bg-white/20 backdrop-blur-sm">
+                                            {game.platform} Oyunları
                                         </div>
-                                    )}
 
-                                    <div className="absolute bottom-0 left-0 right-0 p-3 md:p-8">
-                                        <h3 className="text-lg md:text-3xl lg:text-4xl font-black text-white mb-1 md:mb-3 drop-shadow-2xl line-clamp-1">
-                                            {game.title}
-                                        </h3>
-                                        <p className="hidden md:block text-white/95 text-base mb-5 line-clamp-2 drop-shadow-lg">
-                                            Anında teslimat garantisi ile güvenli alışveriş
-                                        </p>
-                                        <div className="flex flex-col md:flex-row items-start md:items-center gap-1 md:gap-4 mb-3 md:mb-5">
-                                            <div className="flex items-center gap-2 md:gap-4">
+                                        {/* Content */}
+                                        <div className="absolute bottom-0 left-0 right-0 p-4 md:p-8">
+                                            <h2 className="text-xl md:text-3xl lg:text-4xl font-black text-white mb-2 md:mb-3 drop-shadow-lg line-clamp-1">
+                                                {game.title}
+                                            </h2>
+                                            <div className="flex items-center gap-3 mb-3 md:mb-4">
                                                 {game.oldPrice && (
-                                                    <span className="text-white/70 line-through text-xs md:text-lg">
+                                                    <span className="text-white/60 line-through text-sm md:text-lg">
                                                         ₺{game.oldPrice}
                                                     </span>
                                                 )}
-                                                <span className="text-xl md:text-4xl font-black text-white drop-shadow-lg">
+                                                <span className="text-2xl md:text-4xl font-black text-white">
                                                     ₺{game.price}
                                                 </span>
                                             </div>
-                                            <span className="text-white/80 text-xs md:text-base">
-                                                'den Başlayan Fiyatlarla
+                                            <span
+                                                className="inline-block px-4 py-2 md:px-6 md:py-3 rounded-lg font-bold text-sm md:text-base transition-all hover:scale-105"
+                                                style={{ background: 'var(--accent)', color: 'var(--bg)' }}
+                                            >
+                                                İncele →
                                             </span>
                                         </div>
-                                        <Link
-                                            href={`/oyun/${game.id}`}
-                                            className="inline-block px-4 py-2 md:px-8 md:py-4 rounded-lg font-bold text-sm md:text-base transition-all hover:scale-105 active:scale-95 shadow-xl"
-                                            style={{
-                                                background: '#ffffff',
-                                                color: '#000000'
-                                            }}
-                                        >
-                                            Hemen Al
-                                        </Link>
-                                    </div>
-                                </div>
+
+                                        {/* Slide Indicator */}
+                                        <div className="absolute bottom-4 right-4 md:bottom-8 md:right-8 text-white/80 text-sm font-medium bg-black/40 px-3 py-1 rounded-full backdrop-blur-sm">
+                                            {currentSlide + 1}/{heroGames.length}
+                                        </div>
+                                    </Link>
+                                ))}
                             </div>
-                        ))}
-                    </div>
-                </section>
 
-                {/* İndirimdeki Oyunlar Section */}
-                <section className="mt-10 fade-in">
-                    <div className="flex items-center justify-between mb-6">
-                        <div>
-                            <h2 className="text-3xl font-black" style={{ color: 'var(--text)' }}>İndirimdeki Oyunlar</h2>
-                            <p className="text-sm mt-1" style={{ color: 'var(--muted)' }}>En iyi fırsatları kaçırma</p>
-                        </div>
-                    </div>
+                            {/* Navigation Arrows */}
+                            <button
+                                onClick={prevSlide}
+                                className="absolute left-2 md:left-4 top-1/2 -translate-y-1/2 z-20 p-2 md:p-3 rounded-full bg-black/50 hover:bg-black/70 text-white transition-all"
+                                aria-label="Önceki"
+                            >
+                                <svg className="w-5 h-5 md:w-6 md:h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
+                                </svg>
+                            </button>
+                            <button
+                                onClick={nextSlide}
+                                className="absolute right-2 md:right-4 top-1/2 -translate-y-1/2 z-20 p-2 md:p-3 rounded-full bg-black/50 hover:bg-black/70 text-white transition-all"
+                                aria-label="Sonraki"
+                            >
+                                <svg className="w-5 h-5 md:w-6 md:h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                                </svg>
+                            </button>
 
-
-                    <div className="relative group">
-                        {/* Left Scroll Button */}
-                        <button
-                            onClick={() => scroll('left', scrollContainerRef)}
-                            className="absolute left-0 top-1/2 -translate-y-1/2 z-10 p-3 rounded-full shadow-xl opacity-0 group-hover:opacity-100 transition-opacity duration-300 hover:scale-110"
-                            style={{ background: 'var(--surface)', border: '2px solid var(--border)' }}
-                            aria-label="Sola kaydır"
-                        >
-                            <svg className="w-6 h-6" style={{ color: 'var(--text)' }} fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
-                            </svg>
-                        </button>
-
-                        {/* Right Scroll Button */}
-                        <button
-                            onClick={() => scroll('right', scrollContainerRef)}
-                            className="absolute right-0 top-1/2 -translate-y-1/2 z-10 p-3 rounded-full shadow-xl opacity-0 group-hover:opacity-100 transition-opacity duration-300 hover:scale-110"
-                            style={{ background: 'var(--surface)', border: '2px solid var(--border)' }}
-                            aria-label="Sağa kaydır"
-                        >
-                            <svg className="w-6 h-6" style={{ color: 'var(--text)' }} fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-                            </svg>
-                        </button>
-
-                        <div ref={scrollContainerRef} className="overflow-x-auto -mx-4 px-4 scrollbar-hide scroll-smooth">
-                            <div className="flex gap-4 w-max py-2">
-                                {discountedGames.map((game) => (
-                                    <div key={game.id} className="w-72 flex-shrink-0">
-                                        <ProductCard product={game} size="large" />
-                                    </div>
+                            {/* Dot Indicators */}
+                            <div className="absolute bottom-4 left-1/2 -translate-x-1/2 z-20 flex gap-1.5 md:hidden">
+                                {heroGames.map((_, index) => (
+                                    <button
+                                        key={index}
+                                        onClick={() => goToSlide(index)}
+                                        className={`w-2 h-2 rounded-full transition-all ${index === currentSlide ? 'bg-white w-4' : 'bg-white/50'}`}
+                                        aria-label={`Slide ${index + 1}`}
+                                    />
                                 ))}
                             </div>
                         </div>
-                    </div>
-                </section>
+                    </section>
+                )}
 
-                {/* Category Tabs - Platform Based */}
-                <section className="mt-10 fade-in">
-                    <div className="flex items-center gap-2 mb-6 overflow-x-auto scrollbar-hide pb-2">
+                {/* Oyunlar Section */}
+                <section className="mt-8 fade-in">
+                    <div className="flex items-center justify-between mb-4">
+                        <h2 className="text-xl md:text-2xl font-bold flex items-center gap-2" style={{ color: 'var(--text)' }}>
+                            <span className="text-2xl">🎮</span> Oyunlar
+                        </h2>
                         <Link
                             href="/oyun-ara"
-                            className={`px-5 py-2.5 rounded-lg font-bold text-sm whitespace-nowrap transition-all ${selectedCategory === 'all' ? 'shadow-lg' : 'opacity-70 hover:opacity-100'
-                                }`}
-                            style={selectedCategory === 'all' ? {
-                                background: 'var(--accent)',
-                                color: 'var(--bg)'
-                            } : {
-                                background: 'var(--surface)',
-                                color: 'var(--text)',
-                                border: '1px solid var(--border)'
-                            }}
+                            className="text-sm font-medium transition-colors hover:underline"
+                            style={{ color: 'var(--muted)' }}
                         >
-                            Tüm Oyunlar ({allProducts.length})
-                        </Link>
-                        <Link
-                            href="/oyun-ara?platform=pc"
-                            className={`px-5 py-2.5 rounded-lg font-bold text-sm whitespace-nowrap transition-all ${selectedCategory === 'pc' ? 'shadow-lg' : 'opacity-70 hover:opacity-100'
-                                }`}
-                            style={selectedCategory === 'pc' ? {
-                                background: 'var(--accent)',
-                                color: 'var(--bg)'
-                            } : {
-                                background: 'var(--surface)',
-                                color: 'var(--text)',
-                                border: '1px solid var(--border)'
-                            }}
-                        >
-                            PC Oyunları ({pcGames.length})
-                        </Link>
-                        <Link
-                            href="/oyun-ara?platform=playstation"
-                            className={`px-5 py-2.5 rounded-lg font-bold text-sm whitespace-nowrap transition-all ${selectedCategory === 'playstation' ? 'shadow-lg' : 'opacity-70 hover:opacity-100'
-                                }`}
-                            style={selectedCategory === 'playstation' ? {
-                                background: 'var(--accent)',
-                                color: 'var(--bg)'
-                            } : {
-                                background: 'var(--surface)',
-                                color: 'var(--text)',
-                                border: '1px solid var(--border)'
-                            }}
-                        >
-                            PlayStation Oyunları ({psGames.length})
-                        </Link>
-                        <Link
-                            href="/oyun-ara?platform=xbox"
-                            className={`px-5 py-2.5 rounded-lg font-bold text-sm whitespace-nowrap transition-all ${selectedCategory === 'xbox' ? 'shadow-lg' : 'opacity-70 hover:opacity-100'
-                                }`}
-                            style={selectedCategory === 'xbox' ? {
-                                background: 'var(--accent)',
-                                color: 'var(--bg)'
-                            } : {
-                                background: 'var(--surface)',
-                                color: 'var(--text)',
-                                border: '1px solid var(--border)'
-                            }}
-                        >
-                            Xbox Oyunları ({xboxGames.length})
-                        </Link>
-                        <Link
-                            href="/oyun-ara?category=discounted"
-                            className={`px-5 py-2.5 rounded-lg font-bold text-sm whitespace-nowrap transition-all ${selectedCategory === 'discounted' ? 'shadow-lg' : 'opacity-70 hover:opacity-100'
-                                }`}
-                            style={selectedCategory === 'discounted' ? {
-                                background: 'var(--accent)',
-                                color: 'var(--bg)'
-                            } : {
-                                background: 'var(--surface)',
-                                color: 'var(--text)',
-                                border: '1px solid var(--border)'
-                            }}
-                        >
-                            İndirimdeki Oyunlar
+                            Tümünü Gör →
                         </Link>
                     </div>
-                </section>
 
-                {/* Çok Satanlar Section */}
-                <section className="mt-10 fade-in">
-                    <div className="flex items-center justify-between mb-6">
-                        <div>
-                            <h2 className="text-3xl font-black" style={{ color: 'var(--text)' }}>Çok Satanlar</h2>
-                            <p className="text-sm mt-1" style={{ color: 'var(--muted)' }}>En popüler oyunlar</p>
-                        </div>
-                    </div>
-
-                    <div className="relative group">
-                        {/* Left Scroll Button */}
-                        <button
-                            onClick={() => scroll('left', scrollContainerRefBestSellers)}
-                            className="absolute left-0 top-1/2 -translate-y-1/2 z-10 p-3 rounded-full shadow-xl opacity-0 group-hover:opacity-100 transition-opacity duration-300 hover:scale-110"
-                            style={{ background: 'var(--surface)', border: '2px solid var(--border)' }}
-                            aria-label="Sola kaydır"
-                        >
-                            <svg className="w-6 h-6" style={{ color: 'var(--text)' }} fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
-                            </svg>
-                        </button>
-
-                        {/* Right Scroll Button */}
-                        <button
-                            onClick={() => scroll('right', scrollContainerRefBestSellers)}
-                            className="absolute right-0 top-1/2 -translate-y-1/2 z-10 p-3 rounded-full shadow-xl opacity-0 group-hover:opacity-100 transition-opacity duration-300 hover:scale-110"
-                            style={{ background: 'var(--surface)', border: '2px solid var(--border)' }}
-                            aria-label="Sağa kaydır"
-                        >
-                            <svg className="w-6 h-6" style={{ color: 'var(--text)' }} fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-                            </svg>
-                        </button>
-
-                        <div ref={scrollContainerRefBestSellers} className="overflow-x-auto -mx-4 px-4 scrollbar-hide scroll-smooth">
-                            <div className="flex gap-4 w-max py-2">
-                                {bestSellers.map((game) => (
-                                    <div key={game.id} className="w-72 flex-shrink-0">
-                                        <ProductCard product={game} size="large" />
-                                    </div>
-                                ))}
-                            </div>
-                        </div>
-                    </div>
-                </section>
-
-                {/* Tüm Oyunlar Section */}
-                <section className="mt-10 fade-in">
-                    <div className="flex items-center justify-between mb-6">
-                        <h2 className="text-3xl font-black" style={{ color: 'var(--text)' }}>Tüm Oyunlar</h2>
-                    </div>
-
-                    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
-                        {allProducts.slice(0, 8).map((game, i) => (
+                    <div className="grid gap-4 grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5">
+                        {allProducts.slice(0, 15).map((game, i) => (
                             <div key={game.id} className="staggered-item h-full" style={{ ['--i' as any]: i }}>
-                                <ProductCard product={game} size="large" />
+                                <ProductCard product={game} />
                             </div>
                         ))}
                     </div>
 
-                    {allProducts.length > 8 && (
+                    {allProducts.length > 15 && (
                         <div className="flex justify-center mt-8">
                             <Link
                                 href="/oyun-ara"
-                                className="px-8 py-4 rounded-lg font-bold text-base transition-all hover:scale-105 active:scale-95 shadow-lg flex items-center gap-2"
+                                className="px-6 py-3 rounded-lg font-semibold text-sm transition-all hover:scale-105 active:scale-95 flex items-center gap-2"
                                 style={{
                                     background: 'var(--surface)',
                                     color: 'var(--text)',
-                                    border: '2px solid var(--border)'
+                                    border: '1px solid var(--border)'
                                 }}
                             >
-                                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
-                                </svg>
                                 Tümünü Gör ({allProducts.length} oyun)
                             </Link>
                         </div>

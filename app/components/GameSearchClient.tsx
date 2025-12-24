@@ -147,11 +147,16 @@ export default function GameSearchClient({ allGames }: { allGames: Game[] }) {
                     background: 'var(--surface)',
                     borderColor: 'var(--border)'
                 }}>
-                    <div className="relative aspect-square overflow-hidden flex items-center justify-center" style={{ background: 'var(--bg)' }}>
+                    <div className="relative aspect-square overflow-hidden flex items-center justify-center" style={{
+                        background: 'var(--bg)',
+                        backgroundImage: 'url(/images/placeholder.png)',
+                        backgroundSize: 'cover',
+                        backgroundPosition: 'center'
+                    }}>
                         <img
                             src={game.images?.[0] || game.image}
                             alt={game.title}
-                            className="w-full h-full object-cover transition-all duration-300 group-hover:scale-110"
+                            className="w-full h-full object-contain transition-all duration-300 group-hover:scale-110"
                         />
                         {game.discount && (
                             <div className="absolute top-2 left-2 bg-red-500 text-white text-[10px] font-bold px-2 py-1 rounded shadow-lg">

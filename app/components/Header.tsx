@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect } from 'react'
 import Link from 'next/link'
-import { useRouter, usePathname } from 'next/navigation'
+import { useRouter } from 'next/navigation'
 import MobileNav from './MobileNav'
 import Icon from './Icon'
 
@@ -10,15 +10,6 @@ export default function Header() {
   const [open, setOpen] = useState(false)
   const [showCategoryPanel, setShowCategoryPanel] = useState(false)
   const [mounted, setMounted] = useState(false)
-  const [theme, setTheme] = useState<'dark' | 'light'>(() => {
-    if (typeof window !== 'undefined') {
-      try {
-        const s = localStorage.getItem('theme')
-        return s === 'light' ? 'light' : 'dark'
-      } catch { return 'dark' }
-    }
-    return 'dark'
-  })
 
   // Export setOpen to window for BottomNav to use
   useEffect(() => {
@@ -29,15 +20,9 @@ export default function Header() {
 
   useEffect(() => {
     setMounted(true)
+    // Always light theme
+    document.documentElement.classList.remove('dark')
   }, [])
-
-  useEffect(() => {
-    try {
-      if (theme === 'dark') document.documentElement.classList.add('dark')
-      else document.documentElement.classList.remove('dark')
-      localStorage.setItem('theme', theme)
-    } catch (e) { }
-  }, [theme])
 
   const router = useRouter()
 
@@ -62,14 +47,14 @@ export default function Header() {
       <header className="border-b" style={{ background: 'var(--surface)', borderColor: 'var(--border)' }}>
         <div className="max-w-6xl mx-auto px-4 py-3 flex items-center gap-4">
           <div className="flex items-center gap-3">
-            <button aria-label="Mobil menüyü aç" onClick={() => setOpen(true)} className="lg:hidden p-2 rounded hover:bg-gray-100 dark:hover:bg-white/5">
+            <button aria-label="Mobil menüyü aç" onClick={() => setOpen(true)} className="lg:hidden p-2 rounded hover:bg-gray-100">
               {/* hamburger */}
               <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M4 6h16M4 12h16M4 18h16" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" /></svg>
             </button>
             <Link href="/" className="flex items-center">
               {mounted ? (
                 <img
-                  src={theme === 'dark' ? '/images/Yeni Proje-17.png' : '/images/Yeni Proje-16.png'}
+                  src="/images/Yeni Proje-16.png"
                   alt="uGames Logo"
                   className="h-10 w-auto transition-opacity duration-200"
                 />
@@ -89,26 +74,8 @@ export default function Header() {
             />
           </div>
 
-          <div className="ml-auto flex items-center gap-2">
-            <button
-              onClick={() => setTheme(t => t === 'dark' ? 'light' : 'dark')}
-              aria-label={theme === 'dark' ? 'Açık tema geçişi' : 'Karanlık tema geçişi'}
-              title={theme === 'dark' ? 'Açık tema' : 'Karanlık tema'}
-              className="p-2 rounded hover:bg-gray-100 dark:hover:bg-white/5"
-            >
-              {theme === 'dark' ? (
-                // sun icon for switching to light
-                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M12 3v2M12 19v2M4.2 4.2l1.4 1.4M18.4 18.4l1.4 1.4M3 12h2M19 12h2M4.2 19.8l1.4-1.4M18.4 5.6l1.4-1.4" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" /></svg>
-              ) : (
-                // moon icon for switching to dark
-                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z" stroke="currentColor" strokeWidth="1.4" strokeLinecap="round" strokeLinejoin="round" /></svg>
-              )}
-            </button>
-            <div className="hidden sm:flex items-center gap-3">
-              <Link href="/login" className="text-sm whitespace-nowrap" style={{ color: 'var(--text)' }}>Giriş Yap</Link>
-              <Link href="/register" className="px-3 py-2 rounded text-sm transition-colors whitespace-nowrap" style={{ background: 'var(--accent)', color: 'var(--bg)' }}>Kayıt Ol</Link>
-            </div>
-          </div>
+          {/* Empty space on right - auth buttons removed */}
+          <div className="ml-auto" />
         </div>
 
         {/* Mobile Search Bar */}
@@ -188,12 +155,12 @@ export default function Header() {
                           <div
                             className="w-11 h-11 rounded-lg flex items-center justify-center relative z-10 shadow-md"
                             style={{
-                              background: theme === 'dark' ? 'rgba(255, 255, 255, 0.1)' : 'rgba(0, 0, 0, 0.06)'
+                              background: 'rgba(0, 0, 0, 0.06)'
                             }}
                           >
                             {cat.name === 'PC Oyunları' ? (
                               <img
-                                src={theme === 'dark' ? '/images/pciconlight.png' : '/images/pcicondark.png'}
+                                src="/images/pcicondark.png"
                                 alt="PC"
                                 className="w-5 h-5"
                               />
@@ -241,7 +208,7 @@ export default function Header() {
                         className="block text-center py-2.5 px-4 rounded-lg font-semibold text-sm transition-all hover:scale-[1.02] hover:shadow-lg"
                         style={{
                           background: 'var(--accent)',
-                          color: theme === 'dark' ? '#1a1a1a' : 'white'
+                          color: 'white'
                         }}
                       >
                         Tüm Oyunları Gör →
@@ -270,7 +237,7 @@ export default function Header() {
                     <div className={`absolute inset-0 bg-gradient-to-r ${cat.color} opacity-0 group-hover:opacity-10 transition-opacity`} />
                     {cat.name === 'PC Oyunları' ? (
                       <img
-                        src={theme === 'dark' ? '/images/pciconlight.png' : '/images/pcicondark.png'}
+                        src="/images/pcicondark.png"
                         alt="PC"
                         className="w-5 h-5 relative z-10"
                       />
